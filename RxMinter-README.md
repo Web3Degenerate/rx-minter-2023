@@ -4,6 +4,16 @@
 
     - > npx thirdweb@latest create --contract
 
+
+2. Install project dependencies: 
+
+  - [React Router Dom](https://www.npmjs.com/package/react-router-dom)
+    - > npm i react-router-dom
+
+  - [Axios](https://www.npmjs.com/package/axios)
+    - > npm i axios
+
+
 **message**
 ```js
 Inside that directory, you can run several commands:

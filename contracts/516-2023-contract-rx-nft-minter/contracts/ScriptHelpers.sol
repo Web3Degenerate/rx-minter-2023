@@ -258,9 +258,9 @@ pragma solidity ^0.8.0;
 
     // function getQuantity(uint256 tokenId) public view returns (string memory) {
     //ERROR: Return argument type (string memory) type uint256 (new quantity) not implicitly convertible to expected type (type of first return variable) string memory
-    function getQuantity(uint256 tokenId) public view returns (uint256) {
+    function getQuantity(uint256 tokenId) public view returns (string memory) {
         Script storage rx = allScripts[tokenId];
-        return rx.quantity;
+        return toString(rx.quantity);
     }
 
     function getDob(uint256 tokenId) public view returns (string memory) {

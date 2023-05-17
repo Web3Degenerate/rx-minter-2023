@@ -37,7 +37,7 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
             // string memory _npi,
             // string memory _dea
         string memory _datePrescribed,
-        uint256 _dateRxStart
+        uint256 _dateRxStart  
         // string memory _dateFilled,
         // uint256 _dateRxEnd,
         // string memory _dateNextFill,
@@ -126,12 +126,7 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
     // function safeMint(address _to, string memory _uri) public onlyOwner {
     // At: https://www.youtube.com/live/DSKDhBCmHXk?feature=share&t=531
 
-    function mintRx(
-        address _to // onlyDoctor // onlyAdmin
-    )
-        public
-    // uint256 _rx_tokenCounter // string memory _uri // string memory _patient, // string memory _description, // string memory _medication, // string memory _dob, // string memory _quantity
-    {
+    function mintRx(address _to) public {
         // uint256 tokenId = _tokenIdCounter.current();
 
         // _safeMint(_to, _rx_tokenCounter);
@@ -214,20 +209,6 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
         return "data:application/json;base64,";
     }
 
-    // struct Parts {
-    //     string[] parts1;
-    //     string[] parts2;
-    //     string[] parts3;
-    //     string[] parts4;
-    //     string[] parts5;
-    //     string[] parts6;
-    //     string[] parts7;
-    //     string[] parts8;
-    //     string[] parts9;
-    // }
-
-    // string[9] storage parts;
-    // Parts[9] public parts;
 
     function tokenURI(
         uint256 tokenId
@@ -241,7 +222,7 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
         ] = '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350"><style>.base { fill: black; font-family: serif; font-size: 14px; }</style><rect width="100%" height="100%" fill="#E8F559" /><text x="10" y="20" class="base">';
 
         // parts[1] = getPatientInfo(tokenId);
-        parts[1] = getQuantityInfo(tokenId);        
+        parts[1] = getQuantityInfo(tokenId);       
        
         parts[2] = '</text><text x="10" y="40" class="base">';
 
@@ -335,6 +316,9 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
 
         return output;
     } //end of tokenURI or generateSVG
+
+
+
 
 
 
