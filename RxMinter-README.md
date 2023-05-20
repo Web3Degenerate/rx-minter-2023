@@ -1,5 +1,21 @@
 # Thirdweb Rx Minter Contract
 
+## App
+
+1. Install Dependencies
+
+  - npm i react-router-dom
+
+  - npm i axios
+
+  - If installing [bootstrap on a Vite project follow this article](): 
+    
+    - > npm i --save bootstrap @popperjs/core
+    - > npm i --save-dev sass (_skip_)
+
+
+## Solidity Contracts:
+
 1. install with
 
     - > npx thirdweb@latest create --contract

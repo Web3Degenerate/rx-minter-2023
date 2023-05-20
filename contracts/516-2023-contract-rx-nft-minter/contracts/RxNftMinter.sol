@@ -61,9 +61,9 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
             rxId: rx_tokenCounter,
             datePrescribed: _datePrescribed, // string datePrescribed;
             // dateRxStart: _dateRxStart, // uint256 dateRxStart;
-            dateFilled: '', // string dateFilled;
+            dateFilled: 'N/A', // string dateFilled;
             // dateRxEnd: 0, // uint256 dateRxEnd;
-            dateNextFill: ''  // string dateNextFill (daysLeft);
+            dateNextFill: 'N/A'  // string dateNextFill (daysLeft);
             // dateRxNext: 0 // uint256 dateRxNext;
 
             // npi: _npi,
@@ -222,11 +222,11 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
         ] = '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350"><style>.base { fill: black; font-family: serif; font-size: 14px; }</style><rect width="100%" height="100%" fill="#E8F559" /><text x="10" y="20" class="base">';
 
         // parts[1] = getPatientInfo(tokenId);
-        parts[1] = getQuantityInfo(tokenId);       
+        parts[1] = getMedicationInfo(tokenId);       
        
         parts[2] = '</text><text x="10" y="40" class="base">';
 
-        parts[3] = getMedicationInfo(tokenId);
+        parts[3] = getQuantityInfo(tokenId);
 
         parts[4] = '</text><text x="10" y="60" class="base">';
 
@@ -246,6 +246,8 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
                 parts[6]
             )
         );
+
+        
 
         // string memory imageBaseURL = "data:image/svg+xml;base64,";
 
@@ -278,6 +280,70 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
         //         abi.encodePacked(
         //             _baseURI(),
 
+
+// getQuantityFilled(tokenId)
+// getQuantityLeft(tokenId)
+
+
+
+
+
+        // string memory json = Base64.encode(
+        //     bytes(
+        //         string(
+        //             abi.encodePacked(
+        //                 '{"name":"',
+        //                 getPatientName(tokenId),
+        //                 '","description":"',
+        //                 getSig(tokenId),
+        //                 // '","dob":"',
+        //                 // getDob(tokenId),                        
+        //                 // '",',
+        //                 '","medication":"',
+        //                 getMedication(tokenId),
+        //                 // '",',
+        //                 '","quantity":"',
+        //                 getQuantity(tokenId),
+        //                 '","quantity-filled":"',
+        //                 getQuantityFilled(tokenId),
+        //                 // '","quantity-unfilled":"',
+        //                 // getQuantityLeft(tokenId),
+        //                 // '","date-prescribed":"',
+        //                 // getDatePrescribed(tokenId),
+        //                 // '","date-filled":"',
+        //                 // getDateFilled(tokenId),
+        //                 // '","date-next-fill":"',
+        //                 // getDateNextFill(tokenId),                        
+        //                 // '",',
+        //                 '", "image": "data:image/svg+xml;base64,',
+        //                 Base64.encode(bytes(output)),
+        //                 '"}'
+        //                 '",',
+        //                 '"attributes": [{"trait_type": "date-prescribed", "value": "',getDatePrescribed(tokenId),'",{"trait_type": "date-filled", "value": "',getDateFilled(tokenId),'"},{"trait_type": "date-next-fill", "value": "06/20/2023"}]}'
+        //                 // '"attributes":',
+        //                 // jsonAttributes,
+        //                 "}"
+        //             )
+        //         )
+        //     )
+        // );
+
+        string memory json = getTheJson(tokenId, output);
+
+        // return
+        //    output = string(abi.encodePacked(_baseURI(),));
+        output = string(
+            // abi.encodePacked("data:application/json;base64,", json)
+            abi.encodePacked("data:application/json;base64,", json)
+            
+        );
+
+        return output;
+    } //end of tokenURI or generateSVG
+
+
+    function getTheJson(uint256 tokenId, string memory output) public view returns (string memory) {
+
         string memory json = Base64.encode(
             bytes(
                 string(
@@ -285,22 +351,36 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
                         '{"name":"',
                         getPatientName(tokenId),
                         '","description":"',
-                        getSig(tokenId),
-                        // '",',
-                        '","medication":"',
                         getMedication(tokenId),
+                        // getSig(tokenId),
+                        // '","dob":"',
+                        // getDob(tokenId),                        
                         // '",',
-                        '","quantity":"',
-                        getQuantity(tokenId),
+                        // '","medication":"',
+                        // getMedication(tokenId),
                         // '",',
-                        '","dob":"',
-                        getDob(tokenId),
+                        // '","quantity":"',
+                        // getQuantity(tokenId),
+                        // '","quantity-filled":"',
+                        // getQuantityFilled(tokenId),
+                        // '","quantity-unfilled":"',
+                        // getQuantityLeft(tokenId),
+                        // '","date-prescribed":"',
+                        // getDatePrescribed(tokenId),
+                        // '","date-filled":"',
+                        // getDateFilled(tokenId),
+                        // '","date-next-fill":"',
+                        // getDateNextFill(tokenId),                        
                         // '",',
                         '", "image": "data:image/svg+xml;base64,',
                         Base64.encode(bytes(output)),
                         '"}'
-                        // '",',
-                        // '"attributes": [{"trait_type": "npi", "value": "01010101"},{"trait_type": "state", "value": "CA"},{"trait_type": "expiration", "value": "06/06/2023"}]}'
+                        '",',
+                        '"attributes": [{"trait_type": "date-prescribed", "value": "',getDatePrescribed(tokenId),
+                        '",{"trait_type": "date-filled", "value": "',getDateFilled(tokenId),
+                        '",{"trait_type": "quantity", "value": "',getQuantity(tokenId),
+                        '",{"trait_type": "quantity-filled", "value": "',getQuantityFilled(tokenId),
+                        '"},{"trait_type": "date-next-fill", "value": "06/20/2023"}]}'
                         // '"attributes":',
                         // jsonAttributes,
                         // "}"
@@ -308,17 +388,8 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
                 )
             )
         );
-        // return
-        //    output = string(abi.encodePacked(_baseURI(),));
-        output = string(
-            abi.encodePacked("data:application/json;base64,", json)
-        );
-
-        return output;
-    } //end of tokenURI or generateSVG
-
-
-
+        return json;
+    }
 
 
 

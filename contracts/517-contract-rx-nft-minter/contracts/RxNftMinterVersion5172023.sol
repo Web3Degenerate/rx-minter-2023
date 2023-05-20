@@ -1,11 +1,32 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
- 
- 
- contract ScriptHelpers {
 
-//trying to compile on Thurs 5/18/2023
+import "@thirdweb-dev/contracts/base/ERC721Base.sol";
+import "@openzeppelin/contracts/utils/Base64.sol";
 
+contract RxNftMinterVersion5172023 is ERC721Base {
+
+    uint256 private rx_tokenCounter;
+
+      constructor(
+        string memory _name,
+        string memory _symbol,
+        address _royaltyRecipient,
+        uint128 _royaltyBps
+    )
+        ERC721Base(
+            _name,
+            _symbol,
+            _royaltyRecipient,
+            _royaltyBps
+        )
+    {
+        rx_tokenCounter = 0;
+    }
+
+
+
+// Struct and Events: 
     struct Script {
         // string patient_wallet;
         address patient_address;
@@ -76,9 +97,241 @@ pragma solidity ^0.8.0;
         address indexed pharmacy_address,
         address indexed patient_address,
         uint256 indexed script_token_number
-    );
+    );    
 
-    function updateScriptQuantityAndDates(uint256 tokenId, uint256 _pillsFilled, string memory _dateFilled, string memory _dateNextFill) public {
+
+    function _createScript(
+        address _patient_address,
+        string memory _name,
+        string memory _description,
+        string memory _medication,
+        string memory _dob,
+        uint256 _quantity,
+        string memory _datePrescribed,
+        uint256 _dateRxStart  
+    )
+        public
+        returns (
+            uint256
+        )
+    {
+        Script memory _rx = Script({
+            // patient_wallet = _patient_wallet
+            patient_address: _patient_address,
+            name: _name,
+            description: _description,
+            medication: _medication,
+            dob: _dob,
+            quantity: _quantity,
+            quantityFilled: 0, // assume quantity filled always zero when script written.
+            rxId: rx_tokenCounter,
+            datePrescribed: _datePrescribed, // string datePrescribed;
+            // dateRxStart: _dateRxStart, // uint256 dateRxStart;
+            dateFilled: 'N/A', // string dateFilled;
+            // dateRxEnd: 0, // uint256 dateRxEnd;
+            dateNextFill: 'N/A'  // string dateNextFill (daysLeft);
+            // dateRxNext: 0 // uint256 dateRxNext;
+
+        });
+
+        allScripts.push(_rx);
+
+        emit ScriptWritten(
+            //_patient_wallet, //address ("string")   
+            _patient_address, //address ('string') declared as 'address' in _createScript
+            _name, //string
+            _medication, //string
+            _quantity, //uint256
+            0,  //quantityFilled uint256
+            _datePrescribed, // string date
+            _dateRxStart, // uint256 date
+            rx_tokenCounter // uint256 tokenId
+        );
+
+        return _rx.rxId;
+    }
+
+    function mintRx(address _to) public {
+        _safeMint(_to, 1);
+
+        emit ScriptSentToPt(
+            _to,
+            msg.sender,
+            rx_tokenCounter
+        );
+
+        rx_tokenCounter += 1;
+    }
+
+
+    function transferPatientToPharmacy(address _from, address _to, uint256 tokenId) public {
+
+        safeTransferFrom(_from, _to, tokenId);
+
+        emit PatientTransferToPharmacy (
+            _from,
+            _to,
+            tokenId 
+        );
+    }
+    
+    function transferPharmacyToPatient(address _from, address _to, uint256 tokenId) public {
+
+        safeTransferFrom(_from, _to, tokenId);
+
+        emit PharmacyTransferToPatient (
+            _from,
+            _to,
+            tokenId 
+        );
+    }   
+
+    function tokenURI(
+        uint256 tokenId
+    ) public view override returns (string memory) {
+        // Script storage rx = allScripts[tokenId];
+
+        string[7] memory parts;
+
+        parts[
+            0
+        ] = '<svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin meet" viewBox="0 0 350 350"><style>.base { fill: black; font-family: serif; font-size: 14px; }</style><rect width="100%" height="100%" fill="#E8F559" /><text x="10" y="20" class="base">';
+
+        // parts[1] = getPatientInfo(tokenId);
+        parts[1] = getMedicationInfo(tokenId);       
+       
+        parts[2] = '</text><text x="10" y="40" class="base">';
+
+        parts[3] = getQuantityInfo(tokenId);
+
+        parts[4] = '</text><text x="10" y="60" class="base">';
+
+        parts[5] = getDateInfo(tokenId);
+
+        parts[6] = "</text></svg>";
+
+        // string memory output = string(
+        string memory output = string(
+            abi.encodePacked(
+                parts[0],
+                parts[1],
+                parts[2],
+                parts[3],
+                parts[4],
+                parts[5],
+                parts[6]
+            )
+        );
+
+        
+        // string memory json = solidityIsGay(tokenId, output);
+        string memory json = Base64.encode(
+            bytes(
+                string(
+                    abi.encodePacked(
+                        '{"name":"',
+                        getPatientName(tokenId),
+                        '","description":"',
+                        getMedication(tokenId),
+                        // getSig(tokenId),
+                        // '","dob":"',
+                        // getDob(tokenId),                        
+                        // '",',
+                        // '","medication":"',
+                        // getMedication(tokenId),
+                        // '",',
+                        // '","quantity":"',
+                        // getQuantity(tokenId),
+                        // '","quantity-filled":"',
+                        // getQuantityFilled(tokenId),
+                        // '","quantity-unfilled":"',
+                        // getQuantityLeft(tokenId),
+                        // '","date-prescribed":"',
+                        // getDatePrescribed(tokenId),
+                        // '","date-filled":"',
+                        // getDateFilled(tokenId),
+                        // '","date-next-fill":"',
+                        // getDateNextFill(tokenId),                        
+                        // '",',
+                        '", "image": "data:image/svg+xml;base64,',
+                        Base64.encode(bytes(output)),
+                        '"}'
+                        '",',
+                        '"attributes": [{"trait_type": "date-prescribed", "value": "',getDatePrescribed(tokenId),
+                        '",{"trait_type": "date-filled", "value": "',getDateFilled(tokenId),
+                        '",{"trait_type": "quantity", "value": "',getQuantity(tokenId),
+                        '",{"trait_type": "quantity-filled", "value": "',getQuantityFilled(tokenId),
+                        '"},{"trait_type": "date-next-fill", "value": "06/20/2023"}]}'
+                        // '"attributes":',
+                        // jsonAttributes,
+                        // "}"
+                    )
+                )
+            )
+        );
+
+        // return
+        //    output = string(abi.encodePacked(_baseURI(),));
+        output = string(
+            // abi.encodePacked("data:application/json;base64,", json)
+            abi.encodePacked("data:application/json;base64,", json)
+        );
+
+        return output;
+    } //end of tokenURI or generateSVG
+
+
+    // function solidityIsGay(uint256 tokenId, string memory output) public view returns (string memory) {
+
+    //     string memory json = Base64.encode(
+    //         bytes(
+    //             string(
+    //                 abi.encodePacked(
+    //                     '{"name":"',
+    //                     getPatientName(tokenId),
+    //                     '","description":"',
+    //                     getMedication(tokenId),
+    //                     // getSig(tokenId),
+    //                     // '","dob":"',
+    //                     // getDob(tokenId),                        
+    //                     // '",',
+    //                     // '","medication":"',
+    //                     // getMedication(tokenId),
+    //                     // '",',
+    //                     // '","quantity":"',
+    //                     // getQuantity(tokenId),
+    //                     // '","quantity-filled":"',
+    //                     // getQuantityFilled(tokenId),
+    //                     // '","quantity-unfilled":"',
+    //                     // getQuantityLeft(tokenId),
+    //                     // '","date-prescribed":"',
+    //                     // getDatePrescribed(tokenId),
+    //                     // '","date-filled":"',
+    //                     // getDateFilled(tokenId),
+    //                     // '","date-next-fill":"',
+    //                     // getDateNextFill(tokenId),                        
+    //                     // '",',
+    //                     '", "image": "data:image/svg+xml;base64,',
+    //                     Base64.encode(bytes(output)),
+    //                     '"}'
+    //                     '",',
+    //                     '"attributes": [{"trait_type": "date-prescribed", "value": "',getDatePrescribed(tokenId),
+    //                     '",{"trait_type": "date-filled", "value": "',getDateFilled(tokenId),
+    //                     '",{"trait_type": "quantity", "value": "',getQuantity(tokenId),
+    //                     '",{"trait_type": "quantity-filled", "value": "',getQuantityFilled(tokenId),
+    //                     '"},{"trait_type": "date-next-fill", "value": "06/20/2023"}]}'
+    //                     // '"attributes":',
+    //                     // jsonAttributes,
+    //                     // "}"
+    //                 )
+    //             )
+    //         )
+    //     );
+    //     return json;
+    // }
+
+
+ function updateScriptQuantityAndDates(uint256 tokenId, uint256 _pillsFilled, string memory _dateFilled, string memory _dateNextFill) public {
         Script storage rx = allScripts[tokenId];
         rx.quantityFilled += _pillsFilled;
         rx.dateFilled = _dateFilled;
@@ -313,4 +566,9 @@ pragma solidity ^0.8.0;
         }
         return string(buffer);
     }
+
+
+
+
+
 } //end of contract
