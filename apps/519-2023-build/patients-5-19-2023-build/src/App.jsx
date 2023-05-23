@@ -3,14 +3,13 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 
 import { Route, Routes } from 'react-router-dom'
 import { Navbar } from './components';
-import { Home } from './pages';
+import { PatientDashboard } from './pages';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-
-// export default function Home() {
-export default function App() {
+export default function Home() {
+// export default function App() {
   return (
 
     <>
@@ -21,7 +20,7 @@ export default function App() {
    
               <Routes>
 
-                              <Route path="/" element={ <Home /> } />
+                              <Route path="/" element={ <PatientDashboard /> } />
 
                               {/* <Route path="/add-patient" element={ <AddPatient /> } /> */}
 

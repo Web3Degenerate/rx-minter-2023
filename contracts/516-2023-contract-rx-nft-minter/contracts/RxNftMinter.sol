@@ -334,7 +334,9 @@ contract RxNftMinter is ERC721Base, ScriptHelpers {
         //    output = string(abi.encodePacked(_baseURI(),));
         output = string(
             // abi.encodePacked("data:application/json;base64,", json)
-            abi.encodePacked("data:application/json;base64,", json)
+            // abi.encodePacked("data:application/json;base64,", json)
+            abi.encodePacked(_baseURI(), json)
+            
             
         );
 

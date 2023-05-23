@@ -31,7 +31,7 @@ const Navbar = () => {
         <ul className="nav navbar-nav">
 
             <li className="nav-item" style={{margin:"5px"}}>
-                <Link className="navbar-brand btn btn-success" to="/">Practice Portal</Link>
+                <Link className="navbar-brand btn btn-success" to="/">Patient Portal</Link>
             </li>
 
               {/* <li className="nav-item" style={{margin:"5px"}}>
