@@ -1,0 +1,29 @@
+{
+  "name": "doctors-5-19-2023-build",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "yarn build && npx thirdweb@latest upload dist"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "@thirdweb-dev/react": "^3",
+    "@thirdweb-dev/sdk": "^3",
+    "axios": "^1.4.0",
+    "bootstrap": "^5.3.0",
+    "ethers": "^5.7.2",
+    "html2canvas": "^1.4.1",
+    "react": "^18.2",
+    "react-dom": "^18.2",
+    "react-router-dom": "^6.14.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^2",
+    "sass": "^1.63.6",
+    "vite": "^3",
+    "vite-plugin-node-polyfills": "^0.7.0"
+  }
+}

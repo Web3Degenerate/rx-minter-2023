@@ -75,7 +75,7 @@
     min-height: 100px;
     max-height: 150px;
     position: relative; */
-    margin-bottom: -200px;
+    margin-bottom: -240px;
     /* text-align: left !important; */
   }
 /* END OF Quick NFT Card Fix From: https://www.youtube.com/watch?v=HFl_oT5tKfo  */
@@ -111,6 +111,7 @@ p {
     hyphens: auto;
     min-width: 100px;
     max-width: 300px;
+    text-align: left;
   }
 
 
@@ -145,6 +146,22 @@ p {
 
   .title {
     color: #85662b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .title-unfilled {
+    color: #137e04;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .title-filled {
+    color: #d11010;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -216,4 +233,13 @@ image{
 
   object-fit: cover;
   object-position: center right;
+}
+
+.image--cover--navbar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+
+  margin-right: 5px;
+
 }

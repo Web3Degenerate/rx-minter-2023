@@ -3,9 +3,9 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 
 import { Route, Routes } from 'react-router-dom'
 import { Navbar } from './components';
-import { PatientDashboard } from './pages';
+import { PatientDashboard, PatientFaxScript } from './pages';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 
 export default function Home() {
@@ -21,6 +21,8 @@ export default function Home() {
               <Routes>
 
                               <Route path="/" element={ <PatientDashboard /> } />
+
+                              <Route path="/patient-fax-script/:id" element={ <PatientFaxScript /> } />
 
                               {/* <Route path="/add-patient" element={ <AddPatient /> } /> */}
 

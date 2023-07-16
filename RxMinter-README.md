@@ -2,7 +2,9 @@
 
 ## App
 
-1. Install Dependencies
+1. run `npx thirdweb@latest create --app`
+
+2. Install Dependencies
 
   - npm i react-router-dom
 
@@ -11,7 +13,13 @@
   - If installing [bootstrap on a Vite project follow this article](): 
     
     - > npm i --save bootstrap @popperjs/core
-    - > npm i --save-dev sass (_skip_)
+      - > npm i --save-dev sass (_skip_)
+
+  - Install html2canvas and `react-html2canvas` 
+    - NOT npm i html2canvas 
+    - npm install html2canvas react-html2canvas (_per chatgpt_)
+
+    - Seems like you need to have the svg wrapped in some container: https://stackoverflow.com/questions/65632240/uncaught-in-promise-unable-to-find-element-in-cloned-iframe-2460
 
 
 ## Solidity Contracts:

@@ -1,0 +1,244 @@
+.row {
+    padding-top:20px;
+}
+
+.box_size{
+    width:50%;
+    margin:auto;
+}
+
+.nft_box_size{
+    width:95%;
+    margin:auto;
+}
+
+
+/* Quick NFT Card Fix From: https://www.youtube.com/watch?v=HFl_oT5tKfo  
+  Faster writre up https://blog.thirdweb.com/guides/create-an-nft-gallery-using-thirdweb-and-next-js/
+*/
+/* SOURCE: @Thirdweb https://github.com/thirdweb-dev/examples/blob/main/typescript/gallery-example/Home.module.css  */
+/* index: https://github.com/thirdweb-dev/examples/blob/main/typescript/gallery-example/index.tsx */
+
+
+/* Loading container? */
+/* .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #c0ffee;
+} */
+
+.view-scripts-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* width: 100vw; */
+    /* min-height: 100vh; */
+    min-height: 100vh;
+
+    /* width: 100%;
+    min-height: 100%; */
+    background-color: #1e1e20;
+    /* #252246 */
+    /* overflow: hidden; */
+    /* width: 200px; */
+
+  }
+  
+  .view-scripts-cards {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    /* align-items: left; */
+    /* margin-top: 20px; */   /* Original */
+    /* gap: 20px; */          /* Original */
+
+    /* margin-bottom: -80px;     Added */
+    width: 80vw;
+    /* text-align: left; */
+
+    /* overflow: hidden; */
+    /* width: 201px; */
+  }
+  
+  .view-scripts-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 0px 0px 10px #ebe4e4;
+    min-width: 250px;
+    padding: 10px;
+    background: #323331;
+  }
+  
+  .view-scripts-image {
+    /* min-width: 100px;
+    max-width: 150px;
+    min-height: 100px;
+    max-height: 150px;
+    position: relative; */
+    min-height: 250px;
+    min-width: 150px;
+    /* negative margin-bottom from: https://stackoverflow.com/questions/2787310/how-to-reduce-the-space-between-p-tags */
+    margin-bottom: -200px;
+  }
+
+
+/* SINGLE NFT VIEW FOR PHARMACY BASED ON COLLECTION STYLES ABOVE */
+
+.view-single-scripts-cards {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  /* align-items: left; */
+  /* margin-top: 20px; */   /* Original */
+  /* gap: 20px; */          /* Original */
+
+  /* margin-bottom: -80px;     Added */
+  width: 80vw;
+  /* text-align: left; */
+
+  /* overflow: hidden; */
+  /* width: 201px; */
+}
+
+.view-single-scripts-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin: 10px;
+  box-shadow: 0px 0px 10px #ebe4e4;
+  min-width: 250px;
+  padding: 10px;
+  background: rgb(50, 51, 49);
+
+  overflow: hidden;
+}
+
+
+
+  .view-single-script-image {
+    /* min-width: 100px;
+    max-width: 150px;
+    min-height: 100px;
+    max-height: 150px;
+    position: relative; */
+    min-height: 250px;
+/* height: 400px;
+width: 100%; */
+    min-width: 150px;
+    margin-bottom: -300px;
+  }
+/* END OF Quick NFT Card Fix From: https://www.youtube.com/watch?v=HFl_oT5tKfo  */
+
+/* My Edits */
+
+/* p {
+    overflow-wrap: normal;
+    text-align: left;
+    width: 80vw;
+    flex-wrap: flex; 
+}  */
+
+p {
+    width: inherit;
+    margin-top: -20px !important;
+    text-align: left !important;
+    /* background: gold; */
+  }
+  
+  .ow-anywhere {
+    overflow-wrap: anywhere;
+  }
+  
+  .ow-break-word {
+    overflow-wrap: break-word;
+  }
+  
+  .word-break {
+    word-break: break-all;
+  }
+  
+  .hyphens {
+    hyphens: auto;
+    min-width: 100px;
+    max-width: 300px;
+    margin-left: 10px !important;
+  }
+
+
+  /* Accordion Attempt 1 from: https://www.youtube.com/watch?v=bGpZrr32ECw  */
+
+  .wrapper {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+
+/* from chatGPT */
+    position: relative;
+  }
+
+  .accordion {
+    /* width: 500px; */
+    flex-direction: column;
+
+/* from chatGPT */
+    position: absolute;
+    top: 0;
+  }
+
+
+  .item {
+    background: #f0ebe1;
+    margin-bottom: 5px;
+    padding: 10px 20px; 
+
+  }
+
+  .title {
+    color: #85662b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .contento {
+    /* color: #8b7f75; */
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0,1,0,1);
+  }
+
+  .contento.show {
+    height: auto;
+    max-height: 9999px;
+    transition: all 0.5s cubic-bezier(1,0,1,0);
+  }
+
+
+  /* From:  */
+  .image--cover {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px;
+  
+    object-fit: cover;
+    object-position: center right;
+  }
