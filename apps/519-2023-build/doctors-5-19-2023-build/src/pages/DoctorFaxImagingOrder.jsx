@@ -5,7 +5,6 @@ import html2canvas from 'html2canvas';
 //https://www.npmjs.com/package/html2canvas  => https://github.com/niklasvh/html2canvas 
 
 // import "../styles/html2canvas.js";
-
 // import * as htmlToImage from 'html-to-image';
 
 
@@ -18,7 +17,7 @@ import { useAddress, useContract, ConnectWallet, useOwnedNFTs, ThirdwebNftMedia,
   
   import { useNavigate, Link, useParams } from 'react-router-dom'
   
-//   import { ethers } from 'ethers';
+  import { ethers } from 'ethers';
  
   import { addyShortner,convertBigNumberToFourDigitYear, RemedySvgPdfGenerator, formatDateFourDigitYear } from '../utils'
     //work out: dayCalculatorDoc
@@ -294,8 +293,37 @@ const handleConvertClickerInternal = async () => {
                     
 // Imaging Order SVG **********************************************************************************************************************************************************
 
-const svgElement = await RemedySvgOrderMri(nft?.metadata.name, formatDateFourDigitYear(nft?.metadata.attributes[1].value), nft?.metadata.attributes[0].value,
-nft?.metadata.attributes[9].value, nft?.metadata.attributes[10].value, nft?.metadata.description, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value)  )
+        //7-16-2023 decode logic
+            // ethers.utils.toUtf8String(ethers.utils.RLP.decode(grabPatientName))
+            let unhashedName
+            let unhashedDob
+            let unhashed_pt_physical_address
+
+            if(nft?.metadata.name.startsWith('0x')) {
+                unhashedName = ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft?.metadata.name))
+            }else{
+                unhashedName = nft?.metadata.name
+            }
+
+
+            if(nft?.metadata.attributes[1].value.startsWith('0x')) {
+                unhashedDob = formatDateFourDigitYear(ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft?.metadata.attributes[1].value)))
+            }else{
+                unhashedDob = formatDateFourDigitYear(nft?.metadata.attributes[1].value)
+            }
+
+
+            if(nft?.metadata.attributes[10].value.startsWith('0x')) {
+                unhashed_pt_physical_address = ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft?.metadata.attributes[10].value))
+            }else{
+                unhashed_pt_physical_address = nft?.metadata.attributes[10].value
+            }
+
+
+
+const svgElement = await RemedySvgOrderMri(unhashedName, unhashedDob, 
+                    nft?.metadata.attributes[0].value, nft?.metadata.attributes[9].value, unhashed_pt_physical_address, 
+                    nft?.metadata.description, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value)  )
  
 // Imaging Order SVG **********************************************************************************************************************************************************
 

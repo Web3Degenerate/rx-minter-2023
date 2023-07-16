@@ -11,14 +11,24 @@
     margin:auto;
 }
 
-.box_size_orders{
-    width: 80%;
-    margin:auto;
+.nft_box_size{
+  width: 60%;
+  margin:auto;
 }
 
 .box_size_scripts{
     width: 70%;
     margin:auto;
+}
+
+.box_size_orders{
+  width: 80%;
+  margin:auto;
+}
+
+.box_size_new_form{
+  width:90%;
+  margin:auto;
 }
 
 .box_size_patient{
@@ -35,10 +45,7 @@
     padding: 10px;
 }
 
-.nft_box_size{
-    width: 60%;
-    margin:auto;
-}
+
 
 .svg_box_size{
   /* margin:auto;

@@ -1,13 +1,14 @@
 import { Route, Routes } from 'react-router-dom'
 import { Navbar } from './components';
 import { CreateScript, CreateImagingOrder, EditPatient, Home, EditPharmacy, 
-  PatientHistory, TokenHistory, DoctorFaxImagingOrder, ListPharmacies } from './pages';
+  PatientHistory, TokenHistory, DoctorFaxImagingOrder, ListPharmacies, AddPatient, AddPharmacy } from './pages';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
 import { useAddress, useContract, ConnectWallet } from "@thirdweb-dev/react";
+
 // import "./styles/Home.css";
 
 export default function App() {
@@ -29,7 +30,7 @@ export default function App() {
   
                                 {/* <Route path="/patient-list" element={ <ListPatients /> } /> */}
   
-                                {/* <Route path="/add-patient" element={ <AddPatient /> } /> */}
+                                <Route path="/add-patient" element={ <AddPatient /> } />
                                 <Route path="/edit-patient/:id" element={ <EditPatient /> } />
   
                                 <Route path="/mint-script/:id" element={ <CreateScript /> } /> 
@@ -38,8 +39,9 @@ export default function App() {
                                 <Route path="/fax-imaging-order/:id" element={ <DoctorFaxImagingOrder /> } />
   
                                 <Route path="/pharmacy-list" element={ <ListPharmacies /> } />
-  
-                                <Route path="/edit-pharmacy/:id" element={ <EditPharmacy /> } />                              
+                                <Route path="/edit-pharmacy/:id" element={ <EditPharmacy /> } /> 
+                                <Route path="/add-pharmacy" element={ <AddPharmacy /> } />
+
                                 
                                 <Route path="/patient-history/:id" element={ <PatientHistory /> } />
   

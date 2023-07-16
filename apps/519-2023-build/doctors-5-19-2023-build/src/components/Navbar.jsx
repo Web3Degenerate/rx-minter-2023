@@ -77,7 +77,7 @@ const Navbar = () => {
               <Link className="navbar-brand btn btn-primary" to="/edit-patient/:id">Edit Patient</Link>
               </li> */}
           <li className="nav-item" style={{margin:"5px"}}>
-              <Link className="navbar-brand btn btn-primary" to="/pharmacy-list">Edit Pharmacy / Facility</Link>
+              <Link className="navbar-brand btn btn-primary" to="/pharmacy-list">Facility Dashboard</Link>
           </li>
 
           {/* <li className="nav-item" style={{margin:"5px"}}>

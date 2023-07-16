@@ -40,14 +40,16 @@ const ListPharmacies = () => {
             </div>
         </div>
 
-        {/* <div className="row">
-            <div className="col-md-2"></div>
-            <div className="col-md-2">Patient</div>
-            <div className="col-md-2">Wallet</div>
-            <div className="col-md-2">Email</div>
-            <div className="col-md-2">Edit</div>
-            <div className="col-md-2">Delete</div>
-        </div> */}
+        <div className="row">
+                <div className="col-md-2">
+                </div>
+
+                <div className="col-md-8 text-center">
+                    <Link to="/add-pharmacy" className="btn btn-primary btn-lg btn-block container" style={{borderRadius:"12px"}}>
+                        Add A Pharmacy or Facility
+                    </Link>
+                </div>
+        </div>
 
         
         <div className="row">
@@ -66,15 +68,15 @@ const ListPharmacies = () => {
             <thead>          
                 <tr>
                     <th style={{display: "none"}}>Key</th>
-                    <th>Pharmacy</th>
-                    
-                    <th>Wallet Address</th>
-                    
-                    {/* <th>Email</th> */}
+                    <th className="text-center">Pharmacy / Facility </th>
 
+                    <th className="text-center">Fax Number</th>
+                    
+                    <th className="text-center">Wallet Address</th>
+            
                     {/* <th>Scripts</th> */}
                     
-                    <th>Edit</th>
+                    <th className="align-middle text-center">Edit</th>
 
                     {/* <th>Delete</th> */}
                 </tr> 
@@ -82,27 +84,31 @@ const ListPharmacies = () => {
             <tbody className="table-striped">
              {/* <tr key={`${index}`}> */}
 
-            {pharmacy?.filter((pharmacy) => {
-               return search.toLowerCase() === '' ? pharmacy : pharmacy.pharmacy_name.toLowerCase().includes(search) || pharmacy.pharmacy_wallet.toLowerCase().includes(search)
+            {pharmacy.filter((pharmacy) => {
+               return search.toLowerCase() === '' ? pharmacy : pharmacy.pharmacy_name.toLowerCase().includes(search) 
+               || pharmacy.pharmacy_wallet.toLowerCase().includes(search)
+               || pharmacy.pharmacy_fax.includes(search)
+
             }
 
             ).map((pharmacy, index) => (
                     <tr key={`${index}`}>
                         <td style={{display: "none"}}>{index+1}</td>
 
-                        <td>{pharmacy.pharmacy_name}</td>
+                        <td className="align-middle text-center">{pharmacy.pharmacy_name}</td>
+
+                        <td className="text-center">{pharmacy.pharmacy_fax}</td>
                         
-                        <td>{pharmacy.pharmacy_wallet.slice(0,5)}...{pharmacy.pharmacy_wallet.slice(37)}</td>
+                        <td className="text-center">{pharmacy.pharmacy_wallet.slice(0,5)}...{pharmacy.pharmacy_wallet.slice(37)}</td>
 
 
-                        <td><Link className="btn btn-warning" to={`/edit-pharmacy/${pharmacy.id}`}>Edit Pharmacy Info</Link></td>
+                        <td className="text-center"><Link className="btn btn-warning" to={`/edit-pharmacy/${pharmacy.id}`}>Edit Pharmacy Info</Link></td>
 
                     </tr>
                 ))}
             </tbody>
         </table>
 
-        {/* <td><Link className="btn btn-danger" to="" onClick={() => deleteUser(patient.id)}>Delete</Link></td> */}
     
     </>
   )

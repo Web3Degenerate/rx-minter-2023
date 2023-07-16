@@ -72,6 +72,16 @@ const Home = () => {
               </div>
 
 
+                <div className="row">
+                    <div className="col-md-2">
+                    </div>
+                    
+                    <div className="col-md-8 text-center">
+                        <Link to="/add-patient" className="btn btn-primary btn-lg btn-block container" style={{borderRadius:"12px"}}
+                        >Add A Patient</Link>
+                    </div>
+                </div>
+
 
               
               <div className="row">

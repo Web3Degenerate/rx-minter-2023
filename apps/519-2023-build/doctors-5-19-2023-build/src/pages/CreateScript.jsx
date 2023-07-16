@@ -54,23 +54,6 @@ loadDoctors();
 }, [])
 
 const [medication, setMedication] = useState([]);
-// const [medication, setMedication] = useState({
-//   name: "",
-//   sig: "",
-//   id: "",
-//   strength:"",
-//   quantity:"",
-//   daily_max:"",
-//   daily_supply:""
-// });
-
-// const [wtf3provider, setWtf3Provder] = useState('');
-
-// const web3 = new Web3(Web3.givenProvider || "http://localhost:5173"); //returns address 50 times??
-// web3.eth.getAccounts().then(console.log);
-// setWtf3Provder(web3.eth.getAccounts());
-
-// const personallyWTF = web3.eth.getAccounts();
 
 //Added R 6/8/23 for Wallet Events
 const inputWalletRef = useRef();
@@ -81,44 +64,11 @@ setPatient({name: "", wallet_address: "", email:"", dob:"", id:""});
 const result = await axios.get("https://rxminter.com/php-react/edit.php?id="+id);
 console.log("loadUser axios request returned:", result);
 setPatient(result.data);
-// inputWalletRef.current = result.data.wallet_address; 
-// console.log('loadUser inputWalletRef returned: ', inputWalletRef)
+
 }
 
 
 const {name,wallet_address,dob,email,pt_physical_address} = patient;
-// if(wallet_address==''){loadUser()}
-
-// const [options, setOptions] = useState({
-// autoClose: false,
-// keepAfterRouteChange: false
-// });
-
-
-// const [isLoading, setIsLoading] = useState(false);
-// const { contract } = useContract("0x7e45B8A00e2B1Fb9C7302982610219714E500576"); //NFT Rx9.0 - George Minter on mumbai
-// const { contract } = useContract("0x0967b8b29Df848E63239F5dc9314fDcff8839f7B"); //NFT Rx-10.1 - Struct, tokenURI w/ struct
-// const { contract } = useContract("0x46222c35eCA09F0eDDEF9B1faA14B7a236eD0C15"); //NFT Rx-10.2 (NOT BASE/721A) - Struct, tokenURI w/ struct
-
-// const { contract } = useContract("0xEC44e3efeD46D6ffd392e32D6c99E04780Ce4d08"); // NFT RX -10.3 721 ONLY. FINALLY INCREMENT
-// const { contract } = useContract("0x03766B73D752D3155D6D8d7ff98D88ba656db7E0"); // NFT RX 10.4 - fix addy string 
-// const { contract } = useContract("0x3bcf6B3d11d2737A7F2E3D819D6E66F63C6f7a8e"); // NFT RX 10.5 - Two Calls
-// const { contract } = useContract("0xb1F31B06dA1FEca5Bd98D52E89b7AD3e9cbD23B6"); // 10.6 reworked svg section (Yellow, fixed duplicates, but SPACING breaking metadata)
-
-// const { contract } = useContract("0xE0a73cAEb01ABdee510993F2d6a525b9948B49dF"); // 11.0 - Fixed spacing SVG issue. 
-// const { contract } = useContract("0x684E9cA3BDf984769531Af2778957815EB096e01"); // 11.1 - Testing Pharmacy Update
-// const { contract } = useContract("0x92525216C74e3B5819e487Bef564e12845BafdB2"); // 11.5 - Fix SVG uint, Events, Roles (5/20/23)
-// const { contract } = useContract("0x135B8F385f8FaE5ab558d2D2A7A5d33a99184485"); // 11.7 - Improved metadata and function callls (5/21/23)
-// const { contract } = useContract("0xd76F7225D8563071d04f16FF26873f7B4468bD5D"); // 11.9 - Improved metadata and function callls (5/21/23)
-// const { contract } = useContract("0xE5960C2422B192a54988D0b7d7cD6d3f8A3a7794"); // 12.1 - Improved metadata  (5/23/23)
-
-
-// const getCurrentContractAddress = async () => {
-//   const result = await axios.get("https://rxminter.com/php-react/constants.php?id=1");
-//   return result.data.contract_address; // 12.6 - Event index / Fixed Metadata Doctors / DEA (6/4/23)
-// }
-
-// const solidityContractAddress = getCurrentContractAddress();
 
 const { contract } = useContract(solidityContractAddress); // 13.1 - Improved metadata  (5/23/23)             
 console.log('contract address from server axios is: ',contract)
@@ -133,27 +83,6 @@ const address = useAddress();
 
 
 
-//docs erc-721
-// ERC721 - docs: 
-// const { mutateAsync } = useTransferNFT(contract)
-
-//docs useMetadata
-// const { data } = useMetadata(contract)
-
-
-// (~16th min to -16:30) - map over nfts in return stmt that we grab here (metadata.nft)  https://youtu.be/cKc8JVl_u30?t=990
-// const { data: nfts } = useOwnedNFTs(contract, address);
-
-// console.log(nfts)
-
-// Contract must be an ERC-721 or ERC-1155 contract
-// const {
-//   mutateAsync: transferNFT,
-//   // isLoading,
-//   // error,
-// } = useTransferNFT(contract);
-
-
 
 //*********************************** Address Transfer Form ********************* */
 
@@ -161,36 +90,10 @@ const [transferForm, setTransferForm] = useState({
 address: '',
 });
 
-// const handleTransferFormFieldChange = (fieldName, e) => {
-// setTransferForm({ ...form, [fieldName]: e.target.value })
-// }
-
-// const handleTransferSubmit = async (e) => {
-// e.preventDefault();
-// await mintNFT({ ...transferForm })
-// }
-
-// const mintNFT = async (transferForm) => {
-// try {
-//   const data = await contract.call("mintNFT", [transferForm.address])
-
-//   console.log("contract call success", data)
-//   setTransferForm({ address: '' });
-// } catch (error) {
-//   console.log("contract call failure", error)
-// }
-// }
 
 
 //*********************************** Rx Fields Form ************************** */
-// const [form, setForm] = useState({
-//   name: '',
-//   wallet_address: '',
-//   description: '',
-//   medication: '',
-//   dob: '', 
-//   quantity: ''
-// });
+
 
 const [form, setForm] = useState({
   name: '',
@@ -216,11 +119,6 @@ const inputMax = useRef();
 const inputDatePrescribed = useRef(); //datePrescribed
 
 
-
-//For Version 11.1:
-// const inputDoctor = useRef(); 
-// const inputNPI = useRef(); 
-// const inputDEA = useRef(); 
 
 // **************************** CHAT GPT HELPER FUNCTION FOR OUR DATE STRING IN v.11.5 ************************************
 
@@ -310,14 +208,6 @@ const handleSubmit = async (e) => { // useRef() example didn't have e param, but
   // const nextFillDate = date_prescribed_Ref;
 
 
-
-  // await _createScript({ ...form, wallet_address: wallet_address, name: name, description: description_Ref, medication: medication_Ref, dob: dob,
-  // quantity: quantity_Ref})
-
-  // await _createScript({wallet_address, name, description_Ref, medication_Ref, dob, quantity_Ref});
-
-  // const _createScript = async (form) => {
-
 //*********************************************************************** START OF MERGE FN TEST ************************************************/
 if (confirm(`Next Fill Date will initially be set to ${formatDateTwoDigitYear(nextFillDate)} by adding a ${numberOfDays} Days Supply of ${medication_Ref} to the Date Prescribed: ${formatDateTwoDigitYear(date_prescribed_Ref)}. Do you wish to proceed?`) == true){  
 
@@ -325,27 +215,6 @@ if (confirm(`Next Fill Date will initially be set to ${formatDateTwoDigitYear(ne
                         // ******************   datePrescribed inputDatePrescribed
 try {
 
-  // const data = await contract.call("_createScript", [form.wallet_address, form.name, form.description, form.medication, form.dosage, form.quantity])
-  // const data = await contract.call("_createScript", [wallet_address, name, description_Ref, medication_Ref, dob, quantity_Ref])
- 
-//*** VERSION 11.0  */    
-  // const data = await contract.call("_createScript", [wallet_address, name, description_Ref, medication_Ref, dob, quantity_Ref])
-
-//*** VERSION 11.1 - With Date Prescribed  */   
-  // const data = await contract.call("_createScript", [wallet_address, name, description_Ref, medication_Ref, dob, quantity_Ref, formatDateCard(date_prescribed_Ref), new Date(date_prescribed_Ref).getTime()])
-
-//*** VERSION 11.7 - With patient addy as STRING and address  */   
-  // const data = await contract.call("_createScript", [wallet_address, wallet_address, name, description_Ref, medication_Ref, dob, quantity_Ref, formatDateCard(date_prescribed_Ref), new Date(date_prescribed_Ref).getTime()])
-  // const data = await contract.call("_createScript", [wallet_address, wallet_address, name, description_Ref, medication_Ref, dob, quantity_Ref, date_prescribed_Ref, new Date(date_prescribed_Ref).getTime()])
-  
-//v12.1 - 12.4 version
-  // const data = await _createScript({ args: [wallet_address, wallet_address, name, description_Ref, medication_Ref, dob, quantity_Ref, date_prescribed_Ref, new Date(date_prescribed_Ref).getTime()] })
-
-//v12.6 version (swap out pt_physical_address for max_Ref)
-  // const data = await _createScript({ args: [wallet_address, wallet_address, name, description_Ref, medication_Ref, dob, 
-  //   String(perDiemMax), quantity_Ref, doctor, dea, date_prescribed_Ref, new Date(date_prescribed_Ref).getTime()] })
-
-//v12.7 version: Added two additional parameters, date_prescribed_Ref formatted and perDiemMax in its own slot.
 
 //https://www.youtube.com/live/bBjZUe56biU?feature=share&t=1135
 // 1 - wallet_address (string)
@@ -361,13 +230,21 @@ try {
 // 11 - perDiemMax (uint256)
 // 12 - nextFillDate (uint256)
 
-  const data = await _createScript({ args: [wallet_address, name, description_Ref, medication_Ref, dob, 
-    pt_physical_address, quantity_Ref, doctor, dea, new Date(date_prescribed_Ref).getTime(), perDiemMax, 
-    // new Date(nextFillDate).getTime()
-    new Date(nextFillDate).getTime()
-  ] })
 
-//expiration date. 
+      const hashedName = ethers.utils.RLP.encode(ethers.utils.toUtf8Bytes(name));
+      const hashedDob = ethers.utils.RLP.encode(ethers.utils.toUtf8Bytes(dob));
+      const hashed_pt_physical_address = ethers.utils.RLP.encode(ethers.utils.toUtf8Bytes(pt_physical_address));
+
+
+      // const data = await _createScript({ args: [wallet_address, name, description_Ref, medication_Ref, dob, 
+      //             pt_physical_address, quantity_Ref, doctor, dea, new Date(date_prescribed_Ref).getTime(), perDiemMax, 
+      //             new Date(nextFillDate).getTime()
+      //   ] })
+
+      const data = await _createScript({ args: [wallet_address, hashedName, description_Ref, medication_Ref, hashedDob, 
+                  hashed_pt_physical_address, quantity_Ref, doctor, dea, new Date(date_prescribed_Ref).getTime(), 
+                  perDiemMax, new Date(nextFillDate).getTime() ]})
+                  
 
   console.log("Rx NFT Data Set w/ date prescribed as:", data)
 
