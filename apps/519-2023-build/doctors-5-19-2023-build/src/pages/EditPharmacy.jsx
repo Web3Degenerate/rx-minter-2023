@@ -69,7 +69,7 @@ const EditPharmacy = () => {
 
               if(result.data.status =='valid'){
                 alert(`Success! Your changes have been saved. Click okay to return back to the Patient Dashboard`)
-                  navigate('/');
+                  navigate('/pharmacy-list');
               }else{
                   alert('There is a problem saving this Pharmacy / Facility to the database. Please try again.  If the problem persists, check if you have used a special character like an apostrophe. If so, try removing it and saving again. ');
               }

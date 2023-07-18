@@ -283,14 +283,13 @@ const handleConvertClickerInternal = async () => {
     // const svgElement = await RemedySvgForJorgeRucker(nft?.metadata.name, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value), 
     //     nft?.metadata.attributes[10].value, nft?.metadata.description, nft?.metadata.attributes[0].value, nft?.metadata.attributes[2].value )
 
-    if(nft?.metadata.attributes[8].value == 'Dr. Jorge Rucker, M.D.'){
+//********************************************************************************************************************************************* */
+// if(nft?.metadata.attributes[8].value == 'Dr. Jorge Rucker, M.D.'){
+//********************************************************************************************************************************************* */
         // const svgElement = RemedySvgPdfGenerator(remedyPatientName, remedyRxDate, remedyPtAddress, remedySig, remedyMedication, remedyQuantity)
-
-
                     // const svgElement = await RemedySvgForJorgeRucker(nft?.metadata.name, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value), 
                     // nft?.metadata.attributes[10].value, nft?.metadata.description, nft?.metadata.attributes[0].value, remedyDisp )
-
-                    
+             
 // Imaging Order SVG **********************************************************************************************************************************************************
 
         //7-16-2023 decode logic
@@ -325,7 +324,7 @@ const svgElement = await RemedySvgOrderMri(unhashedName, unhashedDob,
                     nft?.metadata.attributes[0].value, nft?.metadata.attributes[9].value, unhashed_pt_physical_address, 
                     nft?.metadata.description, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value)  )
  
-// Imaging Order SVG **********************************************************************************************************************************************************
+// END OF Imaging Order SVG **********************************************************************************************************************************************************
 
 
 
@@ -339,20 +338,22 @@ const svgElement = await RemedySvgOrderMri(unhashedName, unhashedDob,
 
         console.log("Jorge svgElement Test is ", svgElement)
         setGenerateSVGAuto(svgElement)
-    }else{
-        let remedyDisp = nft?.metadata.attributes[2].value - nft?.metadata.attributes[3].value;
 
-        const svgElement = await RemedySvgPdfGenerator(nft?.metadata.name, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value), 
-        nft?.metadata.attributes[10].value, nft?.metadata.description, nft?.metadata.attributes[0].value, remedyDisp )
+// }else{
+    //     let remedyDisp = nft?.metadata.attributes[2].value - nft?.metadata.attributes[3].value;
 
-        console.log("Other svgElement Test is ", svgElement)
-        setGenerateSVGAuto(svgElement)
-    }
+    //     const svgElement = await RemedySvgPdfGenerator(nft?.metadata.name, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value), 
+    //     nft?.metadata.attributes[10].value, nft?.metadata.description, nft?.metadata.attributes[0].value, remedyDisp )
 
-    // console.log("svgElement Test is ", svgElement)
-    // setGenerateSVGAuto(svgElement)
-    // return imageLocation = 'data:image/svg+xml;base64,' + btoa(svgData);
-}
+    //     console.log("Other svgElement Test is ", svgElement)
+    //     setGenerateSVGAuto(svgElement)
+// }//end of doc match else statement
+
+                        // console.log("svgElement Test is ", svgElement)
+                        // setGenerateSVGAuto(svgElement)
+                        // return imageLocation = 'data:image/svg+xml;base64,' + btoa(svgData);
+
+} //end of Imaging SVG generator
 
 
 // const generateSVGAuto = handleConvertClickerInternal()

@@ -34,7 +34,8 @@ const EditPatient = () => {
           dob: "",
           email:"",
           id:"",
-          pt_physical_address:""
+          pt_physical_address:"",
+          pt_phone: "",
       });
   
       const [medication, setMedication] = useState([]);
@@ -56,13 +57,33 @@ const EditPatient = () => {
 
 
       // const [name,wallet_address,email] = patient; // patient is not iterable nasty error
-      const {name,wallet_address,dob,email,pt_physical_address} = patient; 
+      const {name,wallet_address,dob,email,pt_physical_address,pt_phone} = patient; 
   
       const handleChange=(e)=>{
           setPatient({...patient,[e.target.name]: e.target.value })
           // console.log(e);
           console.log("Patient in handleChange: ",patient);
       }
+
+      const handlePhoneChange=(e)=>{
+
+        // console.log(e);
+
+        const input = e.target.value;
+        // Remove all non-digit characters from the input
+        const digitsOnly = input.replace(/\D/g, '');
+
+        // Apply the desired formatting using regular expressions
+        const formattedNumber = digitsOnly.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+
+        // const formattedNumber = formatPhoneNumber(input);
+
+        setPatient({...patient,[e.target.name]: formattedNumber })
+
+        console.log("Phone in handlePhoneChange with formattedNumber: ",patient.pt_phone);
+        console.log("Patient Object in handleOghoneChange: ",patient);
+    }
+      
   
       const updateForm = async (e) => {
           e.preventDefault(); 
@@ -74,6 +95,7 @@ const EditPatient = () => {
   
            
               if(result.data.status =='valid'){
+                  alert(`Success! Patient ${name} with DOB ${dob}, phone number ${pt_phone}, address ${pt_physical_address} and wallet address of ${wallet_address} has been added! Click OK to return to the Patient Dashboard.`)
                   navigate('/');
               }else{
                   alert('There is a problem saving this patient to the database. Please try again.');
@@ -134,7 +156,7 @@ const EditPatient = () => {
       // const loadUsers = async (id) => {  //id was not being passed in when passed in as a parameter (14:45) pt 4.
       const loadUsers = async () => {
           // console.log('ID check inside loadUsers', id) 
-          setPatient({name: "", wallet_address: "", dob: "", email:"", id:"", pt_physical_address:""});
+          setPatient({name: "", wallet_address: "", dob: "", email:"", id:"", pt_physical_address:"", pt_phone:""});
           const result = await axios.get("https://rxminter.com/php-react/edit.php?id="+id);
           console.log(result);
           // setPatient(result.data.records);
@@ -185,7 +207,7 @@ const EditPatient = () => {
                         <div className="row" >
                                 <div className="col-md-3">Patient Name:</div>
                                 <div className="col-md-9">
-                                    <input type="text" name="name" className="form-control" value={name} onChange={(e) => handleChange(e)} />   
+                                    <input type="text" name="name" className="form-control" value={name} onChange={(e) => handleChange(e)} required />   
                                 </div>
                         </div>
 
@@ -194,7 +216,7 @@ const EditPatient = () => {
                             <div className="row">
                                     <div className="col-md-2">Wallet:</div>
                                     <div className="col-md-10">
-                                        <textarea name="wallet_address" className="form-control" value={wallet_address} onChange={(e) => handleChange(e)} onKeyDown={handleKeyDown} rows="2" />   
+                                        <textarea name="wallet_address" className="form-control" value={wallet_address} onChange={(e) => handleChange(e)} onKeyDown={handleKeyDown} rows="2" required />   
                                     </div>
                             </div>
 
@@ -203,9 +225,17 @@ const EditPatient = () => {
                                     <div className="col-md-9">
                                       {/* <input type="text" name="email" className="form-control" value={email} onChange={(e) => handleChange(e)} />
                                       <input type="date" name="dob" className="form-control" value="1969-06-09" onChange={(e) => handleChange(e)} /> */}
-                                        <input type="date" name="dob" className="form-control" value={dob} onChange={(e) => handleChange(e)} />   
+                                        <input type="date" name="dob" className="form-control" value={dob} onChange={(e) => handleChange(e)} required />   
                                     </div>
                             </div>
+
+                            <div className="row">
+                                    <div className="col-md-3">Phone:</div>
+                                    <div className="col-md-9">
+                                        <input type="text" name="pt_phone" className="form-control" value={pt_phone} onChange={(e) => handlePhoneChange(e)} required />   
+                                    </div>
+                            </div>
+
 
                             <div className="row">
                                     <div className="col-md-3">Email Address:</div>
@@ -218,7 +248,7 @@ const EditPatient = () => {
                                     <div className="col-md-3">Address:</div>
                                     <div className="col-md-9">
                                         <textarea name="pt_physical_address" className="form-control" value={pt_physical_address} onChange={(e) => handleChange(e)} 
-                                        onKeyDown={handleKeyDown} rows="2" />   
+                                        onKeyDown={handleKeyDown} rows="2" required />   
                                     </div>
                             </div>                            
 
@@ -239,7 +269,8 @@ const EditPatient = () => {
                             <div className="row">
                                 <div className="col-md-12 text-center">
                                     {/* <input type="submit" name="submit" value="Add Patient" className="btn btn-warning" /> */}
-                                    <button type="submit" className="btn btn-warning" >Save Changes</button>
+                                    {/* <button type="submit" className="btn btn-warning" >Save Changes</button> */}
+                                    <button type="submit" className="btn btn-warning btn-lg btn-block container" style={{borderRadius:"12px"}} > Save Changes</button>
 
                                 </div>
                             </div>

@@ -19,11 +19,12 @@ const AddPatient = () => {
         wallet_address: "",
         email:"",
         dob:"",
-        pt_physical_address:""
+        pt_physical_address:"",
+        pt_phone:""
     });
 
     // const [name,wallet_address,email] = patient; // patient is not iterable nasty error
-    const {name,wallet_address,email,dob,pt_physical_address} = patient; 
+    const {name,wallet_address,email,dob,pt_physical_address,pt_phone} = patient; 
 
     const handleChange=(e)=>{
         setPatient({...patient,[e.target.name]: e.target.value })
@@ -42,7 +43,7 @@ const AddPatient = () => {
 
             // navigate('/');
             if(result.data.status =='valid'){
-                alert(`Success! Patient ${patient.name} with wallet address ${addyShortner(patient.wallet_address)} and home address of ${patient.pt_physical_address} has been added!`)
+                alert(`Success! Patient ${patient.name} with phone number${patient.pt_phone}, home address of ${patient.pt_physical_address} and wallet address of ${addyShortner(patient.wallet_address)} has been added!`)
                 navigate('/');
             }else{
                 alert('There is a problem saving this patient to the database. Please try again.');
@@ -100,6 +101,13 @@ const AddPatient = () => {
                                     <div className="col-md-3">Wallet Address:</div>
                                     <div className="col-md-9">
                                         <input type="text" name="wallet_address" className="form-control" value={wallet_address} onChange={(e) => handleChange(e)} required />   
+                                    </div>
+                            </div>
+
+                            <div className="row">
+                                    <div className="col-md-3">Email:</div>
+                                    <div className="col-md-9">
+                                        <input type="text" name="pt_phone" className="form-control" value={pt_phone} onChange={(e) => handleChange(e)} required />   
                                     </div>
                             </div>
 
