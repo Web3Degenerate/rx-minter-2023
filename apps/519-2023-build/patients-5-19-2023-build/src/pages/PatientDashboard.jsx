@@ -219,13 +219,25 @@ const handleSubmitTest = async (e) => {
     }
 
 
-//Grab Patient name from nfts if exist
+//Grab Patient name from nfts if exist:
 let displayPatientName
+let convertPatientName
+let grabPatientName
+
   if(nfts){
-    nfts.map((nft) => (
-      displayPatientName = `for ${nft.metadata.name}`
+    nfts.map((nft) => (   
+        grabPatientName = nft.metadata.name
     ))
+    if(grabPatientName.startsWith('0x')){
+        convertPatientName = ethers.utils.toUtf8String(ethers.utils.RLP.decode(grabPatientName));
+        displayPatientName = `(for ${convertPatientName})`
+      }else{
+        displayPatientName = `(for ${grabPatientName})`
+      }
   }
+
+
+
 
 //loading / no nfts found
 let showLoading
@@ -361,7 +373,18 @@ return (
                             // className="view-scripts-image"
                           > */}
 
-                              <p><b>Patient:</b> {nft.metadata.name} | <b>DOB:</b> {formatDateTwoDigitYear(nft.metadata.attributes[1].value)}</p>
+                              <p><b>Patient:</b> {nft.metadata.name.startsWith('0x') ? (
+                                                      ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft.metadata.name))
+                                                  ) : (
+                                                      nft.metadata.name
+                                                  ) } | 
+                                   <b> DOB:</b> {nft.metadata.attributes[1].value.startsWith('0x') ? (
+                                                      formatDateTwoDigitYear(ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft.metadata.attributes[1].value)))
+                                                  ) : (
+                                                      formatDateTwoDigitYear(nft.metadata.attributes[1].value)
+                                                  )
+                                                }
+                              </p>
                               {/* <p><b>DOB:</b> {nft.metadata.dob}</p> */}
                               {/* <p><b>DOB:</b> {getDob(nft.metadata.id.toString())}</p> */}
                               <p className="hyphens"><b>Medication:</b> {nft.metadata.attributes[0].value}</p>
