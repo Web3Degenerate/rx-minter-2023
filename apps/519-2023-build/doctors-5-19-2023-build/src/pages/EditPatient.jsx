@@ -65,23 +65,30 @@ const EditPatient = () => {
           console.log("Patient in handleChange: ",patient);
       }
 
+      const [solidityPhoneNumber, setSolidityPhoneNumber] = useState('')
+      const [webPhoneNumber,setWebPhoneNumber] = useState('')
       const handlePhoneChange=(e)=>{
-
         // console.log(e);
-
         const input = e.target.value;
         // Remove all non-digit characters from the input
         const digitsOnly = input.replace(/\D/g, '');
 
         // Apply the desired formatting using regular expressions
         const formattedNumber = digitsOnly.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+        const rawNumber = `1${formattedNumber.replace(/-/g, '')}`;
+        setSolidityPhoneNumber(rawNumber)
+
+        const webNumber = rawNumber.replace(/^1/, '') // Remove leading '1'
+                         .replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+
+        setWebPhoneNumber(webNumber)
 
         // const formattedNumber = formatPhoneNumber(input);
 
         setPatient({...patient,[e.target.name]: formattedNumber })
 
         console.log("Phone in handlePhoneChange with formattedNumber: ",patient.pt_phone);
-        console.log("Patient Object in handleOghoneChange: ",patient);
+        console.log("Patient Object in handlePhoneChange: ",patient);
     }
       
   
@@ -199,7 +206,9 @@ const EditPatient = () => {
               <div className="nft_box_size">
                         <div className="row">
                             <div className="col-md-12 text-center">
-                                <h1>Edit Patient: {name} - {addyShortner(wallet_address)}</h1>                                       
+                                <h1>Edit Patient: {name} - {addyShortner(wallet_address)}</h1> 
+                                <h5>Solidity Phone Number: {solidityPhoneNumber}</h5>   
+                                <h5>Web Phone Number is: {webPhoneNumber}</h5>                             
                             </div>
                         </div>
 
@@ -232,7 +241,7 @@ const EditPatient = () => {
                             <div className="row">
                                     <div className="col-md-3">Phone:</div>
                                     <div className="col-md-9">
-                                        <input type="text" name="pt_phone" className="form-control" value={pt_phone} onChange={(e) => handlePhoneChange(e)} required />   
+                                        <input type="text" name="pt_phone" className="form-control" value={pt_phone} onChange={(e) => handlePhoneChange(e)} required maxLength={12} />   
                                     </div>
                             </div>
 
