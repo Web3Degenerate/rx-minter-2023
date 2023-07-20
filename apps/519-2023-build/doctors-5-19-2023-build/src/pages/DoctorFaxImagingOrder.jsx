@@ -77,7 +77,7 @@ useEffect(()=> {
     loadSVGTemplater();
     loadViewPharmacy();
     loadDoctors(); 
-    loadPatientByWallet();
+    // loadPatientByWallet();
     // loadPatientByWallet();
   
 //   handleConvertClickerInternal()
@@ -119,9 +119,9 @@ const loadDoctors = async () => {
 }
 
 
-useEffect(()=> {    
-    loadPatientByWallet();
-}, [nft])
+// useEffect(()=> {    
+//     loadPatientByWallet();
+// }, [nft])
 
 
 const [patient, setPatient] = useState({
@@ -131,20 +131,22 @@ const [patient, setPatient] = useState({
     dob:"",
     pt_physical_address:"",
     pt_phone:"",
-    id:""
+    pid:""
 });
 
-    const loadPatientByWallet = async () => {
-        // console.log('ID check inside loadUsers', id) 
-    //   setPharmacy({pharmacy_name: "", pharmacy_wallet: "", pharmacy_phone:"", pharmacy_fax: "", pharmacy_address:"", id:""});
-        const wallet_address = nft?.metadata.attributes[4].value;
-        const result = await axios.get("https://rxminter.com/php-react/patient-get-by-address.php?wallet_address="+wallet_address);
-        // console.log("loadPharmacyByAddress fetched:", result);
-        // setPatient(result.data.records);
-        setPatient(result.data);
-        // navigate('/');
-        console.log("loadPatientByWallet patient.pt_phone is: ",patient.pt_phone)
-    }
+const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid} = patient;
+    // const loadPatientByWallet = async () => {
+    //     // console.log('ID check inside loadUsers', id) 
+    // //   setPharmacy({pharmacy_name: "", pharmacy_wallet: "", pharmacy_phone:"", pharmacy_fax: "", pharmacy_address:"", id:""});
+    // setPatient({name: "", wallet_address: "", email: "", dob:"", pt_physical_address:"", pt_phone:"", pid:""});
+    //     const wallet_address = nft?.metadata.attributes[4].value;
+    //     const result = await axios.get("https://rxminter.com/php-react/patient-get-by-address.php?wallet_address="+wallet_address);
+    //     // console.log("loadPharmacyByAddress fetched:", result);
+    //     // setPatient(result.data.records);
+    //     setPatient(result.data);
+    //     // navigate('/');
+    //     console.log("loadPatientByWallet patient.pt_phone is: ",patient.pt_phone)
+    // }
 
 
 
@@ -193,6 +195,7 @@ const handlePharmacyChange = async (e, id) => {
   const getSelectedFax = `1${result.data.pharmacy_fax.replace(/-/g, '')}`;
 //   let getSelectedFax = result.data.pharmacy_fax
 
+  setPharmacyFax({...scriptFax, pharmacy_fax: getSelectedFax });
   setScriptFax({...scriptFax, pharmacy_fax: getSelectedFax });
 
   setShowSubmitButton('block')
@@ -210,8 +213,8 @@ const handlePharmacyChange = async (e, id) => {
 
 //AT BREAK (4:38pm) on Wed 6/21/23 we needed to call handleConvertClickerInteral() to update the selected fax number on scriptFax state
   handleConvertClickerInternal() 
-
-  alert(`You have selected ${getSelectedPharmacy} pharmacy with fax # of ${getSelectedFax}.`)
+  const dislayFaxNumber = getSelectedFax.replace(/^1/, '').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+  alert(`You have selected ${getSelectedPharmacy} pharmacy with fax # of ${dislayFaxNumber}.`)
 }
 
 // **************************** handleSubmitToPharmacy Form Submission ******************************//
@@ -270,7 +273,10 @@ try{
 
             // alertService.success(`Valid, The Fax Image Named ${scriptFax.script_image_name} has been sent!`, options);
             // alert(`Valid, The Fax Image Named ${scriptFax.script_image_name} has been sent!`, options);
-            alert(`Success, your script has been sent to fax number ${scriptFax.pharmacy_fax}` );
+
+            const dislayFaxNumber = scriptFax.pharmacy_fax.replace(/^1/, '').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+            
+            alert(`Success, your script has been sent to fax number ${dislayFaxNumber}` );
 
             
             // if (confirm(`Fax Successfully Sent! Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at address: ${pharmacyFax.pharmacy_wallet} for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${nft?.metadata.name}? Fax: ${pharmacyFax.pharmacy_fax} `) == true){
@@ -334,6 +340,8 @@ useEffect(() => {
 },[nft])
 
 
+const [displayPtPhone,setDisplayPtPhone] = useState('')
+
 const handleConvertClickerInternal = async () => {
 
     // const svgElement = await RemedySvgForJorgeRucker(nft?.metadata.name, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value), 
@@ -375,11 +383,19 @@ const handleConvertClickerInternal = async () => {
             }
 
 
+//***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
+const wallet_address = nft?.metadata.attributes[4].value;
+const result = await axios.get("https://rxminter.com/php-react/patient-get-by-address.php?wallet_address="+wallet_address);
+setPatient(result.data);
+    console.log("inside svg function pt_phone is",result.data.pt_phone)
+    setDisplayPtPhone(result.data.pt_phone)
+//***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
 
 const svgElement = await RemedySvgOrderMri(unhashedName, unhashedDob, 
                     nft?.metadata.attributes[0].value, nft?.metadata.attributes[9].value, unhashed_pt_physical_address, 
                     nft?.metadata.description, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value),
-                    patient.pt_phone, doctor.doctor_name, doctor.doctor_dea, doctor.doctor_npi, doctor.doctor_phone  )
+                    result.data.pt_phone, doctor.doctor_name, doctor.doctor_dea, doctor.doctor_npi, doctor.doctor_phone  )
+
 
 // END OF Imaging Order SVG **********************************************************************************************************************************************************
 
@@ -499,6 +515,7 @@ const autoConvertClicker = () => {
 
         setGetImageDateUrl(imageDataUrl)
         // ...scriptFax, 
+
         setScriptFax({script_image_name: `${imageDataUrl}.jpeg`, script_image_location: imageDataUrl, pharmacy_fax: pharmacyFax.pharmacy_fax });
         console.log("Inside of autoConvertClicker SVG to JPEG fn, scriptFax is now: ",scriptFax)
 
