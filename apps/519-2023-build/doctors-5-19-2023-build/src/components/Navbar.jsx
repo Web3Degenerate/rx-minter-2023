@@ -3,6 +3,10 @@ import {Link, NavLink } from "react-router-dom";
 
 import { useAddress, useContract, ConnectWallet } from "@thirdweb-dev/react";
 
+import { logoPalau, logoDoctorPc } from '../assets';
+
+import "../styles/App.css";
+
 import 'bootstrap/dist/css/bootstrap.css';
 
 const Navbar = () => {
@@ -64,8 +68,15 @@ const Navbar = () => {
    {address ? ( 
     <>
         <ul className="nav navbar-nav">
+        <li className="nav-item" style={{margin:"5px"}}>
+        <Link className="navbar-brand" to="/edit-doctor">
+            <img src={logoDoctorPc} width="100" height="100" className="d-inline-block align-top image--doctor--navbar" alt=""></img>
+            <br></br>
+            <small style={{marginTop:"-50px",paddingTop:"-30px"}}>Profile</small>
+          </Link>
+          </li>
 
-            <li className="nav-item" style={{margin:"5px"}}>
+          <li className="nav-item" style={{margin:"5px"}}>
                 <Link className="navbar-brand btn btn-success" to="/">Patient Dashboard</Link>
             </li>
 

@@ -67,7 +67,7 @@ const Home = () => {
               
               <div className="row">
                   <div className="col-md-12 text-center">
-                      <h1>Doctor Dashboard</h1>
+                      <h1>Patient Population Dashboard</h1>
                   </div>
               </div>
 
@@ -75,7 +75,7 @@ const Home = () => {
                 <div className="row">
                     <div className="col-md-2">
                     </div>
-                    
+
                     <div className="col-md-8 text-center">
                         <Link to="/add-patient" className="btn btn-primary btn-lg btn-block container" style={{borderRadius:"12px"}}
                         >Add A Patient</Link>

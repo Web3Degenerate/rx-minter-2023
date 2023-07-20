@@ -28,6 +28,63 @@ const AddPharmacy = () => {
         console.log(pharmacy);
     }
 
+//Pharmacy Phone Number Handler
+    const [solidityPhoneNumber, setSolidityPhoneNumber] = useState('')
+    const [webPhoneNumber,setWebPhoneNumber] = useState('')
+
+    const handlePhoneChange=(e)=>{
+            // console.log(e);
+            const input = e.target.value;
+            // Remove all non-digit characters from the input
+            const digitsOnly = input.replace(/\D/g, '');
+
+            // Apply the desired formatting using regular expressions
+            const formattedNumber = digitsOnly.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+            const rawNumber = `${formattedNumber.replace(/-/g, '')}`;
+            setSolidityPhoneNumber(rawNumber)
+
+            const webNumber = rawNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+                            
+            setWebPhoneNumber(webNumber)
+
+            // const formattedNumber = formatPhoneNumber(input);
+
+            setPharmacy({...pharmacy,[e.target.name]: formattedNumber })
+
+            console.log("Phone in handlePhoneChange with formattedNumber: ",pharmacy.pharmacy_phone);
+            console.log("pharmacy Object in handlePhoneChange: ",pharmacy);
+    }
+
+// Pharmacy FAX 
+
+        const [solidityFaxNumber, setSolidityFaxNumber] = useState('')
+        const [webFaxNumber,setWebFaxNumber] = useState('')
+
+    const handleFaxChange=(e)=>{
+            // console.log(e);
+            const input = e.target.value;
+            // Remove all non-digit characters from the input
+            const digitsOnly = input.replace(/\D/g, '');
+
+            // Apply the desired formatting using regular expressions
+            const formattedFax = digitsOnly.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+            const rawFax = `1${formattedFax.replace(/-/g, '')}`;
+            setSolidityFaxNumber(rawFax)
+
+            const webFax = rawFax.replace(/^1/, '') // Remove leading '1'
+                            .replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+
+            setWebFaxNumber(webFax)
+
+            // const formattedFax = formatPhoneNumber(input);
+
+            setPharmacy({...pharmacy,[e.target.name]: webFax })
+
+            console.log("Phone in handleFaxChange with formattedFax: ",pharmacy.pharmacy_fax);
+            console.log("Pharmacy Object in handlePhoneChange: ",pharmacy);
+    }
+
+
     const submitForm = async (e) => {
         e.preventDefault(); 
 
@@ -60,6 +117,8 @@ const AddPharmacy = () => {
         <div className="row">
             <div className="col-md-12 text-center">
                 <h1>Add A Pharmacy or Facility</h1>
+                <h5>Phone: {solidityPhoneNumber} Web Phone: {webPhoneNumber}</h5> 
+                <h5>Fax: {solidityFaxNumber} Web Fax: {webFaxNumber}</h5> 
                         
             </div>
         </div>
@@ -101,14 +160,16 @@ const AddPharmacy = () => {
                             <div className="row">
                                     <div className="col-md-3">Phone:</div>
                                     <div className="col-md-9">
-                                        <input type="text" name="pharmacy_phone" className="form-control" value={pharmacy_phone} onChange={(e) => handleChange(e)} required />   
+                                        <input type="text" name="pharmacy_phone" className="form-control" value={pharmacy_phone} onChange={(e) => handlePhoneChange(e)} 
+                                        required maxLength={12} />   
                                     </div>
                             </div>
 
                             <div className="row">
                                     <div className="col-md-3">Fax:</div>
                                     <div className="col-md-9">
-                                        <input type="text" name="pharmacy_fax" className="form-control" value={pharmacy_fax} onChange={(e) => handleChange(e)} required/>   
+                                        <input type="text" name="pharmacy_fax" className="form-control" value={pharmacy_fax} onChange={(e) => handleFaxChange(e)} 
+                                        required maxLength={12} />   
                                     </div>
                             </div>
 

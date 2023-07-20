@@ -1,9 +1,9 @@
 //Inkscape Word Doc Clean Imaging Order: 
 // import {useRef} from 'react';
 // 1 - patient name, 2- dob, 3- med/order, 4- qty/DX, 5 - address, 6 - SIG, 7 - prescribed / ordered date
-export const RemedySvgOrderMri = (remedyPatientName, remedyDOB, remedyOrder, remedyQuantity, remedyPhysicalAddress, remedySig, remedyPrescribedDate) => {
+export const RemedySvgOrderMri = (remedyPatientName, remedyDOB, remedyOrder, remedyQuantity, remedyPhysicalAddress, 
+   remedySig, remedyPrescribedDate, remedyPatientPhone, remedyDoctorName, remedyDoctorDea, remedyDoctorNpi, remedyDoctorPhone) => {
 
-    
     return (       
     <>
        <defs
@@ -1583,8 +1583,10 @@ export const RemedySvgOrderMri = (remedyPatientName, remedyDOB, remedyOrder, rem
                 ><tspan
                   x="154.65039"
                   y="555.0802"
-                  id="tspan25247">{remedyQuantity}</tspan></text>
-            <text
+                  id="tspan25247">{remedyQuantity}</tspan>
+         </text>
+
+      <text
                 space="preserve"
                 transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
                 id="text2172"
@@ -1609,8 +1611,172 @@ export const RemedySvgOrderMri = (remedyPatientName, remedyDOB, remedyOrder, rem
                   y="643.01116"
                   id="tspan25251"><tspan
                     font-size="24px"
-                    id="tspan25249">{remedyPrescribedDate}</tspan></tspan>
-             </text>
+                    id="tspan25249">{remedyPrescribedDate}</tspan>
+            </tspan>
+   </text>
+
+
+
+
+   <text
+                space="preserve"
+                transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
+                id="text2172"
+
+                  fontVariant="normal"
+                  font-weight="bold"
+                  fontStretch="normal"
+                  font-style="normal"
+                  font-size="16px"
+                  font-family="sans-serif"
+
+                  white-space="pre"
+                  shape-inside="url(#rect2174)"
+
+                  fill="#000000"
+                  display="inline"
+            ><tspan
+
+
+                                  
+                  x="630.39844"
+                  y="683.01116"
+                  id="tspan25251"><tspan
+                    font-size="24px"
+                    id="tspan25249">{remedyDoctorName}</tspan>
+            </tspan>
+   </text>
+
+
+
+   <text
+                space="preserve"
+                transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
+                id="text2172"
+
+                  fontVariant="normal"
+                  font-weight="bold"
+                  fontStretch="normal"
+                  font-style="normal"
+                  font-size="16px"
+                  font-family="sans-serif"
+
+                  white-space="pre"
+                  shape-inside="url(#rect2174)"
+
+                  fill="#000000"
+                  display="inline"
+            ><tspan
+
+
+                                  
+                  x="630.39844"
+                  y="708.01116"
+                  id="tspan25251"><tspan
+                    font-size="24px"
+                    id="tspan25249">DEA#: {remedyDoctorDea}</tspan>
+            </tspan>
+   </text>
+
+
+   <text
+                space="preserve"
+                transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
+                id="text2172"
+
+                  fontVariant="normal"
+                  font-weight="bold"
+                  fontStretch="normal"
+                  font-style="normal"
+                  font-size="16px"
+                  font-family="sans-serif"
+
+                  white-space="pre"
+                  shape-inside="url(#rect2174)"
+
+                  fill="#000000"
+                  display="inline"
+            ><tspan
+
+
+                                  
+                  x="630.39844"
+                  y="738.01116"
+                  id="tspan25251"><tspan
+                    font-size="24px"
+                    id="tspan25249">NPI#: {remedyDoctorNpi}</tspan>
+            </tspan>
+   </text>
+
+
+
+
+   <text
+                space="preserve"
+                transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
+                id="text2172"
+
+                  fontVariant="normal"
+                  font-weight="bold"
+                  fontStretch="normal"
+                  font-style="normal"
+                  font-size="16px"
+                  font-family="sans-serif"
+
+                  white-space="pre"
+                  shape-inside="url(#rect2174)"
+
+                  fill="#000000"
+                  display="inline"
+            ><tspan
+
+
+                                  
+                  x="630.39844"
+                  y="768.01116"
+                  id="tspan25251"><tspan
+                    font-size="24px"
+                    id="tspan25249">Prescriber Phone: {remedyDoctorPhone}</tspan>
+            </tspan>
+   </text>
+
+
+
+
+
+
+   <text
+                space="preserve"
+                transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
+                id="text2172"
+
+                  fontVariant="normal"
+                  font-weight="bold"
+                  fontStretch="normal"
+                  font-style="normal"
+                  font-size="16px"
+                  font-family="sans-serif"
+
+                  white-space="pre"
+                  shape-inside="url(#rect2174)"
+
+                  fill="#000000"
+                  display="inline"
+            ><tspan
+
+
+                                  
+                  x="630.39844"
+                  y="145.01116"
+                  id="tspan25251"><tspan
+                    font-size="30px"
+                    id="tspan25249">Phone: {remedyPatientPhone}</tspan>
+            </tspan>
+   </text>
+
+
+
+
 
 
              <foreignObject 

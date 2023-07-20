@@ -58,7 +58,60 @@ const EditPharmacy = () => {
           // console.log(e);
           console.log("Pharmacy info inside (#Change) handleChange is now: ",pharmacy);
       }
-  
+
+    const [solidityPhoneNumber, setSolidityPhoneNumber] = useState('')
+    const [webPhoneNumber,setWebPhoneNumber] = useState('')
+    const handlePhoneChange=(e)=>{
+      // console.log(e);
+      const input = e.target.value;
+      // Remove all non-digit characters from the input
+      const digitsOnly = input.replace(/\D/g, '');
+
+      // Apply the desired formatting using regular expressions
+      const formattedNumber = digitsOnly.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+      const rawNumber = `${formattedNumber.replace(/-/g, '')}`;
+      setSolidityPhoneNumber(rawNumber)
+
+      const webNumber = rawNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+                       
+      setWebPhoneNumber(webNumber)
+
+      // const formattedNumber = formatPhoneNumber(input);
+
+      setPharmacy({...pharmacy,[e.target.name]: formattedNumber })
+
+      console.log("Phone in handlePhoneChange with formattedNumber: ",pharmacy.pharmacy_phone);
+      console.log("pharmacy Object in handlePhoneChange: ",pharmacy);
+  }
+
+
+  const [solidityFaxNumber, setSolidityFaxNumber] = useState('')
+  const [webFaxNumber,setWebFaxNumber] = useState('')
+  const handleFaxChange=(e)=>{
+    // console.log(e);
+    const input = e.target.value;
+    // Remove all non-digit characters from the input
+    const digitsOnly = input.replace(/\D/g, '');
+
+    // Apply the desired formatting using regular expressions
+    const formattedFax = digitsOnly.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+    const rawFax = `1${formattedFax.replace(/-/g, '')}`;
+    setSolidityFaxNumber(rawFax)
+
+    const webFax = rawFax.replace(/^1/, '') // Remove leading '1'
+                     .replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+
+    setWebFaxNumber(webFax)
+
+    // const formattedFax = formatPhoneNumber(input);
+
+    setPharmacy({...pharmacy,[e.target.name]: formattedFax })
+
+    console.log("Phone in handleFaxChange with formattedFax: ",pharmacy.pharmacy_fax);
+    console.log("Pharmacy Object in handlePhoneChange: ",pharmacy);
+}
+
+
       const updateForm = async (e) => {
           e.preventDefault(); 
   
@@ -185,15 +238,23 @@ const EditPharmacy = () => {
   return (
 
 <>
-        <form onSubmit={e => updateForm(e)}>
-                <div className="nft_box_size">
-                        <div className="row">
-                            <div className="col-md-12 text-center">
-                                <h1>Edit Pharmacy / Facility: <br></br>{pharmacy_name}</h1>                                       
-                            </div>
-                </div>
 
-                <div className="box_size_patient">
+
+<div className="container-fluid">
+        <div className="row">
+            <div className="col-md-12 text-center">
+                <h1>Edit Pharmacy / Facility: <br></br>{pharmacy_name}</h1> 
+                <h5>Fax: {solidityFaxNumber} Web Fax: {webFaxNumber}</h5>    
+                        
+            </div>
+        </div>
+
+
+
+        <form onSubmit={e => updateForm(e)} >
+
+
+                <div className="box_size_new_form">
                         <div className="row">
                                 <div className="col-md-2">Name:</div>
                                 <div className="col-md-10">
@@ -214,15 +275,17 @@ const EditPharmacy = () => {
                             <div className="row">
                                     <div className="col-md-2">Phone:</div>
                                     <div className="col-md-10">
-                                        <input type="text" name="pharmacy_phone" className="form-control" value={pharmacy_phone} onChange={(e) => handleChange(e)} />   
+                                        <input type="text" name="pharmacy_phone" className="form-control" value={pharmacy_phone} onChange={(e) => handlePhoneChange(e)} 
+                                            required maxLength={12} /> 
+                                          
                                     </div>
                             </div>
 
                             <div className="row">
                                     <div className="col-md-2">Fax:</div>
                                     <div className="col-md-10">
-                                        <input type="text" name="pharmacy_fax" className="form-control" value={pharmacy_fax} onChange={(e) => handleChange(e)} 
-                                        placeholder="Enter 1 plus the fax number (ie '17162106152') " />   
+                                        <input type="text" name="pharmacy_fax" className="form-control" value={pharmacy_fax} onChange={(e) => handleFaxChange(e)} 
+                                        required maxLength={12} placeholder="Enter 1 plus the fax number (ie '17162106152') " />   
                                     </div>
                             </div>
 
@@ -242,8 +305,9 @@ const EditPharmacy = () => {
                                 </div>
                             </div>
                     </div>
-                </div>
+                
         </form>
+    </div>
 
 
             <hr></hr>

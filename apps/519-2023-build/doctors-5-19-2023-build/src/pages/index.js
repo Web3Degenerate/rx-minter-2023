@@ -9,4 +9,5 @@ export { default as TokenHistory } from './TokenHistory';
 export { default as DoctorFaxImagingOrder } from './DoctorFaxImagingOrder';
 export { default as AddPatient } from './AddPatient';
 export { default as AddPharmacy } from './AddPharmacy';
+export { default as EditDoctor } from './EditDoctor';
 

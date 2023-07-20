@@ -37,6 +37,8 @@ const EditPatient = () => {
           pt_physical_address:"",
           pt_phone: "",
       });
+
+      
   
       const [medication, setMedication] = useState([]);
       const [patients, setPatients] = useState([]);

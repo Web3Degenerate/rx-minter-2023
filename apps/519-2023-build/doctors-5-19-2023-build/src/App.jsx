@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import { Navbar } from './components';
 import { CreateScript, CreateImagingOrder, EditPatient, Home, EditPharmacy, 
-  PatientHistory, TokenHistory, DoctorFaxImagingOrder, ListPharmacies, AddPatient, AddPharmacy } from './pages';
+  PatientHistory, TokenHistory, DoctorFaxImagingOrder, ListPharmacies, AddPatient, AddPharmacy, EditDoctor } from './pages';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -32,6 +32,8 @@ export default function App() {
   
                                 <Route path="/add-patient" element={ <AddPatient /> } />
                                 <Route path="/edit-patient/:id" element={ <EditPatient /> } />
+
+                                <Route path="/edit-doctor" element={ <EditDoctor /> } />
   
                                 <Route path="/mint-script/:id" element={ <CreateScript /> } /> 
                                 <Route path="/mint-imaging-order/:id" element={ <CreateImagingOrder /> } />                        

@@ -75,7 +75,10 @@ const [pharmacy, setPharmacy] = useState([]);
 // useEffect to load the pharmacies on page load:
 useEffect(()=> {    
     loadSVGTemplater();
-  loadViewPharmacy();
+    loadViewPharmacy();
+    loadDoctors(); 
+    loadPatientByWallet();
+    // loadPatientByWallet();
   
 //   handleConvertClickerInternal()
 }, [])
@@ -92,6 +95,58 @@ const loadViewPharmacy = async () => {
   setPharmacy(result.data.records);
   
 }
+
+const doctor_id = 1;
+const [doctor, setDoctor] = useState({
+    doctor_name: "",
+    doctor_dea: "",
+    doctor_wallet_address: "",
+    doctor_npi:"",
+    doctor_phone:"",
+    doctor_fax: "",
+    did:doctor_id
+});
+const {doctor_name,doctor_dea,doctor_wallet_address,doctor_npi,doctor_phone,doctor_fax,did} = doctor; 
+
+const loadDoctors = async () => {
+    // console.log('ID check inside loadUsers', id) 
+    setDoctor({doctor_name: "", doctor_dea: "", doctor_wallet_address: "", doctor_npi:"", id:"", doctor_phone:"", doctor_fax:""});
+    const result = await axios.get("https://rxminter.com/php-react/edit-doctor.php?id="+doctor_id);
+    console.log(result);
+    // setPatient(result.data.records);
+    setDoctor(result.data);
+    // navigate('/');
+}
+
+
+useEffect(()=> {    
+    loadPatientByWallet();
+}, [nft])
+
+
+const [patient, setPatient] = useState({
+    name: "",
+    wallet_address: "",
+    email:"",
+    dob:"",
+    pt_physical_address:"",
+    pt_phone:"",
+    id:""
+});
+
+    const loadPatientByWallet = async () => {
+        // console.log('ID check inside loadUsers', id) 
+    //   setPharmacy({pharmacy_name: "", pharmacy_wallet: "", pharmacy_phone:"", pharmacy_fax: "", pharmacy_address:"", id:""});
+        const wallet_address = nft?.metadata.attributes[4].value;
+        const result = await axios.get("https://rxminter.com/php-react/patient-get-by-address.php?wallet_address="+wallet_address);
+        // console.log("loadPharmacyByAddress fetched:", result);
+        // setPatient(result.data.records);
+        setPatient(result.data);
+        // navigate('/');
+        console.log("loadPatientByWallet patient.pt_phone is: ",patient.pt_phone)
+    }
+
+
 
 // **************** SVG => JPEG PAGE LOGIC ****************************** //
     // const svgContainer = useRef();
@@ -135,7 +190,8 @@ const handlePharmacyChange = async (e, id) => {
   setPharmacyFax(result.data);
   console.log("handlePharmacyChange server data: ",result.data)
   let getSelectedPharmacy = result.data.pharmacy_name
-  let getSelectedFax = result.data.pharmacy_fax
+  const getSelectedFax = `1${result.data.pharmacy_fax.replace(/-/g, '')}`;
+//   let getSelectedFax = result.data.pharmacy_fax
 
   setScriptFax({...scriptFax, pharmacy_fax: getSelectedFax });
 
@@ -322,8 +378,9 @@ const handleConvertClickerInternal = async () => {
 
 const svgElement = await RemedySvgOrderMri(unhashedName, unhashedDob, 
                     nft?.metadata.attributes[0].value, nft?.metadata.attributes[9].value, unhashed_pt_physical_address, 
-                    nft?.metadata.description, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value)  )
- 
+                    nft?.metadata.description, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value),
+                    patient.pt_phone, doctor.doctor_name, doctor.doctor_dea, doctor.doctor_npi, doctor.doctor_phone  )
+
 // END OF Imaging Order SVG **********************************************************************************************************************************************************
 
 
