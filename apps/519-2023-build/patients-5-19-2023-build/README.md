@@ -1,37 +1,19 @@
-## Getting Started
+## Dependencies
 
-Create a project using this example:
 
-```bash
-npx thirdweb create --template vite-javascript-starter
-```
 
-You can start editing the page by modifying `src/main.jsx`. The page auto-updates as you edit the file.
 
-On `src/index.jsx`, you'll find our `ThirdwebProvider` wrapping your app,
-this is necessary for our [hooks](https://portal.thirdweb.com/react) and
-[UI Components](https://portal.thirdweb.com/ui-components) to work.
+## Issue Log
 
-### Deploy to IPFS
+### - On Fri 7/21/23, SF Jorge was unable to access his owned NFT on the patients.rxminter.com build but not doctors.rxminter.com
 
-Deploy a copy of your application to IPFS using the following command:
+- Per the ThirdWeb **Discord**
 
-```bash
-yarn deploy
-```
+`We've received reports from our community that Google Safe Browsing has flagged our IPFS gateway domains (thirdwebstorage.com) as potentially deceptive.`
 
-## Learn More
+`We recommend that you update the SDK to the latest version (@thirdweb-dev/sdk@3.10.29, @thirdweb-dev/react@3.14.9) by running npx thirdweb install in your project.`
 
-To learn more about thirdweb, Vite and React, take a look at the following resources:
+Run **npx thirdweb install** in your project. (_Note from Devin on 7/10/23_)
 
-- [thirdweb React Documentation](https://docs.thirdweb.com/react) - learn about our React SDK.
-- [thirdweb JavaScript Documentation](https://docs.thirdweb.com/react) - learn about our JavaScript/TypeScript SDK.
-- [thirdweb Portal](https://docs.thirdweb.com/react) - check our guides and development resources.
-- [Vite Documentation](https://vitejs.dev/guide/) - learn about Vite features.
-- [React documentation](https://reactjs.org/) - learn React.
+---
 
-You can check out [the thirdweb GitHub organization](https://github.com/thirdweb-dev) - your feedback and contributions are welcome!
-
-## Join our Discord!
-
-For any questions, suggestions, join our discord at [https://discord.gg/thirdweb](https://discord.gg/thirdweb).
