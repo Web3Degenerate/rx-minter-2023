@@ -77,7 +77,7 @@ const [pharmacy, setPharmacy] = useState([]);
 useEffect(()=> {    
     loadSVGTemplater();
     loadViewPharmacy();
-    loadDoctors(); 
+    // loadDoctors(); 
 //   handleConvertClickerInternal()
 }, [])
 

@@ -22,6 +22,15 @@
     - Seems like you need to have the svg wrapped in some container: https://stackoverflow.com/questions/65632240/uncaught-in-promise-unable-to-find-element-in-cloned-iframe-2460
 
 
+# npm run build --base=/client/
+## App Compile Error (doctors.rxminter.com on Fri 7/21/23) - public path issue
+
+`npm run build --base=/client/`
+
+**Source**: https://axellarsson.com/blog/expected-javascript-module-script-server-response-mimetype-text-html/
+**Docs**: https://vitejs.dev/guide/build.html#public-base-path
+
+
 ## Solidity Contracts:
 
 1. install with
