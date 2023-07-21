@@ -243,16 +243,17 @@ const EditPharmacy = () => {
 <div className="container-fluid">
         <div className="row">
             <div className="col-md-12 text-center">
-                <h1>Edit Pharmacy / Facility: <br></br>{pharmacy_name}</h1> 
-                <h5>Fax: {solidityFaxNumber} Web Fax: {webFaxNumber}</h5>    
+                <h1>Edit Pharmacy / Facility:</h1> 
+                <h3 className="display-3">{pharmacy_name}</h3>
+                {/* <h5>Fax: {solidityFaxNumber} Web Fax: {webFaxNumber}</h5>     */}
                         
             </div>
         </div>
 
 
 
-        <form onSubmit={e => updateForm(e)} >
-
+    <form onSubmit={e => updateForm(e)} >
+        <div className="nft_box_size">
 
                 <div className="box_size_new_form">
                         <div className="row">
@@ -305,9 +306,10 @@ const EditPharmacy = () => {
                                 </div>
                             </div>
                     </div>
-                
+
+            </div>  
         </form>
-    </div>
+</div>
 
 
             <hr></hr>

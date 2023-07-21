@@ -32,6 +32,31 @@ const AddPatient = () => {
         console.log(patient);
     }
 
+
+    const handlePhoneChange=(e)=>{
+        // console.log(e);
+        const input = e.target.value;
+        // Remove all non-digit characters from the input
+        const digitsOnly = input.replace(/\D/g, '');
+
+        // Apply the desired formatting using regular expressions
+        const formattedNumber = digitsOnly.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+        
+//For testing, if given user version (716-123-4567) return raw number without dashes (7161234567)
+        // const rawNumber = `${formattedNumber.replace(/-/g, '')}`;
+
+//For testing, if given rawNumber (7161234567) return user version (716-123-4567):
+        // const webNumber = rawNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+
+
+        setPatient({...patient,[e.target.name]: formattedNumber })
+
+        console.log("pt_phone in handlePhoneChange with formattedNumber: ",patient.pt_phone);
+        console.log("pharmacy Object in handlePhoneChange: ",patient);
+}
+
+
+
     const submitForm = async (e) => {
         e.preventDefault(); 
 
@@ -59,8 +84,8 @@ const AddPatient = () => {
       }
 
   return (
-    <>
-    <div className="container-fluid">
+<>
+<div className="container-fluid">
         <div className="row">
             <div className="col-md-12 text-center">
                 <h1>Add Patient</h1>
@@ -68,8 +93,9 @@ const AddPatient = () => {
             </div>
         </div>
 
-        <form onSubmit={e => submitForm(e)}>
-        {/* <form onSubmit={submitForm}> */}
+    <form onSubmit={e => submitForm(e)}>
+        <div className="nft_box_size">
+
                     <div className="box_size_new_form">
                             <div className="row">
                                     <div className="col-md-3">Patient Name:</div>
@@ -105,14 +131,15 @@ const AddPatient = () => {
                             </div>
 
                             <div className="row">
-                                    <div className="col-md-3">Email:</div>
+                                    <div className="col-md-3">Phone:</div>
                                     <div className="col-md-9">
-                                        <input type="text" name="pt_phone" className="form-control" value={pt_phone} onChange={(e) => handleChange(e)} required />   
+                                        <input type="text" name="pt_phone" className="form-control" value={pt_phone} onChange={(e) => handlePhoneChange(e)} 
+                                        required maxLength={12} />   
                                     </div>
                             </div>
 
                             <div className="row">
-                                    <div className="col-md-3">Email:</div>
+                                    <div className="col-md-3">Email: <i>(Optional)</i></div>
                                     <div className="col-md-9">
                                         <input type="text" name="email" className="form-control" value={email} onChange={(e) => handleChange(e)} />   
                                     </div>
@@ -136,6 +163,7 @@ const AddPatient = () => {
                                 </div>
                             </div>
                     </div>
+            </div>
         </form>
     </div>                       
     </>

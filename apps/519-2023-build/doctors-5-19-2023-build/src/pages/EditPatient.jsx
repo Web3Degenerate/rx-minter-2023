@@ -38,7 +38,7 @@ const EditPatient = () => {
           pt_phone: "",
       });
 
-      
+
   
       const [medication, setMedication] = useState([]);
       const [patients, setPatients] = useState([]);
@@ -204,17 +204,20 @@ const EditPatient = () => {
   return (
 
    <> 
-        <form onSubmit={e => updateForm(e)}>
-              <div className="nft_box_size">
-                        <div className="row">
+    <form onSubmit={e => updateForm(e)}>
+            <div className="nft_box_size">
+                    <div className="row">
                             <div className="col-md-12 text-center">
-                                <h1>Edit Patient: {name} - {addyShortner(wallet_address)}</h1> 
-                                <h5>Solidity Phone Number: {solidityPhoneNumber}</h5>   
-                                <h5>Web Phone Number is: {webPhoneNumber}</h5>                             
-                            </div>
-                        </div>
+                            <h1> Edit Patient:</h1> 
+                            <h3 className="display-3">{name}</h3>
 
-                <div className="box_size_patient">
+                                {/* <h1>Edit Patient: {name} - {addyShortner(wallet_address)}</h1>  */}
+                                {/* <h5>Solidity Phone Number: {solidityPhoneNumber}</h5>    */}
+                                {/* <h5>Web Phone Number is: {webPhoneNumber}</h5>            */}
+                            </div>
+                    </div>
+
+                <div className="box_size_new_form">
                         <div className="row" >
                                 <div className="col-md-3">Patient Name:</div>
                                 <div className="col-md-9">
@@ -225,8 +228,8 @@ const EditPatient = () => {
 
 
                             <div className="row">
-                                    <div className="col-md-2">Wallet:</div>
-                                    <div className="col-md-10">
+                                    <div className="col-md-3">Wallet:</div>
+                                    <div className="col-md-9">
                                         <textarea name="wallet_address" className="form-control" value={wallet_address} onChange={(e) => handleChange(e)} onKeyDown={handleKeyDown} rows="2" required />   
                                     </div>
                             </div>
@@ -251,7 +254,7 @@ const EditPatient = () => {
                             <div className="row">
                                     <div className="col-md-3">Email Address:</div>
                                     <div className="col-md-9">
-                                        <input type="text" name="email" className="form-control" value={email} onChange={(e) => handleChange(e)} />   
+                                        <input type="text" name="email" className="form-control" value={email} onChange={(e) => handleChange(e)} placeholder="(Optional)" />   
                                     </div>
                             </div>
 
@@ -286,8 +289,8 @@ const EditPatient = () => {
                                 </div>
                             </div>
                     </div>
-                </div>
-        </form>
+        </div>
+</form>
 
 
     <hr></hr>

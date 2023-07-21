@@ -28,7 +28,7 @@ const AddPharmacy = () => {
         console.log(pharmacy);
     }
 
-//Pharmacy Phone Number Handler
+//Pharmacy Phone Number Handler -- 
     const [solidityPhoneNumber, setSolidityPhoneNumber] = useState('')
     const [webPhoneNumber,setWebPhoneNumber] = useState('')
 
@@ -40,14 +40,16 @@ const AddPharmacy = () => {
 
             // Apply the desired formatting using regular expressions
             const formattedNumber = digitsOnly.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
-            const rawNumber = `${formattedNumber.replace(/-/g, '')}`;
-            setSolidityPhoneNumber(rawNumber)
 
-            const webNumber = rawNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
-                            
-            setWebPhoneNumber(webNumber)
+        //For testing, return version with just digits and remove the dash: 
+                        const rawNumber = `${formattedNumber.replace(/-/g, '')}`;
+                        setSolidityPhoneNumber(rawNumber)
 
-            // const formattedNumber = formatPhoneNumber(input);
+                        const webNumber = rawNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+                                        
+                        setWebPhoneNumber(webNumber)
+
+
 
             setPharmacy({...pharmacy,[e.target.name]: formattedNumber })
 
@@ -68,42 +70,87 @@ const AddPharmacy = () => {
 
             // Apply the desired formatting using regular expressions
             const formattedFax = digitsOnly.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
-            const rawFax = `1${formattedFax.replace(/-/g, '')}`;
-            setSolidityFaxNumber(rawFax)
 
-            const webFax = rawFax.replace(/^1/, '') // Remove leading '1'
-                            .replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+                    //Just for testing:
+                            const rawFax = `1${formattedFax.replace(/-/g, '')}`;
+                            setSolidityFaxNumber(rawFax)
 
-            setWebFaxNumber(webFax)
+                            const webFax = rawFax.replace(/^1/, '') // Remove leading '1'
+                                            .replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+
+                            setWebFaxNumber(webFax)
 
             // const formattedFax = formatPhoneNumber(input);
 
-            setPharmacy({...pharmacy,[e.target.name]: webFax })
+            setPharmacy({...pharmacy,[e.target.name]: formattedFax })
 
             console.log("Phone in handleFaxChange with formattedFax: ",pharmacy.pharmacy_fax);
             console.log("Pharmacy Object in handlePhoneChange: ",pharmacy);
     }
 
+    const [errorMessage, setErrorMessage ] = useState('')
 
-    const submitForm = async (e) => {
-        e.preventDefault(); 
 
-        console.log(pharmacy);
+ //Original Indian Version: 
+    // const submitForm = async (e) => {
+    //     e.preventDefault(); 
 
-        // https://rxminter.com/php-react/phpmysql-student-crud/insert.php
-        await axios.post("https://rxminter.com/php-react/insert-pharmacy.php", pharmacy).then((result)=>{
-            console.log(result);
+    //     console.log(pharmacy);
 
-            // navigate('/');
-            if(result.data.status =='valid'){
-                alert(`Success! Pharmacy/Facility ${pharmacy.pharmacy_name} with Fax Number ${pharmacy.pharmacy_fax} and wallet address ${pharmacy.pharmacy_wallet} has been Added!`)
-                navigate('/pharmacy-list');
-            }else{
-                alert('There is a problem saving this pharmacy to the database. Please try again.');
-            }
-        });
+    //         try {
+    //                 await axios.post("https://rxminter.com/php-react/insert-pharmacy.php", pharmacy).then((result)=>{       
+    //                         console.log(result);
+    //                         if(result.data.status =='valid'){
+    //                             alert(`Success! Pharmacy/Facility ${pharmacy.pharmacy_name} with Fax Number ${pharmacy.pharmacy_fax} and wallet address ${pharmacy.pharmacy_wallet} has been Added!`)
+    //                             navigate('/pharmacy-list');
+    //                         }else{
+    //                             alert('There is a problem saving this pharmacy to the database. Please try again.');
+    //                         }
+    //                 });
 
+    //         } catch (error) {
+    //             console.log('Try Catch Block Error in submitForm when trying to save new pharmacy/facility was: ',error)
+    //             setErrorMessage(error)
+    //         }
+
+    // }
+
+
+// Chat GPT
+const submitForm = async (e) => {
+    e.preventDefault();
+    console.log(pharmacy);
+  
+    try {
+      const result = await axios.post("https://rxminter.com/php-react/insert-pharmacy-chatgpt.php", pharmacy);
+  
+      console.log(result.data);
+      if (result.data.status === 'valid') {
+        alert(`Success! Pharmacy/Facility ${pharmacy.pharmacy_name} with Fax Number ${pharmacy.pharmacy_fax} and wallet address ${pharmacy.pharmacy_wallet} has been Added!`)
+        navigate('/pharmacy-list');
+      } else if (result.data.status === 'invalid' && result.data.message) {
+        setErrorMessage(result.data.message); // Display the error message from the server
+      } else {
+        setErrorMessage('There is a problem saving this pharmacy to the database. Please try again.');
+      }
+    } catch (error) {
+      console.log('Try Catch Error in submitForm when trying to save new pharmacy/facility was: ', error);
     }
+  }
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
 
     const handleKeyDown = (event) => {
         if (event.keyCode === 13) {
@@ -112,19 +159,27 @@ const AddPharmacy = () => {
       }
 
   return (
-    <>
-    <div className="container-fluid">
+<>
+<div className="container-fluid">
         <div className="row">
             <div className="col-md-12 text-center">
+
+            {errorMessage && (
+                <div>
+                <h5 className="display-5" style={{color:"red"}}>Error: {errorMessage}</h5>
+                </div>
+            )}
+
+
                 <h1>Add A Pharmacy or Facility</h1>
-                <h5>Phone: {solidityPhoneNumber} Web Phone: {webPhoneNumber}</h5> 
-                <h5>Fax: {solidityFaxNumber} Web Fax: {webFaxNumber}</h5> 
+                {/* <h5>Phone: {solidityPhoneNumber} Web Phone: {webPhoneNumber}</h5>  */}
+                {/* <h5>Fax: {solidityFaxNumber} Web Fax: {webFaxNumber}</h5>  */}
                         
             </div>
         </div>
 
-        <form onSubmit={e => submitForm(e)}>
-        {/* <form onSubmit={submitForm}> */}
+    <form onSubmit={e => submitForm(e)}>
+        <div className="nft_box_size">
                     <div className="box_size_new_form">
                             <div className="row">
                                     <div className="col-md-3">Facility Name:</div>
@@ -191,9 +246,10 @@ const AddPharmacy = () => {
                                 </div>
                             </div>
                     </div>
+            </div>
         </form>
-    </div>                       
-    </>
+</div>                       
+</>
   )
 }
 export default AddPharmacy

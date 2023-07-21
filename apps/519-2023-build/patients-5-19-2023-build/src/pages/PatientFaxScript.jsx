@@ -94,7 +94,7 @@ const loadViewPharmacy = async () => {
   
 }
 
-const doctor_id = 1;
+// const doctor_id = 1;
 const [doctor, setDoctor] = useState({
     doctor_name: "",
     doctor_dea: "",
@@ -102,19 +102,16 @@ const [doctor, setDoctor] = useState({
     doctor_npi:"",
     doctor_phone:"",
     doctor_fax: "",
-    did:doctor_id
+    did:""
 });
 const {doctor_name,doctor_dea,doctor_wallet_address,doctor_npi,doctor_phone,doctor_fax,did} = doctor; 
 
-const loadDoctors = async () => {
-    // console.log('ID check inside loadUsers', id) 
-    setDoctor({doctor_name: "", doctor_dea: "", doctor_wallet_address: "", doctor_npi:"", id:"", doctor_phone:"", doctor_fax:""});
-    const result = await axios.get("https://rxminter.com/php-react/edit-doctor.php?id="+doctor_id);
-    console.log(result);
-    // setPatient(result.data.records);
-    setDoctor(result.data);
-    // navigate('/');
-}
+// const loadDoctors = async () => {
+//     setDoctor({doctor_name: "", doctor_dea: "", doctor_wallet_address: "", doctor_npi:"", id:"", doctor_phone:"", doctor_fax:""});
+//     const result = await axios.get("https://rxminter.com/php-react/edit-doctor.php?id="+doctor_id);
+//     console.log(result);
+//     setDoctor(result.data);
+// }
 
 // **************** SVG => JPEG PAGE LOGIC ****************************** //
     // const svgContainer = useRef();
@@ -372,13 +369,24 @@ const handleConvertClickerInternal = async () => {
             }
 
 
-//***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
+//***********  AFTER WE HAVE PT WALLET ADDY FROM NFT ==> Get Pt phone to load from server (7/20/2023) *****************************************************************
 const wallet_address = nft?.metadata.attributes[4].value;
 const result = await axios.get("https://rxminter.com/php-react/patient-get-by-address.php?wallet_address="+wallet_address);
-setPatient(result.data);
+setPatient(result.data); //lags, shows up on second load/pharamcy select run
     console.log("inside svg function pt_phone is",result.data.pt_phone)
    
 //***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
+
+
+//***********  AFTER WE HAVE DOCTOR NAME FROM NFT ==> Get Doctor info from server (7/21/2023) *****************************************************************
+const doctor_name = nft?.metadata.attributes[8].value;
+const prescribing_doc = await axios.get("https://rxminter.com/php-react/doctor-get-by-name.php?doctor_name="+doctor_name);
+
+setDoctor(prescribing_doc.data); //lags, shows up on second load/pharamcy select run
+    console.log("inside svg function doctor name is",prescribing_doc.data.doctor_name)
+   
+//***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
+
 
 
     //remedyPatientName, remedyDOB, remedyMedication, remedyQuantity, remedyPhysicalAddress, remedySig, remedyPrescribedDate
@@ -387,7 +395,8 @@ setPatient(result.data);
         const svgElement = await RemedySvgOrderRx(unhashedName, unhashedDob, nft?.metadata.attributes[0].value,
         remedyDisp, unhashed_pt_physical_address, nft?.metadata.description, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value),
         // result.data.pt_phone, doctor.doctor_name, doctor.doctor_dea, doctor.doctor_npi, doctor.doctor_phone  )
-        result.data.pt_phone, doctor.doctor_name, doctor.doctor_dea, doctor.doctor_npi, doctor.doctor_phone  )
+        result.data.pt_phone, prescribing_doc.data.doctor_name, prescribing_doc.data.doctor_dea, 
+        prescribing_doc.data.doctor_npi, prescribing_doc.data.doctor_phone  )
 
 
         console.log("Jorge svgElement Test is ", svgElement)
