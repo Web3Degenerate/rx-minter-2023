@@ -76,8 +76,8 @@ const [pharmacy, setPharmacy] = useState([]);
 // useEffect to load the pharmacies on page load:
 useEffect(()=> {    
     loadSVGTemplater();
-  loadViewPharmacy();
-  
+    loadViewPharmacy();
+    loadDoctors(); 
 //   handleConvertClickerInternal()
 }, [])
 
@@ -92,6 +92,28 @@ const loadViewPharmacy = async () => {
   console.log(result);
   setPharmacy(result.data.records);
   
+}
+
+const doctor_id = 1;
+const [doctor, setDoctor] = useState({
+    doctor_name: "",
+    doctor_dea: "",
+    doctor_wallet_address: "",
+    doctor_npi:"",
+    doctor_phone:"",
+    doctor_fax: "",
+    did:doctor_id
+});
+const {doctor_name,doctor_dea,doctor_wallet_address,doctor_npi,doctor_phone,doctor_fax,did} = doctor; 
+
+const loadDoctors = async () => {
+    // console.log('ID check inside loadUsers', id) 
+    setDoctor({doctor_name: "", doctor_dea: "", doctor_wallet_address: "", doctor_npi:"", id:"", doctor_phone:"", doctor_fax:""});
+    const result = await axios.get("https://rxminter.com/php-react/edit-doctor.php?id="+doctor_id);
+    console.log(result);
+    // setPatient(result.data.records);
+    setDoctor(result.data);
+    // navigate('/');
 }
 
 // **************** SVG => JPEG PAGE LOGIC ****************************** //
@@ -132,12 +154,16 @@ const [pharmacyFax, setPharmacyFax] = useState({
 const handlePharmacyChange = async (e, id) => {
   const {value, options } = e.target
 
+  setPharmacyFax({pharmacy_name:"",pharmacy_wallet:"",pharmacy_phone:"",pharmacy_fax:"",pharmacy_address:""})
   const result = await axios.get("https://rxminter.com/php-react/pharmacy-get-by-address.php?pharmacy_wallet="+e.target.value);
   setPharmacyFax(result.data);
-  console.log("handlePharmacyChange server data: ",result.data)
-  let getSelectedPharmacy = result.data.pharmacy_name
-  let getSelectedFax = result.data.pharmacy_fax
+  console.log("handlePharmacyChange #pharmacyByWallet server data: ",result.data)
 
+  let getSelectedPharmacy = result.data.pharmacy_name
+
+  const getSelectedFax = `1${result.data.pharmacy_fax.replace(/-/g, '')}`;
+
+//   setPharmacyFax({...pharmacyFax, pharmacy_fax: getSelectedFax });
   setScriptFax({...scriptFax, pharmacy_fax: getSelectedFax });
 
   setShowSubmitButton('block')
@@ -151,12 +177,13 @@ const handlePharmacyChange = async (e, id) => {
   // setPharmacyFax(result.data);
   // alert(`You have selected ${pharmacyFax.pharmacy_name} pharmacy with fax # of ${pharmacyFax.pharmacy_fax}.`)
   // const getSelectedFax = loadPharmacyByAddress(rxWallet.rxWallet)
-  console.log("handlePharmacyChange pharmacyFax is now: ", pharmacyFax)
+  console.log("handlePharmacyChange #pharmacyFax is now: ", pharmacyFax)
 
 //AT BREAK (4:38pm) on Wed 6/21/23 we needed to call handleConvertClickerInteral() to update the selected fax number on scriptFax state
-  handleConvertClickerInternal() 
+  handleConvertClickerInternal() //call OUTSIDE fn
 
-  alert(`You have selected ${getSelectedPharmacy} pharmacy with fax # of ${getSelectedFax}.`)
+  const dislayFaxNumber = getSelectedFax.replace(/^1/, '').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+  alert(`You have selected ${getSelectedPharmacy} pharmacy with fax # of ${dislayFaxNumber}.`)
 }
 
 // **************************** handleSubmitToPharmacy Form Submission ******************************//
@@ -168,8 +195,10 @@ const handleSubmitTest = async (e) => {
 
 
     // if (confirm(`Transfer Prescription Item #${rxWallet.tokenId} to Pharmacy: ${pharmacyFax.pharmacy_name} at address: ${rxWallet.rxWallet} for ${sig} by ${prescriber}. Okay ${pt_name}? Fax: ${pharmacyFax.pharmacy_fax} `) == true){
+  const dislayFaxNumber = pharmacyFax.pharmacy_fax.replace(/^1/, '').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
 
-    if (confirm(`Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at address: ${pharmacyFax.pharmacy_wallet} for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${nft?.metadata.name}? Fax: ${pharmacyFax.pharmacy_fax} `) == true){
+
+    if (confirm(`Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at Fax Number ${dislayFaxNumber} (with wallet address: ${pharmacyFax.pharmacy_wallet}) for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${nft?.metadata.name}? `) == true){
     //   await _safeTransferFromToPharmacy({ ...rxWallet })
     sendFax()
     }
@@ -224,7 +253,11 @@ try{
             console.log("7/8 Valid result.data is: ",result.data)
             console.log("7/8/23 Valid result is: ",result)
 
-              _safeTransferFromToPharmacy()
+// SUCCESSFUL FAX SENT - CALLS SAFE TRANSFER FROM PATIENT TO PHARMACY **********************************
+// FOR NOW - FORWARD BACK TO PATIENT HOME AGE
+            navigate('/')
+// _safeTransferFromToPharmacy()
+// SUCCESSFUL FAX SENT - CALLS SAFE TRANSFER FROM PATIENT TO PHARMACY **********************************
 
         }else{
             alert('There is a problem sending this fax script to the pharmacy. Please try again.');
@@ -277,6 +310,18 @@ useEffect(() => {
 // },[pharmacyFax])
 },[nft])
 
+const [patient, setPatient] = useState({
+    name: "",
+    wallet_address: "",
+    email:"",
+    dob:"",
+    pt_physical_address:"",
+    pt_phone:"",
+    pid:""
+});
+
+const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid} = patient;
+
 
 const handleConvertClickerInternal = async () => {
 
@@ -327,11 +372,23 @@ const handleConvertClickerInternal = async () => {
             }
 
 
+//***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
+const wallet_address = nft?.metadata.attributes[4].value;
+const result = await axios.get("https://rxminter.com/php-react/patient-get-by-address.php?wallet_address="+wallet_address);
+setPatient(result.data);
+    console.log("inside svg function pt_phone is",result.data.pt_phone)
+   
+//***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
+
+
     //remedyPatientName, remedyDOB, remedyMedication, remedyQuantity, remedyPhysicalAddress, remedySig, remedyPrescribedDate
         let remedyDisp = nft?.metadata.attributes[2].value - nft?.metadata.attributes[3].value;
 
         const svgElement = await RemedySvgOrderRx(unhashedName, unhashedDob, nft?.metadata.attributes[0].value,
-        remedyDisp, unhashed_pt_physical_address, nft?.metadata.description, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value)  )
+        remedyDisp, unhashed_pt_physical_address, nft?.metadata.description, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value),
+        // result.data.pt_phone, doctor.doctor_name, doctor.doctor_dea, doctor.doctor_npi, doctor.doctor_phone  )
+        result.data.pt_phone, doctor.doctor_name, doctor.doctor_dea, doctor.doctor_npi, doctor.doctor_phone  )
+
 
         console.log("Jorge svgElement Test is ", svgElement)
         setGenerateSVGAuto(svgElement)
