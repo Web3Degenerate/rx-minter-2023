@@ -257,8 +257,6 @@ try {
 
   alert(`Rx has been minted and sent to ${name} at address ${wallet_address} and transaction ID of ${sendRx.receipt.transactionHash}`); 
   setTestNet(sendRx.receipt.transactionHash)
-  // setForm({ name: '', wallet_address: '', description: '', medication: '', dosage: '', quantity: '', datePrescribed: '' });
-
 
 //from: https://stackoverflow.com/questions/67803090/how-to-get-erc-721-tokenid
 // We tried calling .toNumber() but the returned value is string "0x0000000000000000000000000000000000000000000000000000000000000006"
@@ -548,32 +546,61 @@ return (
 
                       
       {/* External Linking Solution From: https://herewecode.io/blog/react-router-link-to-external-url/ */}
-                        <div className="box_size_success" style={{display:`${success}`, background:"#D4EDDA"}}>
+    {/* <div className="box_size_success" style={{display:`${success}`, background:"#D4EDDA"}}> */}
+    <div className="box_size_success" style={{display:"block", background:"#D4EDDA"}}>
+
                             
-          <h1 className="display-4 text-center" style={{color:"#74A27F"}}>Success!</h1>                    
+          <h1 className="display-4 text-center" style={{color:"#74A27F"}}>Success, NFT Script Minted!</h1>                    
       <hr></hr>
 
                             <Link style={{color:"#74A27F"}} to="/" >
                                 {/* <h4 className="text-justify" style={{color:"#74A27F"}}>Click Here to View Your Scripts.</h4> */}
-                                <button className="text-wrap btn btn-success btn-lg" style={{color:"white", width:"100%", padding:"32px 16px", fontSize:"34px"}}>
-                                    Click Here to Return Back to Your Patient Dashboard.
+                                {/* <button className="text-wrap btn btn-success" style={{color:"white", width:"100%", padding:"32px 16px", fontSize:"25px"}}> */}
+                                <button className="text-wrap btn btn-success" style={{color:"white", width:"100%",  fontSize:"25px"}}>
+
+                                    Click Here to Send This NFT Script to Patient {name}.
+                                    
                                 </button>
                             </Link>
-                            <hr></hr>
 
-                            <h4 className="text-center" style={{color:"#74A27F"}}><a href={`https://mumbai.polygonscan.com/tx/${testNet}`} target="_blank">
+    </div>
+
+<hr></hr>
+
+{/* Send To Patient Red Box */}
+<div className="box_size_success" style={{display:"block", background:"#F3E6E2"}}>
+
+<h1 className="display-6 text-center" style={{color:"#6C757D"}}>Transfer Script To Pharmacy</h1>                    
+      <hr></hr>
+                          <Link style={{color:"#74A27F"}} to="/" >
+                                {/* <h4 className="text-justify" style={{color:"#74A27F"}}>Click Here to View Your Scripts.</h4> */}
+                                {/* <button className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", padding:"32px 16px", fontSize:"25px"}}> */}
+                                <button className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", fontSize:"25px"}}>
+
+                                Click Here to Fax This NFT Script Directly To The Pharmacy.
+                                </button>
+                            </Link>
+
+</div>
+
+<hr></hr>
+
+{/* Transaction Blue Box */}
+<div className="box_size_success" style={{display:"block", background:"#ABE2F7"}}>
+
+<h3 className="display-8 text-center" style={{color:"#0D18F4"}}>Minting NFT Script Details:</h3>                    
+      <hr></hr>
+
+                  <h4 className="text-center" style={{color:"#74A27F"}}><a href={`https://mumbai.polygonscan.com/tx/${testNet}`} target="_blank">
                               Click Here to View the transaction on the Polygonscan explorer.
-                            </a></h4>
+                  </a></h4>
                             <br></br>
                             
-                            <h4 className="text-center" style={{color:"#74A27F"}}><a href={`https://testnets.opensea.io/assets/mumbai/${openSeaURL}`} target="_blank">
+                  <h4 className="text-center" style={{color:"#74A27F"}}><a href={`https://testnets.opensea.io/assets/mumbai/${openSeaURL}`} target="_blank">
                             Click Here to View the NFT on OpenSea.
-                            </a></h4>
-                          
-                            
-                            
+                  </a></h4>
 
-                        </div>
+</div>
                         
               
 
