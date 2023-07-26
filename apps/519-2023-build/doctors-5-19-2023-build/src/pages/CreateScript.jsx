@@ -236,11 +236,6 @@ try {
       const hashed_pt_physical_address = ethers.utils.RLP.encode(ethers.utils.toUtf8Bytes(pt_physical_address));
 
 
-      // const data = await _createScript({ args: [wallet_address, name, description_Ref, medication_Ref, dob, 
-      //             pt_physical_address, quantity_Ref, doctor, dea, new Date(date_prescribed_Ref).getTime(), perDiemMax, 
-      //             new Date(nextFillDate).getTime()
-      //   ] })
-
       const data = await _createScript({ args: [wallet_address, hashedName, description_Ref, medication_Ref, hashedDob, 
                   hashed_pt_physical_address, quantity_Ref, doctor, dea, new Date(date_prescribed_Ref).getTime(), 
                   perDiemMax, new Date(nextFillDate).getTime() ]})
@@ -249,46 +244,53 @@ try {
   console.log("Rx NFT Data Set w/ date prescribed as:", data)
 
 
-  const sendRx = await contract.call("mintRx", [wallet_address]); 
+// ************************************************************************** CUT PATIENT TRANSFER START HERE *************************************//
+const sendRx = await contract.call("mintRx", [wallet_address]); 
 
-  console.log("Rx NFT Sent to Patient!", sendRx);
+          console.log("Rx NFT Sent to Patient!", sendRx);
 
-  // alertService.success(`Success, The Rx NFT has been minted and sent to ${name} at address ${wallet_address}`, options);
+          // alertService.success(`Success, The Rx NFT has been minted and sent to ${name} at address ${wallet_address}`, options);
 
-  alert(`Rx has been minted and sent to ${name} at address ${wallet_address} and transaction ID of ${sendRx.receipt.transactionHash}`); 
-  setTestNet(sendRx.receipt.transactionHash)
+          alert(`Rx has been minted and sent to ${name} at address ${wallet_address} and transaction ID of ${sendRx.receipt.transactionHash}`); 
+          setTestNet(sendRx.receipt.transactionHash)
 
-//from: https://stackoverflow.com/questions/67803090/how-to-get-erc-721-tokenid
-// We tried calling .toNumber() but the returned value is string "0x0000000000000000000000000000000000000000000000000000000000000006"
-// so get the last item in the string with soln: https://stackoverflow.com/questions/3884632/how-to-get-the-last-character-of-a-string
-  // let getTokenUri = sendRx.receipt.logs[0].topics[3].slice(-2);
+        //from: https://stackoverflow.com/questions/67803090/how-to-get-erc-721-tokenid
+        // We tried calling .toNumber() but the returned value is string "0x0000000000000000000000000000000000000000000000000000000000000006"
+        // so get the last item in the string with soln: https://stackoverflow.com/questions/3884632/how-to-get-the-last-character-of-a-string
+          // let getTokenUri = sendRx.receipt.logs[0].topics[3].slice(-2);
 
-  let tokenId_stepOneProfit = sendRx.receipt.events[0].args.tokenId;
-  // let tokenId_step3profit = web3.toUtf8(tokenId_stepOneProfit);
+          let tokenId_stepOneProfit = sendRx.receipt.events[0].args.tokenId;
+          // let tokenId_step3profit = web3.toUtf8(tokenId_stepOneProfit);
 
-//https://ethereum.stackexchange.com/questions/101356/how-to-convert-bignumber-to-normal-number-using-ethers-js
-// Close, on 19 got 0.000000000000000019
-// HEX Big Gay number was 0x0000000000000000000000000000000000000000000000000000000000000013
+        //https://ethereum.stackexchange.com/questions/101356/how-to-convert-bignumber-to-normal-number-using-ethers-js
+        // Close, on 19 got 0.000000000000000019
+        // HEX Big Gay number was 0x0000000000000000000000000000000000000000000000000000000000000013
 
-//##################################************************$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  CONQUERED BIGNUMBER!!! $$$$$$$$$$$$$$$$$$$$$$$$***********************###################################
-  let step1Profit = ethers.utils.formatEther(tokenId_stepOneProfit.toString());
-// FINAL SOLUTION IN COMMENT AT BOTTOM: https://ethereum.stackexchange.com/questions/101356/how-to-convert-bignumber-to-normal-number-using-ethers-js
-  const step3Profit = Math.round(parseFloat(step1Profit) * (10 ** 18));
+        //##################################************************$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$  CONQUERED BIGNUMBER!!! $$$$$$$$$$$$$$$$$$$$$$$$***********************###################################
+          let step1Profit = ethers.utils.formatEther(tokenId_stepOneProfit.toString());
+        // FINAL SOLUTION IN COMMENT AT BOTTOM: https://ethereum.stackexchange.com/questions/101356/how-to-convert-bignumber-to-normal-number-using-ethers-js
+          const step3Profit = Math.round(parseFloat(step1Profit) * (10 ** 18));
 
+          setTokenIdz(step3Profit)
 
+          // let getOpenSeaURL = `${contractAddress}/${getTokenUri}`;
+          let getOpenSeaURL = `${solidityContractAddress}/${step3Profit}`;
+          
+          setOpenSeaURL(getOpenSeaURL)
+          setSuccess('block')
+          
+          setShowPtTransfer('block')
+          setShowDocTransfer('block')
+          setShowTx('block')
 
-  // let getOpenSeaURL = `${contractAddress}/${getTokenUri}`;
-  let getOpenSeaURL = `${solidityContractAddress}/${step3Profit}`;
   
-  setOpenSeaURL(getOpenSeaURL)
-  setSuccess('block')
+// ************************************************************************** CUT PATIENT TRANSFER END HERE *************************************//
+  } catch (error) {
+    console.log("contract call failure", error)
+    // alertService.error(`Error with error message of ${error} :(`, options);
+  }
 
-
-} catch (error) {
-  console.log("contract call failure", error)
-  alertService.error(`Error with error message of ${error} :(`, options);
-}
-
+// *************************************************************************** end of try catch block *******
 } //if alert closing bracket for testing (6/8/23)
 
 //**************************************************************************END OF MERGE FN TEST FOR LAG ********************************/
@@ -299,6 +301,37 @@ try {
 const [testNet, setTestNet] = useState('')
 const [openSeaURL, setOpenSeaURL] = useState('')
 const [success, setSuccess ] = useState('none')
+const [showTx, setShowTx] = useState('none')
+const [showPtTransfer, setShowPtTransfer] = useState('none')
+const [showDocTransfer, setShowDocTransfer] = useState('none')
+const [tokenIdz, setTokenIdz] = useState('')
+
+
+// SAT JULY 22 2023 - 7/22/23 - BROKE OUT PATIENT TRANSFER FUNCTION
+  const processPtTransfer = async () => {
+    //_safemint() - mint AND transfer: https://docs.openzeppelin.com/contracts/2.x/api/token/erc721#ERC721-_safeMint-address-uint256-bytes-
+    transferPharmacyToPatient
+    const { mutateAsync: transferPharmacyToPatient, isLoading } = useContractWrite(contract, "transferPharmacyToPatient")
+
+    const call = async () => {
+      try {
+        // const data = await transferPharmacyToPatient({ args: [_from, _to, tokenId] });
+        const data = await transferPharmacyToPatient({ args: [address, wallet_address, tokenId] });
+        console.info("contract call successs", data);
+      } catch (err) {
+        console.error("contract call failure", err);
+      }
+    }
+
+    // Trigger button: 
+        // const handleClick = () => {
+        //   fetchData();
+        // };
+        // <button onClick={handleClick}>Fetch Data</button>
+
+
+  }
+
 
 
 
@@ -399,17 +432,46 @@ const loadDoctors = async () => {
 }
 
 
+// CHANGE NPI, DEA TO GET FROM WEB 2 SERVER
 const [dea, setDea] = useState('')
 const [doctor, setDoctor] = useState('')
-const handleDoctorChange=(e)=>{
+const [showNpi, setShowNpi] = useState('')
+
+
+//Added Sat 7/22/23 - BWI (changed doctor, setDoctor to doctorNpi, setDoctorNpi)
+// const [doctorNpi, setDoctorNpi] = useState({
+//   doctor_name: "",
+//   doctor_dea: "",
+//   doctor_wallet_address: "",
+//   doctor_npi:"",
+//   doctor_phone:"",
+//   doctor_fax: "",
+//   did:""
+// });
+// const {doctor_name,doctor_dea,doctor_wallet_address,doctor_npi,doctor_phone,doctor_fax,did} = doctorNpi; 
+
+
+const handleDoctorChange = async (e)=>{
   // const {value, options } = e.target
   setDea(e.target.value)
   // setDoctor(e.target.name)
   const {value, options } = e.target
   setDoctor(options[e.target.selectedIndex].text)
   console.log("Event passed to handleDoctorChange is ", e);
-  console.log('Current DEA # is now:', dea);
-  console.log('Current Doctor # is now:', doctor);
+  console.log('Current #DEA # is now:', dea);
+  console.log('Current #Doctor # is now:', doctor);
+
+  //***********  AFTER WE HAVE DOCTOR NAME FROM NFT ==> Get Doctor info from server (7/21/2023) *****************************************************************
+
+  const doctor_name = options[e.target.selectedIndex].text;
+  const prescribing_doc = await axios.get("https://rxminter.com/php-react/doctor-get-by-name.php?doctor_name="+doctor_name);
+
+// setDoctorNpi(prescribing_doc.data); //lags, shows up on second load/pharamcy select run
+    console.log("inside #handleDoctorChange function doctor name is",prescribing_doc.data.doctor_name)
+
+    setShowNpi(prescribing_doc.data.doctor_npi)
+   
+//***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
 
 }
 
@@ -546,21 +608,28 @@ return (
 
                       
       {/* External Linking Solution From: https://herewecode.io/blog/react-router-link-to-external-url/ */}
-    {/* <div className="box_size_success" style={{display:`${success}`, background:"#D4EDDA"}}> */}
-    <div className="box_size_success" style={{display:"block", background:"#D4EDDA"}}>
+
+    {/* <div className="box_size_success" style={{display:`${showPtTransfer}`, background:"#D4EDDA"}}> */}
+    <div className="box_size_success" style={{display:`${showPtTransfer}`, background:"#D4EDDA"}}>
 
                             
           <h1 className="display-4 text-center" style={{color:"#74A27F"}}>Success, NFT Script Minted!</h1>                    
       <hr></hr>
 
-                            <Link style={{color:"#74A27F"}} to="/" >
-                                {/* <h4 className="text-justify" style={{color:"#74A27F"}}>Click Here to View Your Scripts.</h4> */}
-                                {/* <button className="text-wrap btn btn-success" style={{color:"white", width:"100%", padding:"32px 16px", fontSize:"25px"}}> */}
-                                <button className="text-wrap btn btn-success" style={{color:"white", width:"100%",  fontSize:"25px"}}>
+        <p className="display-6 text-center">The NFT Script Has Been Sent to patient <br></br>{name}.</p>
+    
 
-                                    Click Here to Send This NFT Script to Patient {name}.
-                                    
+
+                                      {/* <button className="text-wrap btn btn-success" style={{color:"white", width:"100%", padding:"32px 16px", fontSize:"25px"}}> */}
+                            <Link style={{color:"#74A27F"}} to="/" >
+                            <div className="row">
+                              <div className="col-md-3"></div>
+                              <div className="col-md-6">
+                                <button className="text-wrap btn btn-success text-center" style={{color:"white", width:"100%",  fontSize:"25px", borderRadius:"18px"}}>
+                                    Patient Dashboard                           
                                 </button>
+                                </div>
+                            </div>
                             </Link>
 
     </div>
@@ -568,25 +637,35 @@ return (
 <hr></hr>
 
 {/* Send To Patient Red Box */}
-<div className="box_size_success" style={{display:"block", background:"#F3E6E2"}}>
+  {/* <div className="box_size_success" style={{display:`${showDocTransfer}`, background:"#D4EDDA"}}> */}
+<div className="box_size_success" style={{display:`${showDocTransfer}`, background:"#F3E6E2"}}>
 
-<h1 className="display-6 text-center" style={{color:"#6C757D"}}>Transfer Script To Pharmacy</h1>                    
+      <h1 className="display-6 text-center" style={{color:"#6C757D"}}>Transfer Script To Pharmacy</h1>                    
       <hr></hr>
-                          <Link style={{color:"#74A27F"}} to="/" >
-                                {/* <h4 className="text-justify" style={{color:"#74A27F"}}>Click Here to View Your Scripts.</h4> */}
-                                {/* <button className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", padding:"32px 16px", fontSize:"25px"}}> */}
-                                <button className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", fontSize:"25px"}}>
+                <div className="row">
+                  <div className="col-md-1"></div>
+                      <div className="col-md-10">
+                              {/* <Link style={{color:"#74A27F"}} to={`fax-prescription/${tokenIdz}`} > */}
+                              <a href={`http://doctors.rxminter.com/fax-prescription/${tokenIdz}`} className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", fontSize:"25px", borderRadius:"18px"}}>
+                                    {/* <h4 className="text-justify" style={{color:"#74A27F"}}>Click Here to View Your Scripts.</h4> */}
+                                    {/* <button className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", padding:"32px 16px", fontSize:"25px"}}> */}
+                                    {/* <button className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", fontSize:"25px"}}> */}
 
-                                Click Here to Fax This NFT Script Directly To The Pharmacy.
-                                </button>
-                            </Link>
+                                    Click Here to Fax This NFT Script Directly To A Pharmacy.
+                              </a>
+                                    {/* </button> */}
+                                {/* </Link> */}
+                        </div>
+                  <div className="col-md-1"></div>
 
+                </div>
 </div>
 
 <hr></hr>
 
 {/* Transaction Blue Box */}
-<div className="box_size_success" style={{display:"block", background:"#ABE2F7"}}>
+  {/* <div className="box_size_success" style={{display:`${showTx}`, background:"#D4EDDA"}}> */}
+<div className="box_size_success" style={{display:`${showTx}`, background:"#ABE2F7"}}>
 
 <h3 className="display-8 text-center" style={{color:"#0D18F4"}}>Minting NFT Script Details:</h3>                    
       <hr></hr>
@@ -823,7 +902,13 @@ return (
                                 </div>
                         </div> */}
 
-
+                        <div className="row">
+                                <div className="col-md-3">NPI #:</div>
+                                <div className="col-md-9">                             
+                                    {/* <input type="text" name="dea" className="form-control" value="EB7344196" ref={inputDEA}  disabled/> */}
+                                    <input type="text" name="npi" className="form-control" value={showNpi} disabled/>
+                                </div>
+                        </div>
 
                         
 

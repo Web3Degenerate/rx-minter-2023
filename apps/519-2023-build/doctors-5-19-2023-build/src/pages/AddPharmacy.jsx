@@ -126,7 +126,7 @@ const submitForm = async (e) => {
   
       console.log(result.data);
       if (result.data.status === 'valid') {
-        alert(`Success! Pharmacy/Facility ${pharmacy.pharmacy_name} with Fax Number ${pharmacy.pharmacy_fax} and wallet address ${pharmacy.pharmacy_wallet} has been Added!`)
+        alert(`Success! Pharmacy/Facility ${pharmacy.pharmacy_name} with Fax Number ${pharmacy.pharmacy_fax} has been Added!`)
         navigate('/pharmacy-list');
       } else if (result.data.status === 'invalid' && result.data.message) {
         setErrorMessage(result.data.message); // Display the error message from the server
@@ -182,9 +182,13 @@ const submitForm = async (e) => {
         <div className="nft_box_size">
                     <div className="box_size_new_form">
                             <div className="row">
-                                    <div className="col-md-3">Facility Name:</div>
+                                    <div className="col-md-3">Facility Name:
+                                    <br></br>
+                                    <i style={{color:"red"}}>required</i>
+                                    </div>
                                     <div className="col-md-9">
-                                        <input type="text" name="pharmacy_name" className="form-control" value={pharmacy_name} onChange={(e) => handleChange(e)} required />   
+                                        <input type="text" name="pharmacy_name" className="form-control" value={pharmacy_name} onChange={(e) => handleChange(e)} 
+                                        required />   
                                     </div>
                             </div>
 
@@ -206,33 +210,46 @@ const submitForm = async (e) => {
                             </div> */}
 
                             <div className="row">
-                                    <div className="col-md-3">Facility Wallet:</div>
+                                    <div className="col-md-3">Facility Wallet:
+                                    <br></br>
+                                    <i style={{color:"gray"}}>optional</i>
+                                    </div>
                                     <div className="col-md-9">
-                                        <input type="text" name="pharmacy_wallet" className="form-control" value={pharmacy_wallet} onChange={(e) => handleChange(e)} required />   
+                                        <input type="text" name="pharmacy_wallet" className="form-control" value={pharmacy_wallet} onChange={(e) => handleChange(e)}
+                                         />   
                                     </div>
                             </div>
 
                             <div className="row">
-                                    <div className="col-md-3">Phone:</div>
+                                    <div className="col-md-3">Phone:
+                                    <br></br>
+                                    <i style={{color:"gray"}}>optional</i>
+                                    </div>
                                     <div className="col-md-9">
                                         <input type="text" name="pharmacy_phone" className="form-control" value={pharmacy_phone} onChange={(e) => handlePhoneChange(e)} 
-                                        required maxLength={12} />   
+                                        maxLength={12}  />   
                                     </div>
                             </div>
 
                             <div className="row">
-                                    <div className="col-md-3">Fax:</div>
+                                    <div className="col-md-3">Fax:
+                                    <br></br>
+                                    <i style={{color:"red"}}>required</i>
+                                    </div>
                                     <div className="col-md-9">
                                         <input type="text" name="pharmacy_fax" className="form-control" value={pharmacy_fax} onChange={(e) => handleFaxChange(e)} 
-                                        required maxLength={12} />   
+                                        required maxLength={12}  />   
                                     </div>
                             </div>
 
                             <div className="row">
-                                    <div className="col-md-3">Facility Address:</div>
+                                    <div className="col-md-3">Address:
+                                    <br></br>
+                                    <i style={{color:"gray"}}>optional</i>
+                                    </div>
                                     <div className="col-md-9">
                                     <textarea name="pharmacy_physical_address" className="form-control" value={pharmacy_physical_address}
-                                     onChange={(e) => handleChange(e)} rows="2" onKeyDown={handleKeyDown} required />                                          
+                                     onChange={(e) => handleChange(e)} rows="2" onKeyDown={handleKeyDown}  />                                          
                                     </div>
                             </div>
 

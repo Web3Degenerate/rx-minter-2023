@@ -2356,7 +2356,7 @@ export const RemedySvgOrderMri = (remedyPatientName, remedyDOB, remedyOrder, rem
             transform="scale(1,-1)" />
        </g>
      </>
-     
+      
         
 
     )

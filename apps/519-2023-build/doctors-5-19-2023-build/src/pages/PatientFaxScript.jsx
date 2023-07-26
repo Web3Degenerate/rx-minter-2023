@@ -163,6 +163,7 @@ const handlePharmacyChange = async (e, id) => {
 
 //   setPharmacyFax({...pharmacyFax, pharmacy_fax: getSelectedFax });
   setScriptFax({...scriptFax, pharmacy_fax: getSelectedFax });
+  console.log("handlePharmacyChange set #pharmacy_fax to ",getSelectedFax)
 
   setShowSubmitButton('block')
   setDisplaySelectedPharmacy(getSelectedPharmacy)
@@ -176,6 +177,7 @@ const handlePharmacyChange = async (e, id) => {
   // alert(`You have selected ${pharmacyFax.pharmacy_name} pharmacy with fax # of ${pharmacyFax.pharmacy_fax}.`)
   // const getSelectedFax = loadPharmacyByAddress(rxWallet.rxWallet)
   console.log("handlePharmacyChange #pharmacyFax is now: ", pharmacyFax)
+  console.log("setScriptFax inside handlePharmacyChange is ",scriptFax.pharmacy_fax)
 
 //AT BREAK (4:38pm) on Wed 6/21/23 we needed to call handleConvertClickerInteral() to update the selected fax number on scriptFax state
   handleConvertClickerInternal() //call OUTSIDE fn
@@ -194,9 +196,23 @@ const handleSubmitTest = async (e) => {
 
     // if (confirm(`Transfer Prescription Item #${rxWallet.tokenId} to Pharmacy: ${pharmacyFax.pharmacy_name} at address: ${rxWallet.rxWallet} for ${sig} by ${prescriber}. Okay ${pt_name}? Fax: ${pharmacyFax.pharmacy_fax} `) == true){
   const dislayFaxNumber = pharmacyFax.pharmacy_fax.replace(/^1/, '').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
+    console.log("Pharmacy Fax number in handleSubmitTest is ", pharmacyFax.pharmacy_fax)
+
+        const checkSelectedFax = `1${pharmacyFax.pharmacy_fax.replace(/-/g, '')}`;
+        //   setPharmacyFax({...pharmacyFax, pharmacy_fax: getSelectedFax });
+        setScriptFax({...scriptFax, pharmacy_fax: checkSelectedFax });
+    console.log("setScriptFax inside handlePharmacyChange is ",scriptFax.pharmacy_fax)
 
 
-    if (confirm(`Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at Fax Number ${dislayFaxNumber} (with wallet address: ${pharmacyFax.pharmacy_wallet}) for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${nft?.metadata.name}? `) == true){
+    let unhashedName
+
+        if(nft?.metadata.name.startsWith('0x')) {
+            unhashedName = ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft?.metadata.name))
+        }else{
+            unhashedName = nft?.metadata.name
+        }
+
+    if (confirm(`Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at Fax Number ${pharmacyFax.pharmacy_fax} (with wallet address: ${pharmacyFax.pharmacy_wallet}) for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${unhashedName}? `) == true){
     //   await _safeTransferFromToPharmacy({ ...rxWallet })
     sendFax()
     }
@@ -219,6 +235,9 @@ const handleSubmitTest = async (e) => {
 const sendFax = () => {
 
 try{
+
+
+
     // await axios.post("https://rxminter.com/srfax/Queue_Fax.php", scriptFax).then((result)=>{
     axios.post("https://rxminter.com/srfax/Staging_Queue_Fax.php", scriptFax
 
@@ -242,7 +261,10 @@ try{
 
             // alertService.success(`Valid, The Fax Image Named ${scriptFax.script_image_name} has been sent!`, options);
             // alert(`Valid, The Fax Image Named ${scriptFax.script_image_name} has been sent!`, options);
-            alert(`Success, your script has been sent to fax number ${scriptFax.pharmacy_fax}` );
+
+            // alert(`Success, your script has been sent to fax number ${scriptFax.pharmacy_fax}` );
+            alert(`Success, your script has been sent to fax number ${pharmacyFax.pharmacy_fax}` );
+       
 
             
             // if (confirm(`Fax Successfully Sent! Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at address: ${pharmacyFax.pharmacy_wallet} for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${nft?.metadata.name}? Fax: ${pharmacyFax.pharmacy_fax} `) == true){
@@ -429,9 +451,6 @@ useEffect(() => {
 }, [generateSVGAuto])
 
 
-const autoConvertClickerTwo = () => {
-    return "hi"
-}
 
 const autoConvertClicker = () => {
 // const handleConvertClickerInternal = async (e) => {
@@ -506,7 +525,12 @@ const autoConvertClicker = () => {
 
         setGetImageDateUrl(imageDataUrl)
         // ...scriptFax, 
-        setScriptFax({script_image_name: `${imageDataUrl}.jpeg`, script_image_location: imageDataUrl, pharmacy_fax: pharmacyFax.pharmacy_fax });
+
+        let checkSelectedFax = `1${pharmacyFax.pharmacy_fax.replace(/-/g, '')}`;
+
+        //   setPharmacyFax({...pharmacyFax, pharmacy_fax: getSelectedFax });
+        //   setScriptFax({...scriptFax, pharmacy_fax: checkSelectedFax });
+        setScriptFax({script_image_name: `${imageDataUrl}.jpeg`, script_image_location: imageDataUrl, pharmacy_fax: checkSelectedFax });
         console.log("Inside of autoConvertClicker SVG to JPEG fn, scriptFax is now: ",scriptFax)
 
         // Send the image data URL as a fax or perform further processing
