@@ -22,6 +22,6 @@
 
 ## App Compile Error (doctors.rxminter.com on Fri 7/21/23) - public path issue
 
-`npm run build --base=/client/`
+`npm run build --base=/client/` 
 **Source**: https://axellarsson.com/blog/expected-javascript-module-script-server-response-mimetype-text-html/
 **Docs**: https://vitejs.dev/guide/build.html#public-base-path

@@ -25,7 +25,7 @@ import { useAddress, useContract, ConnectWallet, useOwnedNFTs, ThirdwebNftMedia,
 
     import { RemedySvgForJorgeRucker } from '../doctorSigGeorge'
     import { RemedySvgOrderMri } from '../doctorSigGeorge/imaging' 
-    import { RemedySvgOrderRx } from '../doctorSigGeorge/rx' 
+    import { RemedySvgOrderRx } from '../doctorSigGeorge/rx'  
 
 
 
@@ -152,7 +152,8 @@ const handlePharmacyChange = async (e, id) => {
   const {value, options } = e.target
 
   setPharmacyFax({pharmacy_name:"",pharmacy_wallet:"",pharmacy_phone:"",pharmacy_fax:"",pharmacy_address:""})
-  const result = await axios.get("https://rxminter.com/php-react/pharmacy-get-by-address.php?pharmacy_wallet="+e.target.value);
+//   const result = await axios.get("https://rxminter.com/php-react/pharmacy-get-by-address.php?pharmacy_wallet="+e.target.value);
+  const result = await axios.get("https://rxminter.com/php-react/pharmacy-get-by-id.php?pharmacy_id="+e.target.value);
   setPharmacyFax(result.data);
   console.log("handlePharmacyChange #pharmacyByWallet server data: ",result.data)
 
@@ -194,8 +195,15 @@ const handleSubmitTest = async (e) => {
     // if (confirm(`Transfer Prescription Item #${rxWallet.tokenId} to Pharmacy: ${pharmacyFax.pharmacy_name} at address: ${rxWallet.rxWallet} for ${sig} by ${prescriber}. Okay ${pt_name}? Fax: ${pharmacyFax.pharmacy_fax} `) == true){
   const dislayFaxNumber = pharmacyFax.pharmacy_fax.replace(/^1/, '').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
 
+  let unhashedName
 
-    if (confirm(`Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at Fax Number ${dislayFaxNumber} (with wallet address: ${pharmacyFax.pharmacy_wallet}) for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${nft?.metadata.name}? `) == true){
+  if(nft?.metadata.name.startsWith('0x')) {
+      unhashedName = ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft?.metadata.name))
+  }else{
+      unhashedName = nft?.metadata.name
+  }
+
+    if (confirm(`Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at Fax Number ${pharmacyFax.pharmacy_fax} (with wallet address: ${pharmacyFax.pharmacy_wallet}) for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${unhashedName}? `) == true){
     //   await _safeTransferFromToPharmacy({ ...rxWallet })
     sendFax()
     }
@@ -241,7 +249,10 @@ try{
 
             // alertService.success(`Valid, The Fax Image Named ${scriptFax.script_image_name} has been sent!`, options);
             // alert(`Valid, The Fax Image Named ${scriptFax.script_image_name} has been sent!`, options);
-            alert(`Success, your script has been sent to fax number ${scriptFax.pharmacy_fax}` );
+
+            // alert(`Success, your script has been sent to fax number ${scriptFax.pharmacy_fax}` );
+            alert(`Success, your script has been sent to fax number ${pharmacyFax.pharmacy_fax}` );
+
 
             
             // if (confirm(`Fax Successfully Sent! Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at address: ${pharmacyFax.pharmacy_wallet} for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${nft?.metadata.name}? Fax: ${pharmacyFax.pharmacy_fax} `) == true){
@@ -505,7 +516,10 @@ const autoConvertClicker = () => {
 
         setGetImageDateUrl(imageDataUrl)
         // ...scriptFax, 
-        setScriptFax({script_image_name: `${imageDataUrl}.jpeg`, script_image_location: imageDataUrl, pharmacy_fax: pharmacyFax.pharmacy_fax });
+
+        let checkSelectedFax = `1${pharmacyFax.pharmacy_fax.replace(/-/g, '')}`;
+
+        setScriptFax({script_image_name: `${imageDataUrl}.jpeg`, script_image_location: imageDataUrl, pharmacy_fax: checkSelectedFax });
         console.log("Inside of autoConvertClicker SVG to JPEG fn, scriptFax is now: ",scriptFax)
 
         // Send the image data URL as a fax or perform further processing
@@ -568,7 +582,7 @@ const [displaySelectedPharmacy, setDisplaySelectedPharmacy] = useState('The Phar
 
                                                     {pharmacy.map((pharmacy, index) => (
                                                         <option 
-                                                            value={`${pharmacy.pharmacy_wallet}`}                                                                                  
+                                                            value={`${pharmacy.id}`}                                                                                  
                                                             key={`${index}`}>
                                                                 {pharmacy.pharmacy_name} - ({pharmacy.pharmacy_fax}) - [{addyShortner(pharmacy.pharmacy_wallet)}]
                                                         </option>                                                                            
