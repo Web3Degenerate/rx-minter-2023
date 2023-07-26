@@ -153,7 +153,8 @@ const handlePharmacyChange = async (e, id) => {
   const {value, options } = e.target
 
   setPharmacyFax({pharmacy_name:"",pharmacy_wallet:"",pharmacy_phone:"",pharmacy_fax:"",pharmacy_address:""})
-  const result = await axios.get("https://rxminter.com/php-react/pharmacy-get-by-address.php?pharmacy_wallet="+e.target.value);
+//   const result = await axios.get("https://rxminter.com/php-react/pharmacy-get-by-address.php?pharmacy_wallet="+e.target.value);
+  const result = await axios.get("https://rxminter.com/php-react/pharmacy-get-by-name.php?pharmacy_name="+e.target.value);
   setPharmacyFax(result.data);
   console.log("handlePharmacyChange #pharmacyByWallet server data: ",result.data)
 
@@ -212,7 +213,7 @@ const handleSubmitTest = async (e) => {
             unhashedName = nft?.metadata.name
         }
 
-    if (confirm(`Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at Fax Number ${pharmacyFax.pharmacy_fax} (with wallet address: ${pharmacyFax.pharmacy_wallet}) for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${unhashedName}? `) == true){
+    if (confirm(`Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at Fax Number ${pharmacyFax.pharmacy_fax} (with pharmacy wallet address: ${pharmacyFax.pharmacy_wallet}) for patient ${unhashedName} with SIG of ${nft?.metadata.description} for medication ${nft?.metadata.attributes[0].value}. Do you wish to Proceed?`) == true){
     //   await _safeTransferFromToPharmacy({ ...rxWallet })
     sendFax()
     }
@@ -593,7 +594,7 @@ const [displaySelectedPharmacy, setDisplaySelectedPharmacy] = useState('The Phar
 
                                                     {pharmacy.map((pharmacy, index) => (
                                                         <option 
-                                                            value={`${pharmacy.pharmacy_wallet}`}                                                                                  
+                                                            value={`${pharmacy.pharmacy_name}`}                                                                                  
                                                             key={`${index}`}>
                                                                 {pharmacy.pharmacy_name} - ({pharmacy.pharmacy_fax}) - [{addyShortner(pharmacy.pharmacy_wallet)}]
                                                         </option>                                                                            

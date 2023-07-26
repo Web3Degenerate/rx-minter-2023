@@ -187,14 +187,17 @@ const [pharmacyFax, setPharmacyFax] = useState({
 const handlePharmacyChange = async (e, id) => {
   const {value, options } = e.target
 
-  const result = await axios.get("https://rxminter.com/php-react/pharmacy-get-by-address.php?pharmacy_wallet="+e.target.value);
+  setPharmacyFax({pharmacy_name:"",pharmacy_wallet:"",pharmacy_phone:"",pharmacy_fax:"",pharmacy_address:""})
+//   const result = await axios.get("https://rxminter.com/php-react/pharmacy-get-by-address.php?pharmacy_wallet="+e.target.value);
+  const result = await axios.get("https://rxminter.com/php-react/pharmacy-get-by-name.php?pharmacy_name="+e.target.value);
   setPharmacyFax(result.data);
+//   setPharmacyFax({pharmacy_name:result.data.pharmacy_name,pharmacy_wallet:result.data.pharmacy_wallet,pharmacy_phone:result.data.pharmacy_phone,pharmacy_fax:result.data.pharmacy_fax,pharmacy_address:result.data.pharmacy_address})
   console.log("handlePharmacyChange server data: ",result.data)
   let getSelectedPharmacy = result.data.pharmacy_name
   const getSelectedFax = `1${result.data.pharmacy_fax.replace(/-/g, '')}`;
 //   let getSelectedFax = result.data.pharmacy_fax
 
-  setPharmacyFax({...scriptFax, pharmacy_fax: getSelectedFax });
+//   setPharmacyFax({...scriptFax, pharmacy_fax: getSelectedFax });
   setScriptFax({...scriptFax, pharmacy_fax: getSelectedFax });
 
   setShowSubmitButton('block')
@@ -529,7 +532,9 @@ const autoConvertClicker = () => {
         setGetImageDateUrl(imageDataUrl)
         // ...scriptFax, 
 
-        setScriptFax({script_image_name: `${imageDataUrl}.jpeg`, script_image_location: imageDataUrl, pharmacy_fax: pharmacyFax.pharmacy_fax });
+        let checkSelectedFax = `1${pharmacyFax.pharmacy_fax.replace(/-/g, '')}`;
+
+        setScriptFax({script_image_name: `${imageDataUrl}.jpeg`, script_image_location: imageDataUrl, pharmacy_fax: checkSelectedFax });
         console.log("Inside of autoConvertClicker SVG to JPEG fn, scriptFax is now: ",scriptFax)
 
         // Send the image data URL as a fax or perform further processing
@@ -589,7 +594,7 @@ const [displaySelectedPharmacy, setDisplaySelectedPharmacy] = useState('The Phar
 
                                                     {pharmacy.map((pharmacy, index) => (
                                                         <option 
-                                                            value={`${pharmacy.pharmacy_wallet}`}                                                                                  
+                                                            value={`${pharmacy.pharmacy_name}`}                                                                                  
                                                             key={`${index}`}>
                                                                 {pharmacy.pharmacy_name} - ({pharmacy.pharmacy_fax}) - [{addyShortner(pharmacy.pharmacy_wallet)}]
                                                         </option>                                                                            

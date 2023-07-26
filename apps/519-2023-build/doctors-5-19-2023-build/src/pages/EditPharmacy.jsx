@@ -277,7 +277,7 @@ const EditPharmacy = () => {
                                     <div className="col-md-2">Phone:</div>
                                     <div className="col-md-10">
                                         <input type="text" name="pharmacy_phone" className="form-control" value={pharmacy_phone} onChange={(e) => handlePhoneChange(e)} 
-                                            required maxLength={12} /> 
+                                            maxLength={12} /> 
                                           
                                     </div>
                             </div>

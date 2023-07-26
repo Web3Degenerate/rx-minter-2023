@@ -303,6 +303,7 @@ try {
   
   setOpenSeaURL(getOpenSeaURL)
   setSuccess('block')
+  setShowRxPad('none')
 
 
 } catch (error) {
@@ -320,68 +321,70 @@ try {
 const [testNet, setTestNet] = useState('')
 const [openSeaURL, setOpenSeaURL] = useState('')
 const [success, setSuccess ] = useState('none')
+const [showRxPad,setShowRxPad] = useState('block')
+
 
 
 
 // console.log("right before create script:", form)
 // const _create_Script_old_function_call = async (form) => {
-  const _createEscript = async (form) => {
+//   const _createEscript = async (form) => {
 
   
 
-          console.log("inside create script:", form)
+//           console.log("inside create script:", form)
 
-  try {
-    // const data = await contract.call("setRx", [form.name, form.description, form.medication, form.dosage, form.quantity])
-    // const data = await contract.call("_createScript", [form.wallet_address, form.name, form.description, form.medication, form.dosage, form.quantity])
+//   try {
+//     // const data = await contract.call("setRx", [form.name, form.description, form.medication, form.dosage, form.quantity])
+//     // const data = await contract.call("_createScript", [form.wallet_address, form.name, form.description, form.medication, form.dosage, form.quantity])
 
-//LAST WORKING SOLIDITY FN CALL (v.11.0) before useRef() change:
-    const data = await contract.call("_createScript", [form.wallet_address, form.name, form.description, form.medication, form.dosage, form.quantity])
-
-
-    console.log("Rx NFT Data Set", data)
+// //LAST WORKING SOLIDITY FN CALL (v.11.0) before useRef() change:
+//     const data = await contract.call("_createScript", [form.wallet_address, form.name, form.description, form.medication, form.dosage, form.quantity])
 
 
-    const sendRx = await contract.call("mintRx", [wallet_address]); 
-
-    console.log("Rx NFT Sent to Patient!", sendRx);
-
-    // alertService.success(`Success, The Rx NFT has been minted and sent to ${name} at address ${wallet_address}`, options);
-
-    alert(`Rx has been minted and sent to ${name} at address ${wallet_address} and transaction ID of ${sendRx.receipt.transactionHash}`); 
-    setForm({ name: '', wallet_address: '', description: '', medication: '', dosage: '', quantity: '' });
-    setTestNet(sendRx.receipt.transactionHash)
+//     console.log("Rx NFT Data Set", data)
 
 
-//from: https://stackoverflow.com/questions/67803090/how-to-get-erc-721-tokenid
-// We tried calling .toNumber() but the returned value is string "0x0000000000000000000000000000000000000000000000000000000000000006"
-// so get the last item in the string with soln: https://stackoverflow.com/questions/3884632/how-to-get-the-last-character-of-a-string
-    // let getTokenUri = sendRx.receipt.logs[0].topics[3].slice(-1);
-    let getTokenUri = sendRx.receipt.events[0].args.tokenId.toHexString();
-    // then .toString(); ??
+//     const sendRx = await contract.call("mintRx", [wallet_address]); 
 
-    let getOpenSeaURL = `${solidityContractAddress}/${getTokenUri}`;
-    setOpenSeaURL(getOpenSeaURL)
-    setSuccess('block')
+//     console.log("Rx NFT Sent to Patient!", sendRx);
 
+//     // alertService.success(`Success, The Rx NFT has been minted and sent to ${name} at address ${wallet_address}`, options);
 
-  } catch (error) {
-    console.log("contract call failure", error)
-    alertService.error(`Error with error message of ${error} :(`, options);
-  }
-}
+//     alert(`Rx has been minted and sent to ${name} at address ${wallet_address} and transaction ID of ${sendRx.receipt.transactionHash}`); 
+//     setForm({ name: '', wallet_address: '', description: '', medication: '', dosage: '', quantity: '' });
+//     setTestNet(sendRx.receipt.transactionHash)
 
 
-const mintRx = async (transferForm) => {
-  try {
-    const data = await contract.call("mintRx", [wallet_address])
+// //from: https://stackoverflow.com/questions/67803090/how-to-get-erc-721-tokenid
+// // We tried calling .toNumber() but the returned value is string "0x0000000000000000000000000000000000000000000000000000000000000006"
+// // so get the last item in the string with soln: https://stackoverflow.com/questions/3884632/how-to-get-the-last-character-of-a-string
+//     // let getTokenUri = sendRx.receipt.logs[0].topics[3].slice(-1);
+//     let getTokenUri = sendRx.receipt.events[0].args.tokenId.toHexString();
+//     // then .toString(); ??
 
-    console.log("contract call success", data)
-    setTransferForm({ address: '' });
-  } catch (error) {
-    console.log("contract call failure", error)
-  }
-}
+//     let getOpenSeaURL = `${solidityContractAddress}/${getTokenUri}`;
+//     setOpenSeaURL(getOpenSeaURL)
+//     setSuccess('block')
+
+
+//   } catch (error) {
+//     console.log("contract call failure", error)
+//     alertService.error(`Error with error message of ${error} :(`, options);
+//   }
+// }
+
+
+// const mintRx = async (transferForm) => {
+//   try {
+//     const data = await contract.call("mintRx", [wallet_address])
+
+//     console.log("contract call success", data)
+//     setTransferForm({ address: '' });
+//   } catch (error) {
+//     console.log("contract call failure", error)
+//   }
+// }
 
 
 
@@ -410,18 +413,41 @@ const loadDoctors = async () => {
 
 const [dea, setDea] = useState('')
 const [doctor, setDoctor] = useState('')
-const handleDoctorChange=(e)=>{
+const [showNpi, setShowNpi] = useState('')
+
+// const handleDoctorChange=(e)=>{
+
+//   setDea(e.target.value)
+//   const {value, options } = e.target
+//   setDoctor(options[e.target.selectedIndex].text)
+//   console.log("Event passed to handleDoctorChange is ", e);
+//   console.log('Current DEA # is now:', dea);
+//   console.log('Current Doctor # is now:', doctor);
+
+// }
+
+const handleDoctorChange = async (e)=>{
   // const {value, options } = e.target
   setDea(e.target.value)
   // setDoctor(e.target.name)
   const {value, options } = e.target
   setDoctor(options[e.target.selectedIndex].text)
   console.log("Event passed to handleDoctorChange is ", e);
-  console.log('Current DEA # is now:', dea);
-  console.log('Current Doctor # is now:', doctor);
+  console.log('Current #DEA # is now:', dea);
+  console.log('Current #Doctor # is now:', doctor);
 
+  //***********  AFTER WE HAVE DOCTOR NAME FROM NFT ==> Get Doctor info from server (7/21/2023) *****************************************************************
+
+  const doctor_name = options[e.target.selectedIndex].text;
+  const prescribing_doc = await axios.get("https://rxminter.com/php-react/doctor-get-by-name.php?doctor_name="+doctor_name);
+
+// setDoctorNpi(prescribing_doc.data); //lags, shows up on second load/pharamcy select run
+    console.log("inside #handleDoctorChange function doctor name is",prescribing_doc.data.doctor_name)
+
+    setShowNpi(prescribing_doc.data.doctor_npi)
+   
+//***********  END OF Get Doctor info from server (7/21/2023) (previously Get Pt phone to load from server (7/20/2023)) *****************************************************************
 }
-
 
 
 
@@ -549,7 +575,7 @@ return (
                       </div>
                   </div>
 
-                
+           
 {/* External Linking Solution From: https://herewecode.io/blog/react-router-link-to-external-url/ */}
                   <div className="box_size_success" style={{display:`${success}`, background:"#D4EDDA"}}>
                       
@@ -579,7 +605,7 @@ return (
                   </div>
                   
          
-
+<div style={{display:`${showRxPad}`}}>
   {/* <form onSubmit={(e) => handleSubmit(e)}> */}
   <form onSubmit={handleSubmit}>
   <div className="box_size_orders">
@@ -793,7 +819,13 @@ return (
                               {/* <input type="text" name="npi" className="form-control" value="1417960428" disabled/>
                           </div>
                   </div> */}
-
+                  <div className="row">
+                          <div className="col-md-3">NPI #:</div>
+                          <div className="col-md-9">                             
+                              {/* <input type="text" name="dea" className="form-control" value="EB7344196" ref={inputDEA}  disabled/> */}
+                              <input type="text" name="npi" className="form-control" value={showNpi} disabled/>
+                          </div>
+                  </div>
 
 
                   
@@ -810,6 +842,8 @@ return (
                     </div> 
 
               </form>
+            </div> {/* End of outter div around form that hides on submit */}
+
           
 
               

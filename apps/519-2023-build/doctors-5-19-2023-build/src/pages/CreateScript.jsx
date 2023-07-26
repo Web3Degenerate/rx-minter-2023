@@ -282,6 +282,7 @@ const sendRx = await contract.call("mintRx", [wallet_address]);
           setShowPtTransfer('block')
           setShowDocTransfer('block')
           setShowTx('block')
+          setShowRxPad('none')
 
   
 // ************************************************************************** CUT PATIENT TRANSFER END HERE *************************************//
@@ -304,6 +305,7 @@ const [success, setSuccess ] = useState('none')
 const [showTx, setShowTx] = useState('none')
 const [showPtTransfer, setShowPtTransfer] = useState('none')
 const [showDocTransfer, setShowDocTransfer] = useState('none')
+const [showRxPad, setShowRxPad] = useState('block')
 const [tokenIdz, setTokenIdz] = useState('')
 
 
@@ -471,7 +473,7 @@ const handleDoctorChange = async (e)=>{
 
     setShowNpi(prescribing_doc.data.doctor_npi)
    
-//***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
+//***********  END OF Get Doctor info from server (7/21/2023) (previously Get Pt phone to load from server (7/20/2023)) *****************************************************************
 
 }
 
@@ -645,16 +647,17 @@ return (
                 <div className="row">
                   <div className="col-md-1"></div>
                       <div className="col-md-10">
-                              {/* <Link style={{color:"#74A27F"}} to={`fax-prescription/${tokenIdz}`} > */}
-                              <a href={`http://doctors.rxminter.com/fax-prescription/${tokenIdz}`} className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", fontSize:"25px", borderRadius:"18px"}}>
+                              <Link style={{color:"#74A27F"}} to={`/fax-prescription/${tokenIdz}`} >
+                              {/* <a href={`https://doctors.rxminter.com/fax-prescription/${tokenIdz}`} className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", fontSize:"25px", borderRadius:"18px"}}> */}
                                     {/* <h4 className="text-justify" style={{color:"#74A27F"}}>Click Here to View Your Scripts.</h4> */}
                                     {/* <button className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", padding:"32px 16px", fontSize:"25px"}}> */}
-                                    {/* <button className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", fontSize:"25px"}}> */}
-
+                                    <button className="text-wrap btn btn-secondary btn-md" style={{color:"white", width:"100%", fontSize:"25px", borderRadius:"18px"}}>
+                                    
                                     Click Here to Fax This NFT Script Directly To A Pharmacy.
-                              </a>
-                                    {/* </button> */}
-                                {/* </Link> */}
+                                    
+                              {/* </a> */}
+                                    </button>
+                                </Link>
                         </div>
                   <div className="col-md-1"></div>
 
@@ -681,8 +684,8 @@ return (
 
 </div>
                         
-              
-
+                         
+    <div style={{display:`${showRxPad}`}}>
         {/* <form onSubmit={(e) => handleSubmit(e)}> */}
         <form onSubmit={handleSubmit}>
         <div className="box_size_scripts">
@@ -923,8 +926,9 @@ return (
                               </div>
                           </div> 
 
-                    </form>
-          
+      </form>
+    </div> {/* End of outter div around form that hides on submit */}
+                  
 
               </>
               ) : (
