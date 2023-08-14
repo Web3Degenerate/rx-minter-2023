@@ -338,10 +338,17 @@ const [patient, setPatient] = useState({
     dob:"",
     pt_physical_address:"",
     pt_phone:"",
+    pt_primary_insurance:"",
+    pt_primary_id:"",
+    pt_secondary_insurance:"",
+    pt_secondary_id:"",
     pid:""
 });
 
-const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid} = patient;
+const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary_insurance,pt_primary_id,pt_secondary_insurance,pt_secondary_id} = patient;
+
+
+
 
 
 const handleConvertClickerInternal = async () => {
@@ -398,7 +405,20 @@ const wallet_address = nft?.metadata.attributes[4].value;
 const result = await axios.get("https://rxminter.com/php-react/patient-get-by-address.php?wallet_address="+wallet_address);
 setPatient(result.data); //lags, shows up on second load/pharamcy select run
     console.log("inside svg function pt_phone is",result.data.pt_phone)
-   
+
+
+
+// *** Update Sun 8/13/23 Patient Primary Secondary insurance
+// setPrimaryInsurance(result.data.pt_primary_insurance)
+// setPrimaryId(result.data.pt_primary_id)
+// setSecondaryInsurance(result.data.pt_secondary_insurance)
+// setSecondaryId(result.data.pt_secondary_id)
+
+let primaryInsurance = result.data.pt_primary_insurance
+let primaryId = result.data.pt_primary_id
+let secondaryInsurance = `Secondary Insurance: ${result.data.pt_secondary_insurance}`
+let secondaryId = `Secondary Id #: ${result.data.pt_secondary_id}`
+
 //***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
 
 
@@ -420,7 +440,7 @@ setDoctor(prescribing_doc.data); //lags, shows up on second load/pharamcy select
         remedyDisp, unhashed_pt_physical_address, nft?.metadata.description, convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value),
         // result.data.pt_phone, doctor.doctor_name, doctor.doctor_dea, doctor.doctor_npi, doctor.doctor_phone  )
         result.data.pt_phone, prescribing_doc.data.doctor_name, prescribing_doc.data.doctor_dea, 
-        prescribing_doc.data.doctor_npi, prescribing_doc.data.doctor_phone  )
+        prescribing_doc.data.doctor_npi, prescribing_doc.data.doctor_phone, primaryInsurance, primaryId, secondaryInsurance, secondaryId )
 
 
         console.log("Jorge svgElement Test is ", svgElement)
@@ -670,9 +690,9 @@ const [displaySelectedPharmacy, setDisplaySelectedPharmacy] = useState('The Phar
             {/* <img src={getImageDataUrl} style={{width:"844px", height:"601.770px"}} /> */}
 
 
-        <div style={{visibility:"hidden"}} >  
+        {/* <div style={{visibility:"hidden"}} >   */}
             <img src={getImageDataUrl} style={{backgroundColor:"white"}} />
-        </div>                                
+        {/* </div>                                 */}
 
 
  

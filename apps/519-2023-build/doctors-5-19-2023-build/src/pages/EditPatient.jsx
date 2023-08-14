@@ -36,6 +36,10 @@ const EditPatient = () => {
           id:"",
           pt_physical_address:"",
           pt_phone: "",
+          pt_primary_insurance:"",
+          pt_primary_id:"",
+          pt_secondary_insurance:"",
+          pt_secondary_id:"",
       });
 
 
@@ -59,7 +63,7 @@ const EditPatient = () => {
 
 
       // const [name,wallet_address,email] = patient; // patient is not iterable nasty error
-      const {name,wallet_address,dob,email,pt_physical_address,pt_phone} = patient; 
+      const {name,wallet_address,dob,email,pt_physical_address,pt_phone,pt_primary_insurance,pt_primary_id,pt_secondary_insurance,pt_secondary_id} = patient; 
   
       const handleChange=(e)=>{
           setPatient({...patient,[e.target.name]: e.target.value })
@@ -104,8 +108,11 @@ const EditPatient = () => {
   
            
               if(result.data.status =='valid'){
-                  alert(`Success! Patient ${name} with DOB ${dob}, phone number ${pt_phone}, address ${pt_physical_address} and wallet address of ${wallet_address} has been added! Click OK to return to the Patient Dashboard.`)
-                  navigate('/');
+                //   alert(`Success! Patient ${name} with DOB ${dob}, phone number ${pt_phone}, address ${pt_physical_address}, wallet address of ${wallet_address} 
+                //   and Primary Insurance of ${pt_primary_insurance} (${pt_primary_id}) and Secondary Insurance of ${pt_secondary_insurance} (${pt_secondary_id}) has been saved! Click OK to return to the Patient Dashboard.`)
+                alert(`Success! Your changes to Patient ${name} has been saved! Click OK to return to the Patient Dashboard.`)  
+                
+                navigate('/');
               }else{
                   alert('There is a problem saving this patient to the database. Please try again.');
               }
@@ -165,7 +172,8 @@ const EditPatient = () => {
       // const loadUsers = async (id) => {  //id was not being passed in when passed in as a parameter (14:45) pt 4.
       const loadUsers = async () => {
           // console.log('ID check inside loadUsers', id) 
-          setPatient({name: "", wallet_address: "", dob: "", email:"", id:"", pt_physical_address:"", pt_phone:""});
+          setPatient({name: "", wallet_address: "", dob: "", email:"", id:"", pt_physical_address:"", pt_phone:"",
+        pt_primary_insurance:"",pt_primary_id:"",pt_secondary_insurance:"",pt_secondary_id:""});
           const result = await axios.get("https://rxminter.com/php-react/edit.php?id="+id);
           console.log(result);
           // setPatient(result.data.records);
@@ -264,7 +272,35 @@ const EditPatient = () => {
                                         <textarea name="pt_physical_address" className="form-control" value={pt_physical_address} onChange={(e) => handleChange(e)} 
                                         onKeyDown={handleKeyDown} rows="2" required />   
                                     </div>
-                            </div>                            
+                            </div>   
+
+                            <div className="row">
+                                    <div className="col-md-3">Primary Insurance:</div>
+                                    <div className="col-md-9">
+                                        <input type="text" name="pt_primary_insurance" className="form-control" value={pt_primary_insurance} onChange={(e) => handleChange(e)}  />   
+                                    </div>
+                            </div>   
+
+                            <div className="row">
+                                    <div className="col-md-3">Primary ID#:</div>
+                                    <div className="col-md-9">
+                                        <input type="text" name="pt_primary_id" className="form-control" value={pt_primary_id} onChange={(e) => handleChange(e)}  />   
+                                    </div>
+                            </div>     
+
+                            <div className="row">
+                                    <div className="col-md-3">Secondary Insurance:</div>
+                                    <div className="col-md-9">
+                                        <input type="text" name="pt_secondary_insurance" className="form-control" value={pt_secondary_insurance} onChange={(e) => handleChange(e)}  />   
+                                    </div>
+                            </div>   
+
+                            <div className="row">
+                                    <div className="col-md-3">Secondary ID#:</div>
+                                    <div className="col-md-9">
+                                        <input type="text" name="pt_secondary_id" className="form-control" value={pt_secondary_id} onChange={(e) => handleChange(e)}  />   
+                                    </div>
+                            </div>                         
 
                             {/* <div className="row">
                                     <div className="col-md-6">Select Patient Email Test:</div>

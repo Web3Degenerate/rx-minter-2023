@@ -20,11 +20,15 @@ const AddPatient = () => {
         email:"",
         dob:"",
         pt_physical_address:"",
-        pt_phone:""
+        pt_phone:"",
+        pt_primary_insurance:"",
+        pt_primary_id:"",
+        pt_secondary_insurance:"",
+        pt_secondary_id:"",
     });
 
     // const [name,wallet_address,email] = patient; // patient is not iterable nasty error
-    const {name,wallet_address,email,dob,pt_physical_address,pt_phone} = patient; 
+    const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pt_primary_insurance,pt_primary_id,pt_secondary_insurance,pt_secondary_id} = patient; 
 
     const handleChange=(e)=>{
         setPatient({...patient,[e.target.name]: e.target.value })
@@ -152,6 +156,34 @@ const AddPatient = () => {
                                      onChange={(e) => handleChange(e)} rows="2" onKeyDown={handleKeyDown} required />                                          
                                     </div>
                             </div>
+
+                            <div className="row">
+                                    <div className="col-md-3">Primary Insurance:</div>
+                                    <div className="col-md-9">
+                                        <input type="text" name="pt_primary_insurance" className="form-control" value={pt_primary_insurance} onChange={(e) => handleChange(e)}  />   
+                                    </div>
+                            </div>   
+
+                            <div className="row">
+                                    <div className="col-md-3">Primary ID#:</div>
+                                    <div className="col-md-9">
+                                        <input type="text" name="pt_primary_id" className="form-control" value={pt_primary_id} onChange={(e) => handleChange(e)}  />   
+                                    </div>
+                            </div>     
+
+                            <div className="row">
+                                    <div className="col-md-3">Secondary Insurance:</div>
+                                    <div className="col-md-9">
+                                        <input type="text" name="pt_secondary_insurance" className="form-control" value={pt_secondary_insurance} onChange={(e) => handleChange(e)}  />   
+                                    </div>
+                            </div>   
+
+                            <div className="row">
+                                    <div className="col-md-3">Secondary ID#:</div>
+                                    <div className="col-md-9">
+                                        <input type="text" name="pt_secondary_id" className="form-control" value={pt_secondary_id} onChange={(e) => handleChange(e)}  />   
+                                    </div>
+                            </div>                             
 
 
                         

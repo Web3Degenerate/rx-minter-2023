@@ -2,7 +2,7 @@
 import {useRef} from 'react';
 
 export const RemedySvgOrderRx = (remedyPatientName, remedyDOB, remedyMedication, remedyQuantity, remedyPhysicalAddress, remedySig, remedyPrescribedDate,
-   remedyPatientPhone, remedyDoctorName, remedyDoctorDea, remedyDoctorNpi, remedyDoctorPhone) => {
+   remedyPatientPhone, remedyDoctorName, remedyDoctorDea, remedyDoctorNpi, remedyDoctorPhone, remedyPrimaryInsurance, remedyPrimaryId, remedySecondaryInsurance, remedySecondaryId ) => {
 
     
     return (       
@@ -1660,6 +1660,35 @@ export const RemedySvgOrderRx = (remedyPatientName, remedyDOB, remedyMedication,
 
 
    <text
+            space="preserve"
+            transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
+            id="text2172"
+
+            fontVariant="normal"
+            font-weight="bold"
+            fontStretch="normal"
+            font-style="normal"
+            font-size="16px"
+            font-family="sans-serif"
+
+            white-space="pre"
+            shape-inside="url(#rect2174)"
+
+            fill="#000000"
+            display="inline"
+      ><tspan                    
+            x="50.39844"
+            y="683.01116"
+            id="tspan25251"><tspan
+               font-size="24px"
+               id="tspan25249">Primary Insurance: {remedyPrimaryInsurance} </tspan>
+      </tspan>
+   </text>
+
+
+
+
+   <text
                 space="preserve"
                 transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
                 id="text2172"
@@ -1710,6 +1739,36 @@ export const RemedySvgOrderRx = (remedyPatientName, remedyDOB, remedyMedication,
 
 
                                   
+                  x="50.39844"
+                  y="708.01116"
+                  id="tspan25251"><tspan
+                    font-size="24px"
+                    id="tspan25249">Primary Id #: {remedyPrimaryId}</tspan>
+            </tspan>
+   </text>
+
+
+   <text
+                space="preserve"
+                transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
+                id="text2172"
+
+                  fontVariant="normal"
+                  font-weight="bold"
+                  fontStretch="normal"
+                  font-style="normal"
+                  font-size="16px"
+                  font-family="sans-serif"
+
+                  white-space="pre"
+                  shape-inside="url(#rect2174)"
+
+                  fill="#000000"
+                  display="inline"
+            ><tspan
+
+
+                                  
                   x="630.39844"
                   y="738.01116"
                   id="tspan25251"><tspan
@@ -1717,6 +1776,40 @@ export const RemedySvgOrderRx = (remedyPatientName, remedyDOB, remedyMedication,
                     id="tspan25249">NPI#: {remedyDoctorNpi}</tspan>
             </tspan>
    </text>
+
+
+
+   <text
+                space="preserve"
+                transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
+                id="text2172"
+
+                  fontVariant="normal"
+                  font-weight="bold"
+                  fontStretch="normal"
+                  font-style="normal"
+                  font-size="16px"
+                  font-family="sans-serif"
+
+                  white-space="pre"
+                  shape-inside="url(#rect2174)"
+
+                  fill="#000000"
+                  display="inline"
+            ><tspan
+
+
+                                  
+                  x="50.39844"
+                  y="738.01116"
+                  id="tspan25251"><tspan
+                    font-size="24px"
+                    id="tspan25249">{remedySecondaryInsurance}</tspan>
+            </tspan>
+   </text>
+
+
+
 
 
 
@@ -1751,7 +1844,34 @@ export const RemedySvgOrderRx = (remedyPatientName, remedyDOB, remedyMedication,
    </text>
 
 
+   <text
+                space="preserve"
+                transform="matrix(0.68001642,0,0,-0.75000002,14.975794,595.02621)"
+                id="text2172"
 
+                  fontVariant="normal"
+                  font-weight="bold"
+                  fontStretch="normal"
+                  font-style="normal"
+                  font-size="16px"
+                  font-family="sans-serif"
+
+                  white-space="pre"
+                  shape-inside="url(#rect2174)"
+
+                  fill="#000000"
+                  display="inline"
+            ><tspan
+
+
+                                  
+                  x="50.39844"
+                  y="768.01116"
+                  id="tspan25251"><tspan
+                    font-size="24px"
+                    id="tspan25249">{remedySecondaryId}</tspan>
+            </tspan>
+   </text>
 
 
 
