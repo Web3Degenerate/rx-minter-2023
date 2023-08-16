@@ -1,28 +1,29 @@
 # Thirdweb Rx Minter Contract
 
-## App
+## App - Build dist folder with `npm run build --base=/client/`
 
 1. run `npx thirdweb@latest create --app`
 
 2. Install Dependencies
 
-  - npm i react-router-dom
+- npm i react-router-dom
 
-  - npm i axios
+- npm i axios
 
-  - If installing [bootstrap on a Vite project follow this article](): 
-    
-    - > npm i --save bootstrap @popperjs/core
-      - > npm i --save-dev sass (_skip_)
+- If installing [bootstrap on a Vite project follow this article]():
 
-  - Install html2canvas and `react-html2canvas` 
-    - NOT npm i html2canvas 
-    - npm install html2canvas react-html2canvas (_per chatgpt_)
+  - > npm i --save bootstrap @popperjs/core
+    - > npm i --save-dev sass (_skip_)
 
-    - Seems like you need to have the svg wrapped in some container: https://stackoverflow.com/questions/65632240/uncaught-in-promise-unable-to-find-element-in-cloned-iframe-2460
+- Install html2canvas and `react-html2canvas`
 
+  - NOT npm i html2canvas
+  - npm install html2canvas react-html2canvas (_per chatgpt_)
+
+  - Seems like you need to have the svg wrapped in some container: https://stackoverflow.com/questions/65632240/uncaught-in-promise-unable-to-find-element-in-cloned-iframe-2460
 
 # npm run build --base=/client/
+
 ## App Compile Error (doctors.rxminter.com on Fri 7/21/23) - public path issue
 
 `npm run build --base=/client/`
@@ -30,24 +31,23 @@
 **Source**: https://axellarsson.com/blog/expected-javascript-module-script-server-response-mimetype-text-html/
 **Docs**: https://vitejs.dev/guide/build.html#public-base-path
 
-
 ## Solidity Contracts:
 
 1. install with
 
-    - > npx thirdweb@latest create --contract
+   - > npx thirdweb@latest create --contract
 
+2. Install project dependencies:
 
-2. Install project dependencies: 
+- [React Router Dom](https://www.npmjs.com/package/react-router-dom)
 
-  - [React Router Dom](https://www.npmjs.com/package/react-router-dom)
-    - > npm i react-router-dom
+  - > npm i react-router-dom
 
-  - [Axios](https://www.npmjs.com/package/axios)
-    - > npm i axios
-
+- [Axios](https://www.npmjs.com/package/axios)
+  - > npm i axios
 
 **message**
+
 ```js
 Inside that directory, you can run several commands:
 
@@ -66,13 +66,11 @@ Inside that directory, you can run several commands:
 
 2. x
 
-
-
 ## Solidity Compile Errors
 
 `CompilerError: Stack too deep when compiling inline assembly: Variable value0 is 3 slot(s) too deep inside the stack.`
 
-Reducing the size of the Scripts Struct from 15 down to 11 seemed to do the trick. 
+Reducing the size of the Scripts Struct from 15 down to 11 seemed to do the trick.
 Based on [this Stack article suggesting to reduce the Struct size](https://ethereum.stackexchange.com/questions/144578/stack-too-deep-when-compiling-inline-assembly-variable-headstart)
 
 ```js

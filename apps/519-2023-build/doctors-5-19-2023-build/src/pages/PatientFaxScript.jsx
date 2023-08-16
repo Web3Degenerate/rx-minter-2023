@@ -348,6 +348,8 @@ const [patient, setPatient] = useState({
 const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary_insurance,pt_primary_id,pt_secondary_insurance,pt_secondary_id} = patient;
 
 
+// const [showImage, setShowImage] = useState('block')
+// const [showSvg, setShowSvg] = useState('none')
 
 
 
@@ -409,15 +411,12 @@ setPatient(result.data); //lags, shows up on second load/pharamcy select run
 
 
 // *** Update Sun 8/13/23 Patient Primary Secondary insurance
-// setPrimaryInsurance(result.data.pt_primary_insurance)
-// setPrimaryId(result.data.pt_primary_id)
-// setSecondaryInsurance(result.data.pt_secondary_insurance)
-// setSecondaryId(result.data.pt_secondary_id)
+    let primaryInsurance = result.data.pt_primary_insurance;
+    let primaryId = result.data.pt_primary_id;
 
-let primaryInsurance = result.data.pt_primary_insurance
-let primaryId = result.data.pt_primary_id
-let secondaryInsurance = `Secondary Insurance: ${result.data.pt_secondary_insurance}`
-let secondaryId = `Secondary Id #: ${result.data.pt_secondary_id}`
+    let secondaryInsurance = `Secondary Insurance: ${result.data.pt_secondary_insurance}`;
+    let secondaryId = `Secondary Id #: ${result.data.pt_secondary_id}`;
+
 
 //***********  Get Pt phone to load from server (7/20/2023) *****************************************************************
 
@@ -445,6 +444,9 @@ setDoctor(prescribing_doc.data); //lags, shows up on second load/pharamcy select
 
         console.log("Jorge svgElement Test is ", svgElement)
         setGenerateSVGAuto(svgElement)
+
+        // setShowSvg('block')
+        // setShowImage('none')
 
     // END OF #SCRIPT Order SVG **********************************************************************************************************************************************************
 // }else{
@@ -655,29 +657,31 @@ const [displaySelectedPharmacy, setDisplaySelectedPharmacy] = useState('The Phar
         <hr></hr>
 
         {/* <div ref={svgContainerInternal} className="svg-container"> */}
-    <div ref={svgContainerInternalDiv} >
-        
 
-        {/* <div ref={svgContainerInternal} className="svg-component">           */}
 
-        <svg
-        ref={svgContainerInternal}
-            className="svg_box_size"
-            version="1.1"
-            id="svg662"
-            width="1056"
-            height="816"
-            viewBox="0 0 1056 816"
-            xlink="http://www.w3.org/1999/xlink"
-            xmlns="http://www.w3.org/2000/svg"
-            svg="http://www.w3.org/2000/svg"
-        >
+    {/* <div style={{display:`${showImage}`}}> */}
+    {/* <div style={{display:"block"}}> */}
+            <div ref={svgContainerInternalDiv} >
+                {/* <div ref={svgContainerInternal} className="svg-component">   */}
 
-                {generateSVGAuto}   
+                <svg
+                ref={svgContainerInternal}
+                    className="svg_box_size"
+                    version="1.1"
+                    id="svg662"
+                    width="1056"
+                    height="816"
+                    viewBox="0 0 1056 816"
+                    xlink="http://www.w3.org/1999/xlink"
+                    xmlns="http://www.w3.org/2000/svg"
+                    svg="http://www.w3.org/2000/svg"
+                >
 
-        </svg>                                              
-    </div>  
+                        {generateSVGAuto}   
 
+                </svg>                                              
+            </div>  
+    {/* </div>   */}
 
 {/* IMAGE ******************************************************************************* */}
         {/* <div className="svg-container"> */}
@@ -690,7 +694,8 @@ const [displaySelectedPharmacy, setDisplaySelectedPharmacy] = useState('The Phar
             {/* <img src={getImageDataUrl} style={{width:"844px", height:"601.770px"}} /> */}
 
 
-        {/* <div style={{visibility:"hidden"}} >   */}
+        {/* <div style={{visibility:"hidden"}} > */}
+         {/* <div style={{display:`${showSvg}`}}> */}
             <img src={getImageDataUrl} style={{backgroundColor:"white"}} />
         {/* </div>                                 */}
 
