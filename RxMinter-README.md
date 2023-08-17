@@ -31,6 +31,37 @@
 **Source**: https://axellarsson.com/blog/expected-javascript-module-script-server-response-mimetype-text-html/
 **Docs**: https://vitejs.dev/guide/build.html#public-base-path
 
+
+
+## GuestLogin Component
+- With Thirdweb's `ConnectWallet` and `useAddress` wrap all protected pages: 
+
+```js
+
+  import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
+  import { GuestLogin } from '../components';
+
+    const address = useAddress(); 
+
+  return(
+    <>
+        {address ? (
+          <>
+
+            {/* Page JSX code */}
+                
+          </>
+        ) : (
+          <GuestLogin />
+        )}
+    </>
+  );
+```
+
+
+---
+---
+
 ## Solidity Contracts:
 
 1. install with

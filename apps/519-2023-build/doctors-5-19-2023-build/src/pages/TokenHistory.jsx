@@ -2,7 +2,7 @@ import React from 'react'
 
 const TokenHistory = () => {
   return (
-    <div>TokenHistory</div>
+    <div>Individual Script History</div>
   )
 }
 

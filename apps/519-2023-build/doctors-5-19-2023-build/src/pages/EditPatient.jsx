@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { useAddress, useContract, useContractWrite,  } from "@thirdweb-dev/react";
+
 
 import { addyShortner } from '../utils'
 import { solidityContractAddress } from '../constants'
@@ -10,6 +11,8 @@ import { solidityContractAddress } from '../constants'
 import 'bootstrap/dist/css/bootstrap.css';
 import "../styles/App.css";
 
+import "../styles/Overlay.css";
+import { GuestLogin } from '../components';
 
 
 const EditPatient = () => {
@@ -54,9 +57,9 @@ const EditPatient = () => {
       // });
 
     useEffect(()=> {    
-        loadUsers(); 
-        loadMedications();
-        loadPatients();
+        loadPatient(); 
+        // loadMedications();
+        // loadPatients();
         // getPatientRoleString();
     }, [])
 
@@ -97,26 +100,60 @@ const EditPatient = () => {
         console.log("Patient Object in handlePhoneChange: ",patient);
     }
       
-  
-      const updateForm = async (e) => {
+
+// Wed 8/16/2023 - Testing out onBlur with ChatGPT at AUS
+    const [errorMessage, setErrorMessage ] = useState('')
+    const [errorMessageInput, setErrorMessageInput ] = useState('')
+
+    const updateForm = async (e) => {
           e.preventDefault(); 
   
           console.log("Patient in updateForm: ",patient);
   
-          await axios.post("https://rxminter.com/php-react/update.php", patient).then((result)=>{
-              console.log(result);
-  
-           
-              if(result.data.status =='valid'){
-                //   alert(`Success! Patient ${name} with DOB ${dob}, phone number ${pt_phone}, address ${pt_physical_address}, wallet address of ${wallet_address} 
-                //   and Primary Insurance of ${pt_primary_insurance} (${pt_primary_id}) and Secondary Insurance of ${pt_secondary_insurance} (${pt_secondary_id}) has been saved! Click OK to return to the Patient Dashboard.`)
-                alert(`Success! Your changes to Patient ${name} has been saved! Click OK to return to the Patient Dashboard.`)  
-                
+        //   await axios.post("https://rxminter.com/php-react/update.php", patient).then((result)=>{
+        //       console.log(result);
+        //       if(result.data.status =='valid'){   
+        //         alert(`Success! Your changes to Patient ${name} has been saved! Click OK to return to the Patient Dashboard.`)                
+        //         navigate('/');
+        //       }else{
+        //           alert('There is a problem saving this patient to the database. Please try again.');
+        //       }
+        //   });
+
+          try {
+            const result = await axios.post("https://rxminter.com/php-react/update-patient-chatgpt.php", patient);       
+                console.log(result.data);
+            if (result.data.status === 'valid') {
+                setIsRedBorder(false);
+                alert(`Success! Your changes to Patient ${name} has been saved! Click OK to return to the Patient Dashboard.`)
                 navigate('/');
-              }else{
-                  alert('There is a problem saving this patient to the database. Please try again.');
-              }
-          });
+            } else if (result.data.status === 'invalid' && result.data.message) {
+              setErrorMessage(result.data.message); // Display the error message from the server
+            } else {
+              setErrorMessage('There is a problem saving this patient to the database. Please try again.');
+            }
+          } catch (error) {
+            console.log('Try Catch Error in submitForm when trying to save new pharmacy/facility was: ', error);
+          }
+      }
+
+//Added Thu 8/17/2023 from chatGPT and Brad @ LearnWebCode: https://youtu.be/70fadMRqnBo?t=3090
+      const [isRedBorder, setIsRedBorder] = useState(false); // Initialize to false
+      const walletInputRef = useRef(null);
+  
+      const handleErrorButton = (e) => {
+          e.preventDefault(); 
+//8/17 - don't need errorMessage, hold wallet_address as duplicate. displaying wallet_address updates as user types
+        //   setErrorMessageInput(errorMessage);
+          setErrorMessageInput(wallet_address);
+          setErrorMessage('');
+          setIsRedBorder(true);
+        //   setPatient({...patient,wallet_address: wallet_address })
+//8/17/23 - scrapped the idea of loading original wallet address. 
+        // setPatient({...patient,wallet_address: originalWallet });
+        // loadPatientWalletOnly();  
+          walletInputRef.current.focus();
+  
       }
 
  
@@ -168,9 +205,9 @@ const EditPatient = () => {
     }
   
 
-
+    const [originalWallet,setOriginalWallet] = useState('')
       // const loadUsers = async (id) => {  //id was not being passed in when passed in as a parameter (14:45) pt 4.
-      const loadUsers = async () => {
+      const loadPatient = async () => {
           // console.log('ID check inside loadUsers', id) 
           setPatient({name: "", wallet_address: "", dob: "", email:"", id:"", pt_physical_address:"", pt_phone:"",
         pt_primary_insurance:"",pt_primary_id:"",pt_secondary_insurance:"",pt_secondary_id:""});
@@ -178,8 +215,20 @@ const EditPatient = () => {
           console.log(result);
           // setPatient(result.data.records);
           setPatient(result.data);
+          setOriginalWallet(result.data.wallet_address);
           // navigate('/');
       }
+
+//#YOLO Thu 8/17/2023 - Load single patient, but only update the wallet_address to the original value on edit page
+        const loadPatientWalletOnly = async () => {
+            setPatient({...patient,wallet_address: ''});
+            const result = await axios.get("https://rxminter.com/php-react/edit.php?id="+id);
+                console.log("Single Patient called from 8/17/2023 loadPatientWalletOnly is ",result);
+            // setPatient(result.data.records);
+            // setPatient(result.data);
+            setPatient({...patient,wallet_address: result.data.wallet_address});
+            // navigate('/');
+        }
 
 
 // 5:10pm R 5/4/23: Load all medications: 
@@ -193,13 +242,12 @@ const EditPatient = () => {
 
 
 
-      const loadPatients = async () => {
-        setPatient([]);   
-        const result = await axios.get("https://rxminter.com/php-react/view.php");
-        console.log(result);
-        setPatients(result.data.records);
-        // navigate('/');
-    }
+    //   const loadPatients = async () => {
+    //     setPatient([]);   
+    //     const result = await axios.get("https://rxminter.com/php-react/view.php");
+    //     console.log(result);
+    //     setPatients(result.data.records);
+    // }
 
 
     const handleKeyDown = (event) => {
@@ -212,6 +260,14 @@ const EditPatient = () => {
   return (
 
    <> 
+
+<>
+
+    {address ? (
+        <>
+
+
+
     <form onSubmit={e => updateForm(e)}>
             <div className="nft_box_size">
                     <div className="row">
@@ -225,6 +281,8 @@ const EditPatient = () => {
                             </div>
                     </div>
 
+<div className={errorMessage ? 'main-ui blurred' : ''}>
+
                 <div className="box_size_new_form">
                         <div className="row" >
                                 <div className="col-md-3">Patient Name:</div>
@@ -233,14 +291,27 @@ const EditPatient = () => {
                                 </div>
                         </div>
 
+    {errorMessageInput && (                         
+        <div className="alert alert-danger">
+        <p className="display-8" style={{color:"red"}}>
+            Wallet Address {errorMessageInput} is a duplicate address. 
+        </p>
+        <p className="display-8" style={{color:"red"}}>
+            Wallet Address {originalWallet} was previously saved to {name}. 
+        </p>
+        </div>          
+    )}
 
 
+                    <div className={isRedBorder ? 'red-border' : ''}>
                             <div className="row">
                                     <div className="col-md-3">Wallet:</div>
                                     <div className="col-md-9">
-                                        <textarea name="wallet_address" className="form-control" value={wallet_address} onChange={(e) => handleChange(e)} onKeyDown={handleKeyDown} rows="2" required />   
+                                        <textarea name="wallet_address" className="form-control" value={wallet_address} 
+                                        onChange={(e) => handleChange(e)} onKeyDown={handleKeyDown} ref={walletInputRef} rows="2" required />   
                                     </div>
                             </div>
+                    </div>
 
                             <div className="row">
                                     <div className="col-md-3">DOB:</div>
@@ -315,7 +386,7 @@ const EditPatient = () => {
                                     </select>
                             </div> */}
 
-                        
+                       
                             <div className="row">
                                 <div className="col-md-12 text-center">
                                     {/* <input type="submit" name="submit" value="Add Patient" className="btn btn-warning" /> */}
@@ -325,7 +396,22 @@ const EditPatient = () => {
                                 </div>
                             </div>
                     </div>
-        </div>
+
+        </div> {/* Closing Blur Div */} 
+
+        {errorMessage && ( 
+               
+               <div className="overlay overlay--visible">
+                   <div className="overlay-inner">
+                       <p className="end-message" style={{color:"red"}}><b>Error:</b> {errorMessage}</p>
+                       <button className="reset-button" onClick={e => handleErrorButton(e)}>Okay</button>
+                   </div>      
+               </div>  
+          
+       )}             
+
+
+    </div>
 </form>
 
 
@@ -370,8 +456,13 @@ const EditPatient = () => {
             )}
 
     
+    </>
+        
+        ) : (
+            <GuestLogin />
+        )}
+    </>
 </>
-
   )
 }
 export default EditPatient
