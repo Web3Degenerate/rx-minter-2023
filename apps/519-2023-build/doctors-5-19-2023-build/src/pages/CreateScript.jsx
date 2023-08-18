@@ -196,8 +196,20 @@ const handleSubmit = async (e) => { // useRef() example didn't have e param, but
   let quantityPrescribedInt = parseInt(quantity_Ref);
   let numberOfDays = parseInt(max_Ref)
 
+
+  //******************************* AUGUST 17 2023 (VY BLACK THURSDAY) FIX FOR GEORGE MINTING BUG ************************* */
   let perDiemMax = quantityPrescribedInt / numberOfDays;
     console.log("Max per diem Qty is: ", perDiemMax)
+
+    if (perDiemMax < 1) {
+      perDiemMax = 1; // Round up to 1 if less than 1
+  } else {
+      perDiemMax = Math.floor(perDiemMax); // Round down if greater than or equal to 1
+  }
+
+  //if always round up: 
+  // perDiemMax = Math.ceil(perDiemMax);
+  //******************************* END OF: AUGUST 17 2023 (VY BLACK THURSDAY) FIX FOR GEORGE MINTING BUG ************************* */
 
 
   let date_prescribed_Ref = inputDatePrescribed.current.value;

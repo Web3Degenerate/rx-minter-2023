@@ -1,4 +1,4 @@
-//Inkscape Word Doc Clean Imaging Order: 
+ //Inkscape Word Doc Clean Imaging Order ported over from doctors build on Fri 8/18/2023 from Epoch.
 import {useRef} from 'react';
 
 export const RemedySvgOrderRx = (remedyPatientName, remedyDOB, remedyMedication, remedyQuantity, remedyPhysicalAddress, remedySig, remedyPrescribedDate,

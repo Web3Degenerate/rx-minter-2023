@@ -7,16 +7,6 @@ export const RemedySvgOrderRx = (remedyPatientName, remedyDOB, remedyMedication,
     
     return (       
     <>
-         <svg
-            version="1.1"
-            id="svg662"
-            width="1056"
-            height="816"
-            viewBox="0 0 1056 816"
-            xlink="http://www.w3.org/1999/xlink"
-            xmlns="http://www.w3.org/2000/svg"
-            svg="http://www.w3.org/2000/svg"
-        >
        <defs
           id="defs666">
          <rect
@@ -2472,8 +2462,9 @@ export const RemedySvgOrderRx = (remedyPatientName, remedyDOB, remedyMedication,
             y="-156.50444"
             transform="scale(1,-1)" /> 
        </g>
+     </>
+     
+        
 
-       </svg>
-     </> 
     )
 }

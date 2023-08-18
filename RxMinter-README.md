@@ -59,6 +59,23 @@
 ```
 
 
+### Change Log (8/17/2023)
+
+1. Doctors Build - **CreateScripts.jsx**
+
+**Error** - Qty = 1. Days Supply = 15. 
+
+`contract call failure Error: underflow [ See: https://links.ethers.org/v5-errors-NUMERIC_FAULT-underflow ] (fault="underflow", operation="BigNumber.from", value=0.06666666666666667, code=NUMERIC_FAULT, version=bignumber/5.7.0)`
+
+
+
+
+
+
+
+
+
+
 ---
 ---
 

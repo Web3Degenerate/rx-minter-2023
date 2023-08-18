@@ -1,21 +1,47 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import "../styles/App.css";
+import "../styles/App.css"; //  import "../styles/ViewScripts.css";
 import axios from 'axios'; 
-import html2canvas from 'html2canvas'; //https://www.npmjs.com/package/html2canvas  => https://github.com/niklasvh/html2canvas 
+import html2canvas from 'html2canvas';
+//https://www.npmjs.com/package/html2canvas  => https://github.com/niklasvh/html2canvas 
 
-import { useAddress, useContract, ConnectWallet, useOwnedNFTs, useNFT } from "@thirdweb-dev/react";
+// import "../styles/html2canvas.js";
 
-import React, { useState, useEffect, useRef, useContext, getContext } from 'react'
+// import * as htmlToImage from 'html-to-image';
+
+
+import { useAddress, useContract, ConnectWallet, useOwnedNFTs, ThirdwebNftMedia, 
+    useTransferNFT, useMetadata, useNFT, MediaRenderer, useContractRead } from "@thirdweb-dev/react";
+    //removed MediaRenderer, Web3Button
+
+  import React, { useState, useEffect, useRef, useContext, getContext } from 'react'
   
-import { useNavigate, Link, useParams } from 'react-router-dom'
+  import { useNavigate, Link, useParams } from 'react-router-dom'
   
-import { ethers } from 'ethers';
+  import { ethers } from 'ethers';
  
-// - AUG 18 2023 - REMEDY Base template from utils: RemedySvgPdfGenerator
-import { addyShortner,convertBigNumberToFourDigitYear, formatDateFourDigitYear } from '../utils'
-import { solidityContractAddress } from '../constants'
+  // - AUG 18 2023 - REMEDY Base template from utils: RemedySvgPdfGenerator
+  import { addyShortner,convertBigNumberToFourDigitYear, formatDateFourDigitYear } from '../utils'
+    //work out: dayCalculatorDoc
 
-import { RemedySvgOrderRx } from '../fax-template/prescription' 
+    // import { RemedySvgForJorgeRucker } from '../doctorSigGeorge'
+        // import { RemedySvgOrderMri } from '../doctorSigGeorge/imaging' 
+    import { RemedySvgOrderRx } from '../fax-template/prescription' 
+
+
+
+
+  import { solidityContractAddress } from '../constants'
+  
+
+    // import { FormField, CustomButton, ScriptSvgTemplate, RemedySvgPdfTemplate } from '../components';
+    // import { RemedySvgPdfTemplate } from '../components';  //============================COMMENTED OUT ON TRANSFER
+
+    // import RemedySvgTemplate from '../components/RemedySvgTemplate';
+    //   import { GetMedication } from '../components';
+
+    // import { alertService } from '../services';
+
+    // import { scriptImageTest, RemedyScriptTemplatePDF } from '../assets';
 
 //************************************************************************************************************************** *//
 // ****** TUTORIAL RAYS ON REACT IMAGE UPLAOD - MY MAN IN INDIA: https://www.youtube.com/watch?v=fFx4Pbe9dAs *************** //
@@ -30,12 +56,18 @@ const PatientFaxScript = () => {
     const { contract } = useContract(solidityContractAddress);
     const address = useAddress(); 
 
-        console.log("contract address is: ",contract)
-        console.log("address is ",address)
+    console.log("contract address is: ",address)
+    console.log("address is ",address)
 
   const { data: nft, isLoading: isLoadingNFT } = useNFT(contract, id);
 
     console.log("nft call using useNFT() retunred: ",nft)
+
+    // console.log("Single nft to fax is: ",nft)
+
+    // const { data: nfts, isLoading: loading } = useOwnedNFTs(contract, address);
+    // console.log("owned NFTs from connected wallet are :",nfts)
+
 
     //************************************* Pull in Pharmacies for drop down menu ********************** */
 
@@ -79,13 +111,35 @@ const [doctor, setDoctor] = useState({
 });
 const {doctor_name,doctor_dea,doctor_wallet_address,doctor_npi,doctor_phone,doctor_fax,did} = doctor; 
 
+// const loadDoctors = async () => {
+//     setDoctor({doctor_name: "", doctor_dea: "", doctor_wallet_address: "", doctor_npi:"", id:"", doctor_phone:"", doctor_fax:""});
+//     const result = await axios.get("https://rxminter.com/php-react/edit-doctor.php?id="+doctor_id);
+//     console.log(result);
+//     setDoctor(result.data);
+// }
+
 // **************** SVG => JPEG PAGE LOGIC ****************************** //
+    // const svgContainer = useRef();
+    // const canvasTest = useRef();
+    // const pngContainer = useRef();
+
     const [getImageDataUrl, setGetImageDateUrl] = useState('')
     const [generateSVGAuto, setGenerateSVGAuto] = useState('');
 
     const svgContainerInternal = useRef();
 
     const svgContainerInternalDiv = useRef();
+
+ // **************** Pharmacy State ******************************************* //
+ 
+//  const [rxWallet, setRxWallet] = useState({
+//     tokenId: '', 
+//     rxWallet: '', 
+//     pharmacyName: ''
+//   });
+
+//   const inputTokenId = useRef(); 
+//   const inputPharmacyWallet = useRef('');
 
 // ****************************** GET Selected Pharmacy ******************************************************//
 
@@ -139,15 +193,15 @@ const handlePharmacyChange = async (e, id) => {
 
 // **************************** handleSubmitToPharmacy Form Submission ******************************//
 
-const handleSubmitToPharmacy = async (e) => { 
+const handleSubmitTest = async (e) => { 
 
     e.preventDefault();
-    console.log("handleSubmitToPharmacy e value is:", e)
+    console.log("handleSubmitTests e value:", e)
 
 
     // if (confirm(`Transfer Prescription Item #${rxWallet.tokenId} to Pharmacy: ${pharmacyFax.pharmacy_name} at address: ${rxWallet.rxWallet} for ${sig} by ${prescriber}. Okay ${pt_name}? Fax: ${pharmacyFax.pharmacy_fax} `) == true){
   const dislayFaxNumber = pharmacyFax.pharmacy_fax.replace(/^1/, '').replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3'); // Add dashes
-    console.log("Pharmacy Fax number in handleSubmitToPharmacy is ", pharmacyFax.pharmacy_fax)
+    console.log("Pharmacy Fax number in handleSubmitTest is ", pharmacyFax.pharmacy_fax)
 
         const checkSelectedFax = `1${pharmacyFax.pharmacy_fax.replace(/-/g, '')}`;
         //   setPharmacyFax({...pharmacyFax, pharmacy_fax: getSelectedFax });
@@ -169,15 +223,14 @@ const handleSubmitToPharmacy = async (e) => {
     // }
 
     if(address == nft?.owner){
-        if (confirm(`${unhashedName}, you are now faxing an Image of your prescription for medication ${nft?.metadata.attributes[0].value} (Rx Token ID#${nft?.metadata.id}) to ${pharmacyFax.pharmacy_name} at Fax Number ${pharmacyFax.pharmacy_fax}. Do you wish to Proceed?`) == true){
-            //   await _safeTransferFromToPharmacy({ ...rxWallet })
-            sendFaxAndTransferNft()
-        }
-    }else{
         if (confirm(`You are now faxing an Image of Prescription ID# ${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at Fax Number ${pharmacyFax.pharmacy_fax} for patient ${unhashedName} with SIG of ${nft?.metadata.description} for medication ${nft?.metadata.attributes[0].value}. Do you wish to Proceed?`) == true){
             //   await _safeTransferFromToPharmacy({ ...rxWallet })
             sendFax()
+        }else{
+            _transferPharmacyToPatient(); 
         }
+    }else{
+        alert('sorry homes, you do not own this shit!')
     }
   }
 
@@ -194,24 +247,52 @@ const handleSubmitToPharmacy = async (e) => {
         keepAfterRouteChange: false
     });
 
-// 8/18/23 - NON-OWNER FAX SCRIPT ONLY
 const sendFax = () => {
 
 try{
+
+
+
     // await axios.post("https://rxminter.com/srfax/Queue_Fax.php", scriptFax).then((result)=>{
     axios.post("https://rxminter.com/srfax/Staging_Queue_Fax.php", scriptFax
 
     ).then((result)=>{
+    
+    
+        console.log(result);
+        // setOptions(result);
+        // alertService.success(`Success, The Fax Image Named ${scriptFax.script_image_name} has been sent!`, options);
+        // alert(`Success, The fax image named ${scriptFax.script_image_name} has been sent!`, result);
+        // alert(`Success, your script has been sent to fax number ${scriptFax.pharmacy_fax}` );
         console.log('Fax axios then clause result is: ',result)
-  
+
+
+     
         if(result.data.status == 'valid'){
-            alert(`Success, the prescription for ${nft?.metadata.name} has been sent to ${pharmacy.pharmacy_name} at fax number ${pharmacyFax.pharmacy_fax}.` );
+            // navigate('/');
+            // alert('sendFax() received result.data.status = valid')
+            // setOptions(result.data)
+            // setOptions(result)
+
+            // alertService.success(`Valid, The Fax Image Named ${scriptFax.script_image_name} has been sent!`, options);
+            // alert(`Valid, The Fax Image Named ${scriptFax.script_image_name} has been sent!`, options);
+
+            // alert(`Success, your script has been sent to fax number ${scriptFax.pharmacy_fax}` );
+            alert(`Success, your script has been sent to fax number ${pharmacyFax.pharmacy_fax}` );
        
+
+            
+            // if (confirm(`Fax Successfully Sent! Transfer Prescription Item #${nft?.metadata.id} to Pharmacy: ${pharmacyFax.pharmacy_name} at address: ${pharmacyFax.pharmacy_wallet} for ${nft?.metadata.description} for ${nft?.metadata.attributes[0].value}. Okay ${nft?.metadata.name}? Fax: ${pharmacyFax.pharmacy_fax} `) == true){
+            //     _transferPharmacyToPatient()
+            //   }
             console.log("7/8 Valid result.data is: ",result.data)
             console.log("7/8/23 Valid result is: ",result)
 
-// SUCCESSFUL FAX SENT FOR NON-OWNER. NAVIGATE BACK TO HOME **********************************
+// SUCCESSFUL FAX SENT - CALLS SAFE TRANSFER FROM PATIENT TO PHARMACY **********************************
+// FOR NOW - FORWARD BACK TO PATIENT HOME AGE
             navigate('/')
+// _transferPharmacyToPatient()
+// SUCCESSFUL FAX SENT - CALLS SAFE TRANSFER FROM PATIENT TO PHARMACY **********************************
 
         }else{
             alert('There is a problem sending this fax script to the pharmacy. Please try again.');
@@ -235,63 +316,17 @@ try{
     }
 }
 
-//****************************** 8/18/2023 - OWNER ONLY TRANSFER NFT TO PHARMACY WALLET AFTER FAX */
-
-const sendFaxAndTransferNft = () => {
-    if (confirm(`Hit Cancel to skip fax for testing`) == true){ 
-
-                try{
-                    // await axios.post("https://rxminter.com/srfax/Queue_Fax.php", scriptFax).then((result)=>{
-                    axios.post("https://rxminter.com/srfax/Staging_Queue_Fax.php", scriptFax
-                
-                    ).then((result)=>{
-                        console.log('Fax axios then clause result is: ',result)
-                
-                        if(result.data.status == 'valid'){
-                            alert(`Success, your script has been sent to fax number ${pharmacyFax.pharmacy_fax}` );
-                    
-                            console.log("7/8 Valid result.data is: ",result.data)
-                            console.log("7/8/23 Valid result is: ",result)
-                
-                // SUCCESSFUL FAX SENT FOR NON-OWNER. NAVIGATE BACK TO HOME **********************************
-                            // navigate('/')
-                            _transferPharmacyToPatient();
-
-                        }else{
-                            alert('There is a problem sending this fax script to the pharmacy. Please try again.');
-                            // setOptions(result.data)
-                            // setOptions(result)
-                
-                            // alertService.error(`Error with error message of :(`, options);
-                            alert(`Error with error message of :(`, result);
-                
-                            console.log("6/21 Invalid result.data is: ",result.data)
-                            console.log("6/21 Invalid result is: ",result)
-                        }
-                    }); //end of axios post call
-                
-                    }catch(error){
-                        // setOptions(error)
-                        // alertService.error(`Catch Clause Error with message of ${error} :(`, options);
-                        alert(`Catch Clause Error with message of ${error} :(`);
-                
-                        console.log("7/7 catch(error) is: ",result)
-                    }
-        }else{
-            _transferPharmacyToPatient();
-        }
-    }
 
 // **************************** _transferPharmacyToPatient Form Submission ******************************//
 
 const _transferPharmacyToPatient = async () => {
-    if (confirm(`The next step is to transfer your NFT prescription for ${nft?.metadata.attributes[0].value} (Rx Token ID#${id}) to ${pharmacyFax.pharmacy_name} at their public wallet address of:
-    ${pharmacyFax.pharmacy_wallet}. 
-    Press 'OK' to complete your refill request.`) == true){ 
+    if (confirm(`Please confirm that you want to transfer this NFT Prescription ID#: ${id} to Pharmacy: ${pharmacyFax.pharmacy_name}, to their wallet address of:
+    ${pharmacyFax.pharmacy_wallet}. `) == true){ 
             try {
             
                 // VERSION 12.5+ - Patient Transfer: 
-                            //   let pharmacyNameOnly = rxWallet.pharmacyName.substring(0, rxWallet.pharmacyName.indexOf(" ["));                                                                                                                                    //check if pharma name a parameter
+                            //   let pharmacyNameOnly = rxWallet.pharmacyName.substring(0, rxWallet.pharmacyName.indexOf(" ["));
+                                                                                                                                    //check if pharma name a parameter
                             //   const data = await contract.call("transferPatientToPharmacyRoles", [address, pharmacyFax.pharmacy_wallet, pharmacyFax.pharmacy_name, id]);
 
                             const data = await contract.call("transferPharmacyToPatient", [address, pharmacyFax.pharmacy_wallet, id]);
@@ -394,6 +429,11 @@ setPatient(result.data); //lags, shows up on second load/pharamcy select run
 
 
 // *** Update Sun 8/13/23 Patient Primary Secondary insurance
+// setPrimaryInsurance(result.data.pt_primary_insurance)
+// setPrimaryId(result.data.pt_primary_id)
+// setSecondaryInsurance(result.data.pt_secondary_insurance)
+// setSecondaryId(result.data.pt_secondary_id)
+
 let primaryInsurance = result.data.pt_primary_insurance
 let primaryId = result.data.pt_primary_id
 let secondaryInsurance = `Secondary Insurance: ${result.data.pt_secondary_insurance}`
@@ -444,35 +484,241 @@ setDoctor(prescribing_doc.data); //lags, shows up on second load/pharamcy select
 } //end of Jorge svg generator
 
 
+// const generateSVGAuto = handleConvertClickerInternal()
+// const getImageAuto = autoConvertClicker()
+
 useEffect(() => {
-    autoConvertClickerVersionTwo()
+    // autoConvertClicker()
+    autoConvertClickervTwo()
 }, [generateSVGAuto])
 
-    //Solution from: https://www.robinwieruch.de/react-component-to-image/
-    const autoConvertClickerVersionTwo = async () => {
-        const svgElement = svgContainerInternalDiv.current;
-        const canvas = await html2canvas(svgElement);
 
-    let imageDataUrl = canvas.toDataURL('image/jpeg');
+const autoConvertClickervTwo = async () => {
+    const svgElement = svgContainerInternalDiv.current;
+    const canvas = await html2canvas(svgElement);
+    // const data = canvas.toDataURL('image/jpg');
 
-    setGetImageDateUrl(imageDataUrl)
+                        //     let {width, height} = svgElement.getBox(); 
+                        //     let clonedSvgElement = svgElement.cloneNode(true);
+                        //     let outerHTML = clonedSvgElement.outerHTML,
+                        //   blob = new Blob([outerHTML],{type:'image/svg+xml;charset=utf-8'});
+                        //   let URL = window.URL || window.webkitURL || window;
+                        //   let blobURL = URL.createObjectURL(blob);
 
-    let checkSelectedFax = `1${pharmacyFax.pharmacy_fax.replace(/-/g, '')}`;
+                        //   let canvas = document.createElement('canvas');
+                        
+                        //   canvas.width = width;
+                        
+                        //   canvas.height = height;
+                        //   let context = canvas.getContext('2d');
+                        //   // draw image in canvas starting left-0 , top - 0  
+                        //   context.drawImage(image, 0, 0, width, height );
 
-    setScriptFax({script_image_name: `${imageDataUrl}.jpeg`, script_image_location: imageDataUrl, pharmacy_fax: checkSelectedFax });
-    console.log("Inside of autoConvertClickerVersionTwo SVG to JPEG fn, scriptFax is now: ",scriptFax)
+                        //   image.src = blobURL;
 
-    }
+  let imageDataUrl = canvas.toDataURL('image/jpeg');
+//   const data = canvas.toDataURL('image/jpg');
+
+  setGetImageDateUrl(imageDataUrl)
+  // ...scriptFax, 
+
+  let checkSelectedFax = `1${pharmacyFax.pharmacy_fax.replace(/-/g, '')}`;
+
+  //   setPharmacyFax({...pharmacyFax, pharmacy_fax: getSelectedFax });
+  //   setScriptFax({...scriptFax, pharmacy_fax: checkSelectedFax });
+  setScriptFax({script_image_name: `${imageDataUrl}.jpeg`, script_image_location: imageDataUrl, pharmacy_fax: checkSelectedFax });
+  console.log("Inside of autoConvertClickervTwo SVG to JPEG fn, scriptFax is now: ",scriptFax)
 
 
-    const [showSubmitButton, setShowSubmitButton] = useState('none')
-    const [displaySelectedPharmacy, setDisplaySelectedPharmacy] = useState('The Pharmacy')
+}
+
+
+const autoConvertClicker = () => {
+// const handleConvertClickerInternal = async (e) => {
+//     e.preventDefault()
+//     const canABrotherSetAnSVGMyNigga = await autoConvertClicker();
+
+    const svgElement = svgContainerInternalDiv.current;
+    // const svgElement = generateSVGAuto.current;
+    console.log("Auto svgElemento es: ",svgElement)
+    // const svgElement = await RemedySvgPdfGenerator("Eric Cartman", "6/20/2023", "123 Bud Liiiight Way, Houston, TX 78745", "Take PRN for pain, (2) Take when angry about Kyle, (3) Take when needed to calm anger, (4) Take bid tid blah, blah, blah, blah", "Amlodipine 100mg Tablet", "30")
+
+    // Create a canvas element to render the SVG
+    const canvas = document.createElement('canvas');
+    console.log("#Yolo, const canvas = document.createElement(canvas) is ",canvas)
+    const context = canvas.getContext('2d');
+    console.log("#Yolo, unused? const context = canvas.getContext(2d) is ",context)
+
+
+    const svgRectOriginal = svgElement.getBoundingClientRect();
+
+//8/17/23  (10:53 pm CST @ Epoch Vy Day): ChatGPT hardcode DOMRect width (1296) and height (816) even though height already working
+// const svgRect = new DOMRect(
+//     // svgRectOriginal.x,
+//     85,
+//     // svgRectOriginal.y,
+//     448.9375,
+//     // 1296, // Set the width to 1296
+//     1056,
+//     // svgRectOriginal.width,
+//     // svgRectOriginal.height,
+//     816,
+//     // 816,
+//     // svgRectOriginal.top,
+//     448.9375,
+//     // svgRectOriginal.right,
+//     781,
+//     // svgRectOriginal.bottom,
+//     1264.9375,
+//     // svgRectOriginal.left
+//     85
+
+//     //     "bottom": 1264.9375,
+//     //     "left": 85
+// );
+
+    // const svgRect = { "x": 45.5, "y": 15.3984375, "width": 1116, "height": 816, 
+    //"top": 15.3984375, "right": 1161.5, "bottom": 831.3984375, "left": 45.5 }
+
+// const svgRect = new DOMRect(
+//     // svgRectOriginal.x,
+//     45.5,
+//     // svgRectOriginal.y,
+//     15.3984375,
+//     // 1296, // Set the width to 1296
+//     1116,
+//     // svgRectOriginal.width,
+//     // svgRectOriginal.height,
+//     816,
+//     // 816,
+//     // svgRectOriginal.top,
+//     15.3984375,
+//     // svgRectOriginal.right,
+//     1161.5,
+//     // svgRectOriginal.bottom,
+//     831.3984375,
+//     // svgRectOriginal.left
+//     45.5
+
+//     //     "bottom": 1264.9375,
+//     //     "left": 85
+// );
+
+
+
+const svgRect = new DOMRect(
+    svgRectOriginal.x,
+    svgRectOriginal.y,
+    1056, // Set the width to 1056
+    svgRectOriginal.height,
+    svgRectOriginal.top,
+    svgRectOriginal.right,
+    svgRectOriginal.bottom,
+    svgRectOriginal.left
+);
+
+console.log("Modified DOMRect ChatGPT Test is ",svgRect);
+
+
+
+
+
+    // const svgRect = {
+    //     x: 108.1076431274414,
+    //     y: 107.13542175292969,
+    //     width: 936.0070190429688,
+    //     height: 545.9896240234375,
+    //     top: 107.13542175292969,
+    //     right: 1044.1146621704102,
+    //     bottom: 653.1250457763672,
+    //     left: 108.1076431274414
+    //   }; 
+
+    // const svgRect = {
+    //     "x": 85,
+    //     "y": 448.9375,
+    //     // "width": 1800,
+    //     "width": 1056,
+
+    //     // "height": 1416,
+    //     "height": 816,
+
+    //     "top": 448.9375,
+    //     "right": 781,
+    //     "bottom": 1264.9375,
+    //     "left": 85
+    // }
+
+    // const svgRect = { "x": 45.5, "y": 15.3984375, "width": 1116, "height": 816, "top": 15.3984375, "right": 1161.5, "bottom": 831.3984375, "left": 45.5 }
+
+    console.log("svgRect is: ",svgRect)
+    // canvas.width = svgRect.width;
+    // canvas.height = svgRect.height;
+
+
+//8/17/23 YOLO Test:
+    // svgRect.width = 1296;
+    // svgRect.height = 816;
+    console.log("svgRect.width is now ",svgRect.width)
+    console.log("svgRect Height is now ",svgRect.height)
+
+    // canvas.width = svgRect.width*1.5;
+    // canvas.height = svgRect.height*1.5;
+
+
+    canvas.width = svgRect.width;
+    canvas.height = svgRect.height;
+//8/17/23 YOLO Test
+    // canvas.width = 1296;
+    // canvas.height = 816;
+
+    console.log("Canvas.width is now ",canvas.width)
+    console.log("Canvas Height is now ",canvas.height)
+    // console.log("Canvas y is now ",canvas.y)
+
+
+
+
+    // Capture the SVG content as an image
+     //html2canvas
+     html2canvas(svgElement, { canvas }).then(canvas => {
+        // Convert the canvas to an image data URL
+    // const imageDataUrl = canvas.toDataURL('image/png');
+        // let imageDataUrl = canvas.toDataURL('image/png');
+        let imageDataUrl = canvas.toDataURL('image/jpeg');
+
+        setGetImageDateUrl(imageDataUrl)
+        // ...scriptFax, 
+
+        let checkSelectedFax = `1${pharmacyFax.pharmacy_fax.replace(/-/g, '')}`;
+
+        //   setPharmacyFax({...pharmacyFax, pharmacy_fax: getSelectedFax });
+        //   setScriptFax({...scriptFax, pharmacy_fax: checkSelectedFax });
+        setScriptFax({script_image_name: `${imageDataUrl}.jpeg`, script_image_location: imageDataUrl, pharmacy_fax: checkSelectedFax });
+        console.log("Inside of autoConvertClicker SVG to JPEG fn, scriptFax is now: ",scriptFax)
+
+        // Send the image data URL as a fax or perform further processing
+        // console.log('Image data URL:', imageDataUrl);
+      }).catch(error => {
+        console.error('Error capturing SVG:', error);
+      });
+}
+
+
+const [showSubmitButton, setShowSubmitButton] = useState('none')
+
+const [displaySelectedPharmacy, setDisplaySelectedPharmacy] = useState('The Pharmacy')
 
   return (
     <>
 
+
+     
+      
+
 {/* PATIENT SELECT PHARMACY ******************************************************************************* */}
 <hr></hr>
+{/* TRY moving selector box back to the bottom? ******************************* */}
 
 <div className="container d-flex justify-content-center align-items-center">
     <h2 className="display-3">Transfer Script</h2>
@@ -480,12 +726,18 @@ useEffect(() => {
     <div className={isLoadingNFT ? 'd-none' : ''} >
                 <div className="row">
 
+                    {/* <div className="col-sm-4">
+
+                    </div> */}
                     <div className="col-sm-12">
 
                 
                     <div className="card w-100">
                             <div className="card-header bg-light">
                                 <h5 className="card-title">Select A Pharmacy</h5>
+                                {/* <div className="text-right">
+                                    <Link to="/" className="btn btn-primary text-right">Go somewhere</Link>
+                                </div> */}
                             </div>
                             <div className="card-body" style={{background:"#F0F1F2"}}>
                                 
@@ -503,17 +755,19 @@ useEffect(() => {
                                                   ) }.
 
                                                  
-<br></br>However, only the patient may transfer this NFT to a pharmacy by connecting their wallet ({addyShortner(nft?.owner)}) to the&nbsp;
-<br></br><a href={`https://patients.rxminter.com`} target="_blank">Rx Minter Patient Portal dApp</a>.
+                                                However, only the patient may transfer this NFT to a pharmacy by connecting their wallet ({addyShortner(nft?.owner)}) to the&nbsp;
+                                                <a href={`https://patients.rxminter.com`} target="_blank">Rx Minter Patient Portal dApp</a>.
                                             
                                             </p>
                                         )}
-                                            <form onSubmit={e => handleSubmitToPharmacy(e)}>
+                                            <form onSubmit={e => handleSubmitTest(e)}>
 
+                                                {/* <div className="view-scripts-card"> */}
                                                 <div  style={{background:"#F0F1F2"}}>
 
                                                         <div className="input-group-mb-3">
 
+                                                            {/* <select className="form-select" aria-label="Select A Pharmacy" name="rxWallet" value={rxWallet.value} onChange={(e) => handlePharmacyChange(e, nft.metadata.id)}  > */}
                                                             <select className="form-select" aria-label="Select A Pharmacy" name="rxWallet" onChange={(e) => handlePharmacyChange(e, nft?.metadata.id)}  >
                                                             
                                                                 <option selected value="none">Select a Pharmacy...</option>
@@ -528,6 +782,9 @@ useEffect(() => {
 
                                                             </select>     
                                                         </div>
+
+                                                        {/* <button type="submit" className="btn btn-success">Submit {nft?.metadata.attributes[0].value} To Pharmacist</button>  */}
+                                                        
 
                                                         <div className="row">
                                                             <div className="col-md-12">  
@@ -562,24 +819,66 @@ useEffect(() => {
 
 {/* SVG ******************************************************************************* */}
                         {isLoadingNFT && ( 
-                            <h5 className="display-3">Your NFT Prescription is Loading...</h5>              
+                            // <>
+                            <h5 className="display-3">Your NFT Prescription is Loading...</h5>
+                            // </>
                         )}
 
-
+                    {/* <div ref={svgContainerInternal} className="svg-container"> */}
+                                                                        {/* d-none class display=none */}
                 <div ref={svgContainerInternalDiv} className={isLoadingNFT ? 'd-none' : 'w-100'} >
                     <hr></hr>
                     <h2>Script Preview for Medication {nft?.metadata.attributes[0].value}</h2>
                     <hr></hr>
-                                
+                    
+
+                                            {/* <div ref={svgContainerInternal} className="svg-component">           */}
+
+                                            {/* ref={svgContainerInternal} */}
+                                                {/* className="svg_box_size" */}
+                                            {/* <svg
+                                                version="1.1"
+                                                id="svg662"
+                                                width="1056"
+                                                height="816"
+                                                viewBox="0 0 1056 816"
+                                                xlink="http://www.w3.org/1999/xlink"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                svg="http://www.w3.org/2000/svg"
+                                            > */}
+                 
                             {generateSVGAuto}   
-          
+        
+
+                    {/* </svg> */}
+           
                 </div>  
     
 {/* IMAGE ******************************************************************************* */}
+        {/* <div className="svg-container"> */}
+            {/* <img src={getImageDataUrl} style={{width:"844px", height:"601.770px"}}/> */}
+
+            <hr></hr>
+            {/* <h5>Image Conversion:</h5> */}
+            {/* <button onClick={autoConvertClicker} className="btn btn-success">Convert To Jpeg</button> */}
+
+            {/* <img src={getImageDataUrl} style={{width:"844px", height:"601.770px"}} /> */}
+
 
         <div style={{visibility:"hidden"}} >  
+            {/* <img src={getImageDataUrl} style={{backgroundColor:"white"}} /> */}
             <img src={getImageDataUrl} />
+
         </div>                                
+
+
+ 
+
+        {/* </div> */}
+        {/* </div> */}
+
+
+
 
     </>
   )
