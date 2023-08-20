@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import { Link, useNavigate, useParams } from "react-router-dom";
 
-// import "../styles/ViewScripts.css";
-import "../styles/App.css";
+import "../styles/ViewScripts.css";
 // import 'bootstrap/dist/css/bootstrap.css';
 // import "../styles/App.css";
 
@@ -382,242 +381,10 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
 
   return (
 <>
-        <div className="justify-content-center text-center">
-            <h1 style={{color:"black"}}>Manage Prescription for&nbsp;
-                    {nftz?.metadata.name.startsWith('0x') ? (
-                        ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name))
-                    ) : ( 
-                        nftz?.metadata.name
-                    )}
-            
-            </h1>
-            <h5 style={{color:"black"}}>Rx Token ID#{id} - {nftz?.metadata.attributes[0].value}</h5>
-        </div>
-
-    <div className="card text-center">
-        <div className="card-header">
-           <b className="display-6 card-title"> Patient Information</b>
-        </div>
-        <div className="card-body">
-            {/* <h5 className="card-title">Special title treatment</h5> */}
-
-        <div className="row">
-            <div class="col">
-                <b className="card-text"><b>Name: </b>Patient Name</b>&nbsp; |  
-                &nbsp;<b className="card-text"><b>DOB: </b>8/3/1983</b>&nbsp; | 
-                &nbsp;<b className="card-text"><b>Phone: </b>416-123-4567</b>
-            </div>
-        </div> 
-
-        <div className="row">
-            <div class="col">
-                <b className="card-text"><b>Primary Insurance: </b>Blue Cross Blue Shield</b>&nbsp; |  
-                &nbsp;<b className="card-text"><b>Insurance ID#: </b>12-3456789</b>&nbsp; | 
-                
-            </div>
-        </div>
-
-
-
-        </div>
-        <div className="card-footer text-muted">
-            2 days ago
-        </div>
-    </div>
-
-
-
-
-
-
-
-{/* <!--Start of Blipcare Card--> */}
-    <div className="row">
-        <div className="col-md-12">
-                    <div className="card card-stats">
-                                <div className="card-header card-header-success card-header-icon">
-                                    <div className="text-center">
-                                            <img src="{{ asset('images/blipcare-logo-larger.png') }}" />
-                                            <hr></hr>
-                                        <h3 className="display-6"> NFT Prescription Details</h3>
-                                    </div>
-                                </div>
-                        <div className="card-footer">
-                            <div className="text-center">
-                 
-                 
-                    <form onSubmit={e => handleSubmitUpdateFilled(e)}>  
-                           
-                    <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Patient:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">
-                                                                                
-                                    <input type="text" id="patient" name="patient" className="form-control" disabled
-                                    value={nftz?.metadata.name.startsWith('0x') ? (
-                                                ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name))
-                                            ) : ( 
-                                                nftz?.metadata.name
-                                            )}   
-                                    />
-                                </div>
-                            </div>
-
-                            <label className="col-sm-2 col-form-label">DOB:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">
-                                    <input type="text" id="dob" name="dob" className="form-control" disabled
-                                    value={nftz?.metadata.attributes[1].value.startsWith('0x') ? (
-                                                formatDateFourDigitYear(ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.attributes[1].value)))
-                                            ) : ( 
-                                        
-                                                formatDateFourDigitYear(nftz?.metadata.attributes[1].value)
-                                            )}  
-                                    />
-                                </div>
-                            </div>
-                            
-                            <label className="col-sm-2 col-form-label">Phone:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">
-                                    <input type="text" id="pt_phone" name="pt_phone" className="form-control" value={patient.pt_phone} disabled />
-                                </div>
-                            </div>
-                        
-                </div>
-                
-                <hr></hr>
-
-                <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Insurance:</label>
-
-                            <div className="col-sm-4">
-                                <div className="input-group m-b">
-                                                                                
-                                    <input type="text" id="primary_insurance" name="primary_insurance" className="form-control" value={patient.pt_primary_insurance} disabled/>
-                                </div>
-                            </div>
-
-                            
-                            <label className="col-sm-2 col-form-label">Insurance ID#:</label>
-
-                            <div className="col-sm-4">
-                                <div className="input-group m-b">
-                                    <input type="text" id="primary_id" name="primary_id" className="form-control" value={patient.pt_primary_id} disabled/>
-                                </div>
-                            </div>
-                        
-                </div>
-                
-                <hr></hr> 
-
-                <div className="form-row">
-                            {/* <label className="col-sm-2 col-form-label">Medication:</label> */}
-
-
-                            <div className="col-sm-6">
-                            <label for="medication">Medication:</label>
-                                <div className="input-group m-b">
-                                                                                
-                                    <input type="text" id="medication" name="medication" className="form-control" value={nftz?.metadata.attributes[0].value} disabled/>
-                                </div>
-                            <div className="col-sm-6">
-                                    <label for="date_prescribed">Date Prescribed:</label>
-                                    <div className="input-group m-b">
-                                        <input type="date" id="date_prescribed" name="date_prescribed" className="form-control" value={convertBigNumberToFourDigitYear(nftz?.metadata.attributes[5].value)} disabled />                                   
-                                </div>
-                            </div>
-                        </div>
-
-                            
-                            {/* <label className="col-sm-2 col-form-label">Date Prescribed:</label>
-
-                            <div className="col-sm-6">
-                            </div> */}
-                        
-                </div>
-                
-                <hr></hr> 
-
-                <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Qty Prescribed:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">                                                                             
-                                    <input type="text" id="quantity_prescribed" name="quantity_prescribed" className="form-control" value={nftz?.metadata.attributes[2].value} disabled/>
-                                </div>
-                            </div>
-
-                            <label className="col-sm-2 col-form-label">Qty Filled:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">
-                                    <input type="text" id="quantity_filled" name="quantity_filled" className="form-control" value={nftz?.metadata.attributes[3].value} disabled />
-                                </div>
-                            </div>
-                            
-                            <label className="col-sm-2 col-form-label">Qty Left:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">
-                                    <input type="text" id="quantity_left" name="quantity_left" className="form-control" value={nftz?.metadata.attributes[2].value - nftz?.metadata.attributes[3].value} disabled/>
-                                </div>
-                            </div>
-                        
-                </div>
-                
-    <hr></hr>  
-                                         
-                    <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">SIG:</label>
-
-                                <div className="col-sm-10">
-                                    <div className="input-group m-b">
-                                        <textarea className="form-control" id="bp_note" name="bp_note" rows="3" value={nftz?.metadata.description} disabled></textarea>
-                                    </div>
-                                </div> 
-                    </div>
-                        
-    <hr></hr>                   
-                        
-                        
-                    
-            </form>
-                         
-                       
-                                       </div>
-                                    </div>
-                                </div>
-                    </div>
-                            
-                          
-
-    </div> {/* <!--end of Blip Connect Div class ROW--> */}
-    
-
-<br />
-<br />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         <div className="view-single-scripts-card">
 
-            <h1 style={{color:"gray"}}>Manage Prescription for&nbsp;
+            <h1 style={{color:"white"}}>Manage Prescription for&nbsp;
                     {nftz?.metadata.name.startsWith('0x') ? (
                         ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name))
                     ) : ( 
@@ -625,7 +392,7 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
                     )}
             
             </h1>
-            <h5 style={{color:"black"}}>Rx Token ID#{id} - {nftz?.metadata.attributes[0].value}</h5>
+            <h5 style={{color:"white"}}>Rx Token ID#{id} - {nftz?.metadata.attributes[0].value}</h5>
 
                 <div className="view-single-scripts-card">
 

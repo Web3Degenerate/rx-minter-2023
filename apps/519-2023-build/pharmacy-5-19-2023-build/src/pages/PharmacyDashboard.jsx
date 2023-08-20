@@ -13,11 +13,12 @@ import { useAddress, useContract, ConnectWallet, useOwnedNFTs, ThirdwebNftMedia,
   import axios from 'axios';
   import { ethers } from 'ethers';
 
-  import { addyShortner, formatDateFourDigitYear, formatDateTwoDigitYear } from '../utils'
+  import { addyShortner, convertBigNumberToTwoDigitYear, convertBigNumberToFourDigitYear, convertBigNumberToRawString, formatDateFourDigitYear, formatDateTwoDigitYear } from '../utils'
   import { solidityContractAddress } from '../constants'
 
   import { logoPalau } from '../assets'
 
+  
 
 const PharmacyDashboard = () => {
 
@@ -25,8 +26,8 @@ const PharmacyDashboard = () => {
     // const { contract } = useContract("0xE0a73cAEb01ABdee510993F2d6a525b9948B49dF"); // 11.0 - Fixed spacing SVG issue.  
     const { pharmacyContract } = useContract("0x684E9cA3BDf984769531Af2778957815EB096e01"); // 11.1 - Testing Pharmacy Update
     // const { contract } = useContract("0x135B8F385f8FaE5ab558d2D2A7A5d33a99184485"); // 11.7 (1 jake ottenger last used) - Fixed spacing SVG issue.  
-    const { contract } = useContract(solidityContractAddress); // 11.7 (1 jake ottenger last used) - Fixed spacing SVG issue.  
-
+    // const { contract } = useContract(solidityContractAddress); // 11.7 (1 jake ottenger last used) - Fixed spacing SVG issue.  
+    const { contract } = useContract(solidityContractAddress);
 
     
 
@@ -132,7 +133,13 @@ return (
                     <tr key={`${index}`}>
                         <td style={{display: "none"}}>{index+1}</td>
 
-                        <td>{nft.metadata.name}</td>
+                        <td>
+                            {nft?.metadata.name.startsWith('0x') ? (
+                                ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft?.metadata.name))
+                            ) : ( 
+                                nft.metadata.name
+                            )}
+                        </td>
  
                         <td>{nft.metadata.attributes[0].value}</td>
 
@@ -140,7 +147,11 @@ return (
 
                         <td className="text-center">{nft.metadata.attributes[3].value}</td>
 
-                        <td>{nft.metadata.attributes[5].value}</td>
+                        <td>
+                        {convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value)}
+ 
+                        
+                        </td>
 
                         <td><Link className="btn btn-primary" to={`/pharmacy-review-nft/${nft.metadata.id}`}>Manage Rx</Link></td>
                     

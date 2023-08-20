@@ -104,7 +104,12 @@
   /* gap: 20px; */          /* Original */
 
   /* margin-bottom: -80px;     Added */
-  width: 80vw;
+
+  /* 8/18/2023 */
+  /* width: 80vw; */
+  width: 90vw;
+
+
   /* text-align: left; */
 
   /* overflow: hidden; */

@@ -129,7 +129,7 @@ return formatDateTwoDigitYear(dateString);
 
 
 // CONVERT BIG NUMBER to RAW Date, Four Digit Year and Two Digit Year: 
-
+// Converts BigNumber dates to (1) raw string, (2) four digit year, (3) two digit year.
 export const convertBigNumberToRawString = (bigNumberDate) => {
 let dateNumber = Number(bigNumberDate);
 var date = new Date(dateNumber);
