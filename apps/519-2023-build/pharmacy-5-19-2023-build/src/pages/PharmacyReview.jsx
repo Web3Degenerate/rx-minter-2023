@@ -96,10 +96,7 @@ const [rxWallet, setRxWallet] = useState({
   const inputTokenId = useRef(); 
   const inputPharmacyWallet = useRef('');
 
-//   const inputPillsFilled = useRef();
-//   const inputDateFilled = useRef();
-//   const inputDateNextFill = useRef();
-  // const inputTokenId = useRef();
+
 
 
   //probably won't use:
@@ -132,7 +129,8 @@ const handleSubmitTransferToPatient = async (e) => {
   }
 
 
-  const transferPharmacyToPatient = async (rxWallet) => {  
+//   const transferPharmacyToPatient = async (rxWallet) => {  
+  const transferPharmacyToPatient = async () => {
       try {
    
   //********************* ORIGINAL PHARMACY SELECT TRANSFER IN VERSION 1 ************************************************** */
@@ -146,7 +144,16 @@ const handleSubmitTransferToPatient = async (e) => {
             
                 console.log("NFT Sent to Selected Pharmacy with response:", data);
         
-                alert(`Success! The NFT Prescription has been sent back to the patient at address ${nftz?.metadata.attributes[4].value}. If you have any further questions, please call Rx Minter's dedicated Support Team located in Palau.`);
+
+                let showPatientName;
+                if(nftz?.metadata.name.startsWith('0x')) { 
+                    let showPatientName = ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name));
+                }else{
+                    let showPatientName = nftz?.metadata.name;
+                }
+
+
+                alert(`Success! The NFT Prescription has been filled and sent back to patient ${showPatientName} at address ${addyShortner(nftz?.metadata.attributes[4].value)}. If you have any further questions, please email Rx Minter's dedicated Support Team at support@rxminter.com.`);
                 // setRxWallet({ tokenId: '', rxwallet: '' })
                 navigate('/');
   
@@ -180,23 +187,37 @@ const handleSubmitTransferToPatient = async (e) => {
   const inputDaysManual = useRef()
   const inputRefillDateManual = useRef()
 
+//   const [gdPillsFilled, setGDPillsFilled] = useState(nftz?.metadata.attributes[2].value);
+// const handleGDPillsFilled = (e) => {
+//     e.preventDefault();
+//     setGDPillsFilled(e.target.value);
+
+// }
+
   const handleSubmitUpdateFilled = async (e) => { 
     e.preventDefault();  
         console.log("handleSubmitUpdateFilled submit event value:", e)
 
-        let diplayPillsFilled = inputPillsFilled.current.value;
-        let displayDateFilled = formatDateCard(inputDateFilled.current.value);
-        let displayNextRefillDate = formatDateCard(manualRefillDate);
-        
-        let displayPatientName;
-        if (nftz?.metadata.name.startsWith('0x') ) {
-            let displayPatientName =  ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name))
-        }else{
-            let displayPatientName =  nftz?.metadata.name
-        }
-        
+        let showPillsFilled = inputPillsFilled.current.value;
+        // let showPillsFilled = gdPillsFilled;
+        // let displayPillsFilled = nftz?.metadata.attributes[2].value;
+        // let showPillsFilled = e.target.value;
 
-    if (confirm(`Would you like to Proceed Filling Prescription NFT #${id} for ${displayPatientName} on ${displayDateFilled} for medication ${getMedication} in the quantity of ${diplayPillsFilled} with a next available refill date of ${displayNextRefillDate}?`) == true){  
+        let displayDateFilled = formatDateCard(inputDateFilled.current.value);
+        // let displayNextRefillDate = formatDateCard(manualRefillDate);
+//Sun 8/20/2023 Update: 
+        let showNextFillDate = convertBigNumberToFourDigitYear(nftz?.metadata.attributes[7].value);
+        
+        let showGDPatientName = patient.name;
+        // if (nftz?.metadata.name.startsWith('0x') ) {
+        //     let displayPatientName = ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name))
+        // }else{
+        //     let displayPatientName = nftz?.metadata.name
+        // }
+        
+        
+    // if (confirm(`Would you like to Proceed Filling Prescription NFT #${id} for ${displayPatientName} on ${displayDateFilled} for medication ${getMedication} in the quantity of ${showPillsFilled} with a next available refill date of ${showNextFillDate}?`) == true){  
+    if (confirm(`Would you like to Proceed Filling Prescription NFT #${id} for ${showGDPatientName} on ${displayDateFilled} for medication ${nftz?.metadata.attributes[0].value} in the quantity of ${showPillsFilled} with a next available refill date of ${showNextFillDate}?`) == true){  
       await updateScriptQuantityAndDates()
     }
       
@@ -237,14 +258,17 @@ const handleSubmitTransferToPatient = async (e) => {
         
             let pills_filled_Ref = inputPillsFilled.current.value;
             
-            let date_filled_Ref = formatDateCard(inputDateFilled.current.value);
+            // let date_filled_Ref = formatDateCard(inputDateFilled.current.value);
+            let date_filled_Ref = new Date(inputDateFilled.current.value).getTime();
+            
 
 
         // let diplayPillsFilled = inputPillsFilled.current.value;
         // let displayDateFilled = formatDateCard(inputDateFilled.current.value);
         // let displayNextRefillDate = 
 //- FRIDAY AUGUST 18 2023 BASTROP CHANGE NEXT REFILL DATE TO MANUAL CHANGE: ************************************************
-        let date_next_fill_Ref = formatDateCard(manualRefillDate);
+        // let date_next_fill_Ref = formatDateCard(manualRefillDate);
+        let date_next_fill_Ref = nftz?.metadata.attributes[7].value;
 // let date_next_fill_Ref = getNextFillDate(inputDateFilled.current.value);
 //- END OF FRIDAY AUGUST 18 2023 BASTROP CHANGE NEXT REFILL DATE TO MANUAL CHANGE: ************************************
 
@@ -254,18 +278,28 @@ const handleSubmitTransferToPatient = async (e) => {
 
      
             console.log("RX NFT Has Been Filled As Follows:", data);
+
+
+            let show_date_filled_Ref = formatDateFourDigitYear(inputDateFilled.current.value);
+            let show_date_next_fill_Ref = convertBigNumberToFourDigitYear(nftz?.metadata.attributes[7].value);
+
   
-            alert(`Success! Quantity of ${pills_filled_Ref} pills on ${date_filled_Ref} has been recorded. Next refill date is ${date_next_fill_Ref}.`);
-            setShowSendButton("block")
-            setShowFillButton('none')
-            // inputPillsFilled.current.value = '';
-            // inputDateFilled.current.value = currentDate;
+            // alert(`Success! Quantity of ${pills_filled_Ref} pills on ${date_filled_Ref} has been recorded. Next refill date is ${date_next_fill_Ref}.`);
+            alert(`Success! Quantity of ${pills_filled_Ref} pills on ${show_date_filled_Ref} has been recorded. Next refill date is ${show_date_next_fill_Ref}. Press Okay and approve the transaction in your wallet to send this prescription back to the patient.`);
+ 
+            if (confirm(`Success! Quantity of ${pills_filled_Ref} pills on ${show_date_filled_Ref} has been recorded. Next refill date is ${show_date_next_fill_Ref}.`) == true){  
+                await transferPharmacyToPatient()
+              }
+
+//Mon 8/21/2023 - Remove hide/show send. 
+            // setShowSendButton("block")
+            // setShowFillButton('none')
+                     
     } catch (error) {
             console.log("contract call failure", error)
             alert("CONTRACT CALL FAILURE. REASON: You must have a Pharmacy Role to update this NFT.");
     }
-  
-  
+   
   }
 
   
@@ -288,28 +322,50 @@ const handleSubmitTransferToPatient = async (e) => {
 
   const [showFinishedWorking, setShowFinishedWorking] = useState('none')
    
-  const handleContinueWorking = (e) => {
-    e.preventDefault();  
-    setShowFillButton('block')
-    setShowSendButton('none')
-    setShowFinishedWorking('block')
-    inputPillsFilled.current.value = '';
-    inputDateFilled.current.value = currentDate;
-  }
+//   const handleContinueWorking = (e) => {
+//     e.preventDefault();  
+//     setShowFillButton('block')
+//     setShowSendButton('none')
+//     setShowFinishedWorking('block')
+//     inputPillsFilled.current.value = '';
+//     inputDateFilled.current.value = currentDate;
+//   }
 
-  const handleTestManualDate = (e) => {
-    e.preventDefault()
-    console.log('#Manually using new date picker set manualRefillDate as ',manualRefillDate)
-  }
+//   const handleTestManualDate = (e) => {
+//     e.preventDefault()
+//     console.log('#Manually using new date picker set manualRefillDate as ',manualRefillDate)
+//   }
 
-  const handleFinishedWorking = (e) => {
-    e.preventDefault();
-    setShowFillButton('none')
-    setShowSendButton('block')
-    setShowFinishedWorking('none')
-  }
+//   const handleFinishedWorking = (e) => {
+//     e.preventDefault();
+//     setShowFillButton('none')
+//     setShowSendButton('block')
+//     setShowFinishedWorking('none')
+//   }
 
-  let currentDate = new Date().toJSON().slice(0, 10);
+//Changed Sunday 8/20/2023 - 
+//   let currentDate = new Date().toJSON().slice(0, 10);
+
+  const getTodayPSTDate = () => {
+    let currentFilterDate = new Date();
+  
+    let optionsFilter = {
+      timeZone: 'America/Los_Angeles',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    };
+  
+    let pstDate = currentFilterDate.toLocaleString('en-US', optionsFilter).split(', ')[0];
+  
+    let parts = pstDate.split('/'); // Split the date string by '/'
+  
+    // Format the date components into YYYY-MM-DD format
+    const formattedFilterDate = `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+    return formattedFilterDate;
+  }
+  
+  let currentDate = getTodayPSTDate();
 
 
 
@@ -394,185 +450,104 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
             <h5 style={{color:"black"}}>Rx Token ID#{id} - {nftz?.metadata.attributes[0].value}</h5>
         </div>
 
-    <div className="card text-center">
+        
+<div className="align-items-center">
+    <div className="card text-center" style={{width:"40rem"}}>
         <div className="card-header">
            <b className="display-6 card-title"> Patient Information</b>
         </div>
-        <div className="card-body">
-            {/* <h5 className="card-title">Special title treatment</h5> */}
+        <div className="card-body" style={{paddingTop:"-50px",martinTop:"-50px"}}>
 
         <div className="row">
-            <div class="col">
-                <b className="card-text"><b>Name: </b>Patient Name</b>&nbsp; |  
-                &nbsp;<b className="card-text"><b>DOB: </b>8/3/1983</b>&nbsp; | 
-                &nbsp;<b className="card-text"><b>Phone: </b>416-123-4567</b>
+            <div className="col">
+                {/* <div class="col-md"> */}
+                    {/* <b className="card-text" style={{fontSize:"20px"}}><b>Name: </b> */}
+                    <b className="card-text"><b>Name: </b>
+                    <span className="input-style">
+                        {nftz?.metadata.name.startsWith('0x') ? (
+                            ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name))
+                        ) : ( 
+                            nftz?.metadata.name
+                        )}
+                    </span>
+                    </b>&nbsp;
+                {/* </div> */}
+                {/* <div class="col-md">  */}
+                    &nbsp;<b className="card-text"><b>DOB: &nbsp;</b><span className="input-style">
+                            {nftz?.metadata.attributes[1].value.startsWith('0x') ? (
+                                formatDateFourDigitYear(ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.attributes[1].value)))
+                            ) : ( 
+                        
+                                formatDateFourDigitYear(nftz?.metadata.attributes[1].value)
+                            )}
+                        </span></b>&nbsp; 
+                {/* </div> */}
+                {/* <div class="col-md"> */}
+                    &nbsp;<b className="card-text"><b>Phone: </b> <span className="input-style">{patient.pt_phone}</span></b>
+                {/* </div> */}
+<hr></hr>
             </div>
         </div> 
+        <div className="row">
+            <div className="col">
+              
+                    <b className="card-text "><b>Primary Insurance: </b><span className="input-style">{patient.pt_primary_insurance}</span></b>&nbsp;          
+                    &nbsp;<b className="card-text" ><b>Insurance ID#: </b><span className="input-style">{patient.pt_primary_id}</span></b>&nbsp;              
+        <hr></hr>
+                <b className="card-text "><b>Secondary Insurance: </b><span className="input-style">{patient.pt_secondary_insurance}</span></b>&nbsp;          
+                &nbsp;<b className="card-text" ><b>Insurance ID#: </b><span className="input-style">{patient.pt_secondary_id}</span></b>&nbsp; 
+  
+            </div>
+        </div>
+
+        </div>
+    </div>
+</div>
+        {/* <div className="card-footer text-muted">
+            
+        </div> */}
+
+
+
+<div className="align-items-center">
+    <div className="card text-center" style={{width:"40rem"}}>
+        <div className="card-header">
+           <b className="display-6 card-title">Medication</b>
+        </div>
+        {/* <div className="card-body" style={{paddingTop:"-50px",martinTop:"-50px"}}> */}
+        <div className="card-body">
 
         <div className="row">
-            <div class="col">
-                <b className="card-text"><b>Primary Insurance: </b>Blue Cross Blue Shield</b>&nbsp; |  
-                &nbsp;<b className="card-text"><b>Insurance ID#: </b>12-3456789</b>&nbsp; | 
-                
+            <div className="col">
+
+                    <b className="card-text"><b>Medication: </b>
+                    <span className="input-style">
+                    {nftz?.metadata.attributes[0].value}
+                    </span>
+                    </b>&nbsp;
+
+                    &nbsp;<b className="card-text"><b>Date Prescribed: &nbsp;</b><span className="input-style">
+                    {convertBigNumberToFourDigitYear(nftz?.metadata.attributes[5].value)}
+                        </span></b>&nbsp;
+  
+            </div>
+        </div> 
+<hr></hr>
+        <div className="row">
+            <div className="col">
+              
+                    <b className="card-text "><b>Quantity Prescribed: </b><span className="input-style">{nftz?.metadata.attributes[2].value}</span></b>&nbsp;          
+                    &nbsp;<b className="card-text" ><b>Qty Filled: </b><span className="input-style">{nftz?.metadata.attributes[3].value}</span></b>&nbsp;              
+                &nbsp;<b className="card-text" ><b>Qty Remaining: </b><span className="input-style">{nftz?.metadata.attributes[2].value - nftz?.metadata.attributes[3].value}</span></b>&nbsp; 
+        <hr></hr>
+                {/* <b className="card-text "><b>Secondary Insurance: </b><span className="input-style">{patient.pt_secondary_insurance}</span></b>&nbsp;           */}
+  
             </div>
         </div>
 
 
-
-        </div>
-        <div className="card-footer text-muted">
-            2 days ago
-        </div>
-    </div>
-
-
-
-
-
-
-
-{/* <!--Start of Blipcare Card--> */}
-    <div className="row">
-        <div className="col-md-12">
-                    <div className="card card-stats">
-                                <div className="card-header card-header-success card-header-icon">
-                                    <div className="text-center">
-                                            <img src="{{ asset('images/blipcare-logo-larger.png') }}" />
-                                            <hr></hr>
-                                        <h3 className="display-6"> NFT Prescription Details</h3>
-                                    </div>
-                                </div>
-                        <div className="card-footer">
-                            <div className="text-center">
-                 
-                 
-                    <form onSubmit={e => handleSubmitUpdateFilled(e)}>  
-                           
-                    <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Patient:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">
-                                                                                
-                                    <input type="text" id="patient" name="patient" className="form-control" disabled
-                                    value={nftz?.metadata.name.startsWith('0x') ? (
-                                                ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name))
-                                            ) : ( 
-                                                nftz?.metadata.name
-                                            )}   
-                                    />
-                                </div>
-                            </div>
-
-                            <label className="col-sm-2 col-form-label">DOB:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">
-                                    <input type="text" id="dob" name="dob" className="form-control" disabled
-                                    value={nftz?.metadata.attributes[1].value.startsWith('0x') ? (
-                                                formatDateFourDigitYear(ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.attributes[1].value)))
-                                            ) : ( 
-                                        
-                                                formatDateFourDigitYear(nftz?.metadata.attributes[1].value)
-                                            )}  
-                                    />
-                                </div>
-                            </div>
-                            
-                            <label className="col-sm-2 col-form-label">Phone:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">
-                                    <input type="text" id="pt_phone" name="pt_phone" className="form-control" value={patient.pt_phone} disabled />
-                                </div>
-                            </div>
-                        
-                </div>
-                
-                <hr></hr>
-
-                <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Insurance:</label>
-
-                            <div className="col-sm-4">
-                                <div className="input-group m-b">
-                                                                                
-                                    <input type="text" id="primary_insurance" name="primary_insurance" className="form-control" value={patient.pt_primary_insurance} disabled/>
-                                </div>
-                            </div>
-
-                            
-                            <label className="col-sm-2 col-form-label">Insurance ID#:</label>
-
-                            <div className="col-sm-4">
-                                <div className="input-group m-b">
-                                    <input type="text" id="primary_id" name="primary_id" className="form-control" value={patient.pt_primary_id} disabled/>
-                                </div>
-                            </div>
-                        
-                </div>
-                
-                <hr></hr> 
-
-                <div className="form-row">
-                            {/* <label className="col-sm-2 col-form-label">Medication:</label> */}
-
-
-                            <div className="col-sm-6">
-                            <label for="medication">Medication:</label>
-                                <div className="input-group m-b">
-                                                                                
-                                    <input type="text" id="medication" name="medication" className="form-control" value={nftz?.metadata.attributes[0].value} disabled/>
-                                </div>
-                            <div className="col-sm-6">
-                                    <label for="date_prescribed">Date Prescribed:</label>
-                                    <div className="input-group m-b">
-                                        <input type="date" id="date_prescribed" name="date_prescribed" className="form-control" value={convertBigNumberToFourDigitYear(nftz?.metadata.attributes[5].value)} disabled />                                   
-                                </div>
-                            </div>
-                        </div>
-
-                            
-                            {/* <label className="col-sm-2 col-form-label">Date Prescribed:</label>
-
-                            <div className="col-sm-6">
-                            </div> */}
-                        
-                </div>
-                
-                <hr></hr> 
-
-                <div className="form-group row">
-                            <label className="col-sm-2 col-form-label">Qty Prescribed:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">                                                                             
-                                    <input type="text" id="quantity_prescribed" name="quantity_prescribed" className="form-control" value={nftz?.metadata.attributes[2].value} disabled/>
-                                </div>
-                            </div>
-
-                            <label className="col-sm-2 col-form-label">Qty Filled:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">
-                                    <input type="text" id="quantity_filled" name="quantity_filled" className="form-control" value={nftz?.metadata.attributes[3].value} disabled />
-                                </div>
-                            </div>
-                            
-                            <label className="col-sm-2 col-form-label">Qty Left:</label>
-
-                            <div className="col-sm-2">
-                                <div className="input-group m-b">
-                                    <input type="text" id="quantity_left" name="quantity_left" className="form-control" value={nftz?.metadata.attributes[2].value - nftz?.metadata.attributes[3].value} disabled/>
-                                </div>
-                            </div>
-                        
-                </div>
-                
-    <hr></hr>  
-                                         
-                    <div className="form-group row">
-                                <label className="col-sm-2 col-form-label">SIG:</label>
+        <div className="form-group row">
+                                <label className="col-sm-2 col-form-label"><b>SIG:</b></label>
 
                                 <div className="col-sm-10">
                                     <div className="input-group m-b">
@@ -580,167 +555,89 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
                                     </div>
                                 </div> 
                     </div>
-                        
-    <hr></hr>                   
-                        
-                        
-                    
-            </form>
-                         
-                       
-                                       </div>
-                                    </div>
-                                </div>
-                    </div>
-                            
-                          
-
-    </div> {/* <!--end of Blip Connect Div class ROW--> */}
-    
-
-<br />
-<br />
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-        <div className="view-single-scripts-card">
-
-            <h1 style={{color:"gray"}}>Manage Prescription for&nbsp;
-                    {nftz?.metadata.name.startsWith('0x') ? (
-                        ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name))
-                    ) : ( 
-                        nftz?.metadata.name
-                    )}
+        </div>
+    </div>
+</div>
+        {/* <div className="card-footer text-muted">
             
-            </h1>
-            <h5 style={{color:"black"}}>Rx Token ID#{id} - {nftz?.metadata.attributes[0].value}</h5>
+        </div> */}
 
-                <div className="view-single-scripts-card">
+<hr></hr>
 
-                        <div className="card" style={{width: "18rem;"}}>
-                            {/* <img className="card-img-top view-scripts-image" src={nftz?.metadata.image} alt="Card image cap" /> */}
-                            {/* <img className="card-img-top view-single-script-image" src={nftz?.metadata.image} alt="Card image cap" /> */}
-                            <div className="card-body">
-                                {/* <h5 className="card-title">Patient: {nftz?.metadata.name} | DOB: {formatDateFourDigitYear(nftz?.metadata.attributes[1].value)}</h5> */}
-                            {/* <h3 className="card-title display-6 container d-flex justify-content-center ">Prescription Details: </h3> */}
-                           
-                            {/* From: https://getbootstrap.com/docs/5.3/utilities/sizing/  */}
-                            <h3 className="card-title display-6 vw-100">Prescription Details: </h3>
+<div className="align-items-center">
+    <div className="card text-center" style={{width:"40rem"}}>
+        <div className="card-header">
+           <b className="display-6 card-title">Process Prescription</b>
+        </div>
+        {/* <div className="card-body" style={{paddingTop:"-50px",martinTop:"-50px"}}> */}
+        <div className="card-body">
 
-                                <hr></hr>
-                                <ul className="list-group list-group-flush">
-
-                                <li className="list-group-item"><b>Patient: </b> 
-                                    {nftz?.metadata.name.startsWith('0x') ? (
-                                        ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name))
-                                    ) : ( 
-                                        nftz?.metadata.name
-                                    )}                             
-                                </li>
-                                <li className="list-group-item"><b>Phone: </b> {patient.pt_phone}</li>
-                                <li className="list-group-item"><b>DOB: </b>
-                                        {nftz?.metadata.attributes[1].value.startsWith('0x') ? (
-                                            formatDateFourDigitYear(ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.attributes[1].value)))
-                                        ) : ( 
-                                    
-                                            formatDateFourDigitYear(nftz?.metadata.attributes[1].value)
-                                        )}
-                                </li>
-                                    {/* <li className="list-group-item">Medication: {nftz?.metadata.medication}</li> */}
-                                    {/* <li className="list-group-item">Medication: {getMedication}</li> */}
-                                    <li className="list-group-item"><b>Medication: </b> {nftz?.metadata.attributes[0].value}</li>                                  
-                                    <li className="list-group-item"><b>Qty Prescribed: </b> {nftz?.metadata.attributes[2].value} | <b>Qty Filled:</b> {nftz?.metadata.attributes[3].value}  | <b>Qty Left:</b> {nftz?.metadata.attributes[2].value - nftz?.metadata.attributes[3].value} </li>
-                                    <li className="list-group-item"><b>SIG: </b> {nftz?.metadata.description}</li>
-                                    <li className="list-group-item"><b>Date Prescribed: </b> {convertBigNumberToFourDigitYear(nftz?.metadata.attributes[5].value)}</li>
-                                   
-                                    <li className="list-group-item"><b>Primary Insurance: </b>: {patient.pt_primary_insurance}</li>
-                                    <li className="list-group-item"><b>Primary Insurance ID#: </b>{patient.pt_primary_id}</li>
-                                    
-
-                                    {/* <li className="list-group-item">Date Prescribed: {formatDateCard(nftz?.metadata.datePrescribed)}</li> */}
-                                </ul>
-                                
-                                {/* <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> */}
-
-                                <form onSubmit={e => handleSubmitUpdateFilled(e)}>  
+        
+        <form onSubmit={e => handleSubmitUpdateFilled(e)}>  
                                             <div className="row">
                                                     <div className="col-6">
                                                         <label>Quantity Filled:</label>
-                                                        <input type="number" name="quantityFilled" className="form-control" 
+                                                        <input type="number" name="quantityFilled" className="form-control text-center" 
                                                             max={nftz?.metadata.attributes[2].value - nftz?.metadata.attributes[3].value}                                                 
-                                                            placeholder="enter amount"
-                                                            // onChange={(e) => handleChange(e)}
+                                                            defaultValue={nftz?.metadata.attributes[2].value}
+                                                            // onChange={(e) => handleGDPillsFilled(e)}
                                                             ref={inputPillsFilled}
                                                         />
                                                     </div>
 
                                                     <div className="col-6">
                                                         <label>Date Filled:</label>
-                                                        <input type="date" name="dateFilled" className="form-control" defaultValue={currentDate} ref={inputDateFilled} />
+                                                        <input type="date" name="dateFilled" className="form-control text-center" defaultValue={currentDate} ref={inputDateFilled} />
 
                                                     </div>
                                             </div>
-                                            <hr></hr>
+                                            {/* <hr></hr>
                                             <i>Enter the refill date for this medication:</i>
                                             <div className="row">
 
                                                     <div className="col-6 text-right" stlye={{textAlign:"right"}}>
                                                         <label className="text-right">Next Refill Date:</label>
-                                                        {/* <input type="number" name="daysToRefill" className="form-control" value={daysToRefill}
-                                                         onChange={handleDaysToRefillChange} /> */}
-                                                        {/* ref={inputDaysManual} */}
                                                     </div>
 
-                                                    <div className="col-6">
-                                                        {/* <label>Next Re-Fill Date:</label> */}
+                                                    <div className="col-6">                                 
                                                         <input type="date" name="manualRefillDate" className="form-control" 
-                                                        // onChange={(date) => setManualRefillDate(date)} />
-                                                        onChange={(e) => handleDateFieldFour(e)} />
-                                                        
-                                                        {/* ref={inputRefillDateManual} */}
+                                                        onChange={(e) => handleDateFieldFour(e)} />                                                   
                                                     </div>
-                                            </div>
+                                            </div> */}
+                                                        {/* ref={inputRefillDateManual} */}
                                         <br></br>
-                               
-                                                <div className="text-center" style={{display:`${showFillButton}`}}>                                       
-                                                    {/* <button type="submit" className="btn btn-primary">Fill {getMedication}</button> */}
+
+                                                <div className="text-center">                                             
                                                     <button type="submit" className="btn btn-primary">Fill {nftz?.metadata.attributes[0].value}</button>
-                                                    
+                                                </div>
+
+                                                {/* <div className="text-center" style={{display:`${showFillButton}`}}>                                             
+                                                    <button type="submit" className="btn btn-primary">Fill {nftz?.metadata.attributes[0].value}</button>
                                                 </div>
 
                                                 <div className="card-footer text-center" style={{display:`${showFinishedWorking}`}}> 
                                                     <button className="btn btn-danger" onClick={(e) => handleFinishedWorking(e)}>Cancel Edit and Send Rx</button>
-                                                </div>
+                                                </div> */}
                                 </form>
-    {/* <button className="btn btn-success" onClick={(e) => handleTestManualDate(e)}>Test Manual Refill Date</button> */}
-                          
-                            </div>{/* END OF CARD BODY */}
-                                
-                                    <div className="card-footer text-center" style={{display:`${showSendButton}`}}>  
-                                        <form onSubmit={e => handleSubmitTransferToPatient(e)}>
-                                            <button type="submit" className="btn btn-success">Send Rx Back To {nftz?.metadata.name}</button>
-                                        </form>
-                                        <br></br>
-                                        {nftz?.metadata.attributes[2].value - nftz?.metadata.attributes[3].value !== 0 &&
-                                            <button className="btn btn-warning" onClick={(e) => handleContinueWorking(e)}>Continue Working on Rx</button>
-                                        }
-                                    </div>
-                            
-                        </div>
-                </div>
+
         </div>
+    </div>
+</div>
+        {/* <div className="card-footer text-muted">
+            
+        </div> */}
+
+
+
+<br />
+<br />
+
+
 
         
 </>

@@ -11,6 +11,7 @@ import { addyShortner } from '../utils'
 import { logoPalau } from '../assets'
 
 import 'bootstrap/dist/css/bootstrap.css';
+import "../styles/ViewScripts.css";
 
 const Navbar = () => {
 
@@ -26,7 +27,7 @@ const Navbar = () => {
 
           <Link className="navbar-brand" to="/">
             <img src={logoPalau} width="30" height="30" className="d-inline-block align-top image--cover--navbar" alt=""></img>
-             Pharmacy Dashboard <small className="text-muted">({addyShortner(address)})</small>
+             &nbsp;Pharmacy Dashboard <small className="text-muted">({addyShortner(address)})</small>
           </Link>
      
       ):(

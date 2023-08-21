@@ -163,6 +163,7 @@ const EditPharmacy = () => {
             console.log('getPharmacyRoleString returned: ', dataGetPharmacyRole)
         }catch(err){
             console.error("contract call failure", err);
+            alert('Must have Admin Role to make this change. Please see RxMinter Administrator.')
         }
     }    
 

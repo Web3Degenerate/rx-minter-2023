@@ -11,10 +11,11 @@ import { addyShortner } from '../utils'
 import { logoPalau } from '../assets'
 
 import 'bootstrap/dist/css/bootstrap.css';
+import "../styles/ViewScripts.css";
 
 const Navbar = () => {
 
-  const address = useAddress(); 
+  const address = useAddress();  
 
 
 
