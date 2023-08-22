@@ -145,12 +145,12 @@ const handleSubmitTransferToPatient = async (e) => {
                 console.log("NFT Sent to Selected Pharmacy with response:", data);
         
 
-                let showPatientName;
-                if(nftz?.metadata.name.startsWith('0x')) { 
-                    let showPatientName = ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name));
-                }else{
-                    let showPatientName = nftz?.metadata.name;
-                }
+                let showPatientName = patient.name;
+                // if(nftz?.metadata.name.startsWith('0x')) { 
+                //     let showPatientName = ethers.utils.toUtf8String(ethers.utils.RLP.decode(nftz?.metadata.name));
+                // }else{
+                //     let showPatientName = nftz?.metadata.name;
+                // }
 
 
                 alert(`Success! The NFT Prescription has been filled and sent back to patient ${showPatientName} at address ${addyShortner(nftz?.metadata.attributes[4].value)}. If you have any further questions, please email Rx Minter's dedicated Support Team at support@rxminter.com.`);
@@ -217,8 +217,9 @@ const handleSubmitTransferToPatient = async (e) => {
         
         
     // if (confirm(`Would you like to Proceed Filling Prescription NFT #${id} for ${displayPatientName} on ${displayDateFilled} for medication ${getMedication} in the quantity of ${showPillsFilled} with a next available refill date of ${showNextFillDate}?`) == true){  
-    if (confirm(`Would you like to Proceed Filling Prescription NFT #${id} for ${showGDPatientName} on ${displayDateFilled} for medication ${nftz?.metadata.attributes[0].value} in the quantity of ${showPillsFilled} with a next available refill date of ${showNextFillDate}?`) == true){  
-      await updateScriptQuantityAndDates()
+    // if (confirm(`Would you like to Proceed Filling Prescription NFT #${id} for ${showGDPatientName} on ${displayDateFilled} for medication ${nftz?.metadata.attributes[0].value} in the quantity of ${showPillsFilled} with a next available refill date of ${showNextFillDate}?`) == true){  
+    if (confirm(`Would you like to Proceed Filling Prescription NFT #${id} for ${showGDPatientName} on ${displayDateFilled} for medication ${nftz?.metadata.attributes[0].value} in the quantity of ${showPillsFilled}?`) == true){ 
+        await updateScriptQuantityAndDates()
     }
       
   }
@@ -271,10 +272,11 @@ const handleSubmitTransferToPatient = async (e) => {
         let date_next_fill_Ref = nftz?.metadata.attributes[7].value;
 // let date_next_fill_Ref = getNextFillDate(inputDateFilled.current.value);
 //- END OF FRIDAY AUGUST 18 2023 BASTROP CHANGE NEXT REFILL DATE TO MANUAL CHANGE: ************************************
-
+        let pharmacyAddressString = address.toString()
     
             // const data = await contract.call("updateScriptQuantityAndDates", [tokenId, pills_filled_Ref, date_filled_Ref, date_next_fill_Ref]);
-            const data = await contract.call("updateScriptQuantityAndDatesRoles", [tokenId, pills_filled_Ref, date_filled_Ref, date_next_fill_Ref]);
+            const data = await contract.call("updateScriptQuantityAndDatesRoles", [tokenId, pills_filled_Ref, date_filled_Ref,
+                date_filled_Ref, date_next_fill_Ref, pharmacyAddressString, nftz?.metadata.attributes[4].value]);
 
      
             console.log("RX NFT Has Been Filled As Follows:", data);
@@ -285,11 +287,13 @@ const handleSubmitTransferToPatient = async (e) => {
 
   
             // alert(`Success! Quantity of ${pills_filled_Ref} pills on ${date_filled_Ref} has been recorded. Next refill date is ${date_next_fill_Ref}.`);
-            alert(`Success! Quantity of ${pills_filled_Ref} pills on ${show_date_filled_Ref} has been recorded. Next refill date is ${show_date_next_fill_Ref}. Press Okay and approve the transaction in your wallet to send this prescription back to the patient.`);
- 
-            if (confirm(`Success! Quantity of ${pills_filled_Ref} pills on ${show_date_filled_Ref} has been recorded. Next refill date is ${show_date_next_fill_Ref}.`) == true){  
-                await transferPharmacyToPatient()
-              }
+            // Next refill date is ${show_date_next_fill_Ref}.
+            alert(`Success! Medication ${nftz?.metadata.attributes[0].value} with a quantity of ${pills_filled_Ref} filled on ${show_date_filled_Ref} has been recorded. Press 'Okay' and approve the transaction in your wallet to send this prescription NFT back to the patient and complete today's transaction.`);
+            await transferPharmacyToPatient();
+
+            // if (confirm(`Success! Quantity of ${pills_filled_Ref} pills filled on ${show_date_filled_Ref} has been recorded. Next refill date is ${show_date_next_fill_Ref}.`) == true){  
+            //     await transferPharmacyToPatient()
+            //   }
 
 //Mon 8/21/2023 - Remove hide/show send. 
             // setShowSendButton("block")
@@ -398,7 +402,7 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
         const wallet_address = nftz?.metadata.attributes[4].value;
         const result = await axios.get("https://rxminter.com/php-react/patient-get-by-address.php?wallet_address="+wallet_address);
         setPatient(result.data); //lags, shows up on second load/pharamcy select run
-            console.log("inside svg function pt_phone is",result.data.pt_phone)
+            console.log("inside loadPatientByWallet pt_phone is",result.data.pt_phone)
 
 
 
@@ -450,6 +454,11 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
             <h5 style={{color:"black"}}>Rx Token ID#{id} - {nftz?.metadata.attributes[0].value}</h5>
         </div>
 
+<div className="container-fluid">
+<div className="row">
+    <div className="col-sm-2">
+    </div>
+    <div className="col-sm-8">
         
 <div className="align-items-center">
     <div className="card text-center" style={{width:"40rem"}}>
@@ -494,8 +503,8 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
                     <b className="card-text "><b>Primary Insurance: </b><span className="input-style">{patient.pt_primary_insurance}</span></b>&nbsp;          
                     &nbsp;<b className="card-text" ><b>Insurance ID#: </b><span className="input-style">{patient.pt_primary_id}</span></b>&nbsp;              
         <hr></hr>
-                <b className="card-text "><b>Secondary Insurance: </b><span className="input-style">{patient.pt_secondary_insurance}</span></b>&nbsp;          
-                &nbsp;<b className="card-text" ><b>Insurance ID#: </b><span className="input-style">{patient.pt_secondary_id}</span></b>&nbsp; 
+                <b className="card-text "><b>Secondary Insurance: </b><span className="input-style">{patient.pt_secondary_insurance ? patient.pt_secondary_insurance : "N/A"}</span></b>&nbsp;          
+                &nbsp;<b className="card-text" ><b>Insurance ID#: </b><span className="input-style">{patient.pt_secondary_id ? patient.pt_secondary_id : "N/A"}</span></b>&nbsp; 
   
             </div>
         </div>
@@ -537,8 +546,8 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
             <div className="col">
               
                     <b className="card-text "><b>Quantity Prescribed: </b><span className="input-style">{nftz?.metadata.attributes[2].value}</span></b>&nbsp;          
-                    &nbsp;<b className="card-text" ><b>Qty Filled: </b><span className="input-style">{nftz?.metadata.attributes[3].value}</span></b>&nbsp;              
-                &nbsp;<b className="card-text" ><b>Qty Remaining: </b><span className="input-style">{nftz?.metadata.attributes[2].value - nftz?.metadata.attributes[3].value}</span></b>&nbsp; 
+                    &nbsp;<b className="card-text" ><b>Quantity Filled: </b><span className="input-style">{nftz?.metadata.attributes[3].value}</span></b>&nbsp;              
+                &nbsp;<b className="card-text" ><b>Quantity Remaining: </b><span className="input-style">{nftz?.metadata.attributes[2].value - nftz?.metadata.attributes[3].value}</span></b>&nbsp; 
         <hr></hr>
                 {/* <b className="card-text "><b>Secondary Insurance: </b><span className="input-style">{patient.pt_secondary_insurance}</span></b>&nbsp;           */}
   
@@ -567,11 +576,12 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
             
         </div> */}
 
-<hr></hr>
+<br></br>
+
 
 <div className="align-items-center">
     <div className="card text-center" style={{width:"40rem"}}>
-        <div className="card-header">
+        <div className="card-header text-white bg-primary mb-3">
            <b className="display-6 card-title">Process Prescription</b>
         </div>
         {/* <div className="card-body" style={{paddingTop:"-50px",martinTop:"-50px"}}> */}
@@ -581,7 +591,7 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
         <form onSubmit={e => handleSubmitUpdateFilled(e)}>  
                                             <div className="row">
                                                     <div className="col-6">
-                                                        <label>Quantity Filled:</label>
+                                                        <label><b>Quantity Filled:</b></label>
                                                         <input type="number" name="quantityFilled" className="form-control text-center" 
                                                             max={nftz?.metadata.attributes[2].value - nftz?.metadata.attributes[3].value}                                                 
                                                             defaultValue={nftz?.metadata.attributes[2].value}
@@ -591,7 +601,7 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
                                                     </div>
 
                                                     <div className="col-6">
-                                                        <label>Date Filled:</label>
+                                                        <label><b>Date Filled:</b></label>
                                                         <input type="date" name="dateFilled" className="form-control text-center" defaultValue={currentDate} ref={inputDateFilled} />
 
                                                     </div>
@@ -634,8 +644,16 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
 
 
 
-<br />
-<br />
+    </div> {/* closing middle div col-8 */}
+    <div className="col-sm-2">
+
+    </div>
+</div> {/* closing global 'row' container div */}
+</div> {/* closing container-fluid div */}
+
+<br></br>
+<br></br>
+<br></br>
 
 
 

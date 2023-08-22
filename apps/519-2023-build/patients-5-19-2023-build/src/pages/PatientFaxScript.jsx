@@ -1,5 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import "../styles/App.css";
+// import "../styles/DoctorsApp.css";
 import axios from 'axios'; 
 import html2canvas from 'html2canvas'; //https://www.npmjs.com/package/html2canvas  => https://github.com/niklasvh/html2canvas 
 
@@ -238,7 +239,7 @@ try{
 //****************************** 8/18/2023 - OWNER ONLY TRANSFER NFT TO PHARMACY WALLET AFTER FAX */
 
 const sendFaxAndTransferNft = () => {
-    if (confirm(`Hit Cancel to skip fax for testing`) == true){ 
+    // if (confirm(`Hit Cancel to skip fax for testing`) == true){ 
 
                 try{
                     // await axios.post("https://rxminter.com/srfax/Queue_Fax.php", scriptFax).then((result)=>{
@@ -248,7 +249,7 @@ const sendFaxAndTransferNft = () => {
                         console.log('Fax axios then clause result is: ',result)
                 
                         if(result.data.status == 'valid'){
-                            alert(`Success, your script has been sent to fax number ${pharmacyFax.pharmacy_fax}` );
+                            alert(`Success, your script has been sent to fax number ${pharmacyFax.pharmacy_fax}.` );
                     
                             console.log("7/8 Valid result.data is: ",result.data)
                             console.log("7/8/23 Valid result is: ",result)
@@ -277,9 +278,9 @@ const sendFaxAndTransferNft = () => {
                 
                         console.log("7/7 catch(error) is: ",result)
                     }
-        }else{
-            _transferPharmacyToPatient();
-        }
+        // }else{
+        //     _transferPharmacyToPatient();
+        // }
     }
 
 // **************************** _transferPharmacyToPatient Form Submission ******************************//
@@ -565,11 +566,13 @@ useEffect(() => {
                             <h5 className="display-3">Your NFT Prescription is Loading...</h5>              
                         )}
 
-
-                <div ref={svgContainerInternalDiv} className={isLoadingNFT ? 'd-none' : 'w-100'} >
+                <div className={isLoadingNFT ? 'd-none' : 'w-100'} >
                     <hr></hr>
                     <h2>Script Preview for Medication {nft?.metadata.attributes[0].value}</h2>
                     <hr></hr>
+                </div>
+
+                <div ref={svgContainerInternalDiv} className={isLoadingNFT ? 'd-none' : 'w-100'} >
                                 
                             {generateSVGAuto}   
           

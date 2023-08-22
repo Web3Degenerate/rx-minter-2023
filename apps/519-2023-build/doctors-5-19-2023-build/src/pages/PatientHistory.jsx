@@ -167,8 +167,9 @@ const [search, setSearch] = useState('');
                         <td style={{display: "none"}}>{index+1}</td>
 
                         {nft.metadata.attributes[6].value != 0 ? (                       
-                            <td className="text-center"><Link className="btn btn-primary" to={`/prescription-history/${nft.metadata.id}`}>{convertBigNumberToTwoDigitYear(nft.metadata.attributes[11].value)}</Link></td>
-                        ) : (
+                            // <td className="text-center"><Link className="btn btn-primary" to={`/prescription-history/${nft.metadata.id}`}>{convertBigNumberToTwoDigitYear(nft.metadata.attributes[11].value)}</Link></td>
+                            <td className="text-center">{convertBigNumberToTwoDigitYear(nft.metadata.attributes[11].value)}</td>                  
+                            ) : (
                             <td className="text-center">"N/A"</td>
                         )}
 

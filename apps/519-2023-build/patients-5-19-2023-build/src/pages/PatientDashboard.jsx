@@ -457,8 +457,8 @@ return (
               <div className="view-scripts-card">
 
                     <div className="input-group-mb-3">
-                        <p><b style={{color:"white"}}>Medication Filled: {nft.metadata.attributes[6].value}</b></p>
-                        <b style={{color:"white"}}>Next Fill Date: {nft.metadata.attributes[7].value}</b>
+                        <p><b style={{color:"white"}}>Medication Filled: {convertBigNumberToFourDigitYear(nft.metadata.attributes[6].value)}</b></p>
+                        {/* <b style={{color:"white"}}>Next Fill Date: {nft.metadata.attributes[7].value}</b> */}
                     </div>
                     
                     

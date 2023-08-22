@@ -5,8 +5,8 @@ import { Route, Routes } from 'react-router-dom'
 import { Navbar } from './components';
 import { PatientDashboard, PatientFaxScript } from './pages';
 
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-
+// import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Home() {
 // export default function App() {
@@ -14,7 +14,7 @@ export default function Home() {
 
     <>
     <Navbar />
-      <main className="container">
+      <main className="container"> 
           
           <div>
    

@@ -1,0 +1,159 @@
+/* .container {
+    padding: 0 2rem;
+  } */
+
+  .row {
+    padding-top:20px;
+}
+
+.box_size{
+    width:50%;
+    margin:auto;
+}
+
+.nft_box_size{
+  width: 60%;
+  margin:auto;
+}
+
+.box_size_scripts{
+    width: 70%;
+    margin:auto;
+}
+
+.box_size_orders{
+  width: 80%;
+  margin:auto;
+}
+
+.box_size_new_form{
+  width:90%;
+  margin:auto;
+}
+
+.box_size_patient{
+    width: 100%;
+    margin:auto;
+}
+
+.box_size_login {
+    border: 5px solid;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+}
+
+
+
+.svg_box_size{
+  /* margin:auto;
+  padding:auto; */
+  border: 5px solid;
+  /* height: 50%; */
+  /* width: 100vw; */
+  /* min-height: 10vh; */
+  /* position: fixed; */
+  /* display: fixed;s */
+  justify-content: left;
+
+  /* overflow: hidden; */
+  /* viewport-fit: auto; */
+  /* background-color:rgb(255, 253, 145); */
+
+  /* width: 60%;
+  height: 50%;
+  align-items: left;
+  margin-top:0px;
+  margin-left:-20px;
+  margin-bottom:-10px;
+  padding:0px;
+  border:5px solid; */
+}
+
+.fax_box_size{
+  position: fixed;
+
+}
+
+.wallet_box_size{
+    width:25%;
+    margin:auto;
+    align-items: center;
+}
+
+.block_button_box_size{
+    width:100%;
+    margin:auto;
+}
+
+.box_size_success{
+    border-radius: 25px;
+    border: 2px solid #73AD21;
+    padding: 20px; 
+    width:95%;
+    margin:auto;
+}
+
+/* .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    min-height: 100vh;
+    width: 100%;
+    min-height: 100%;
+    background-color: #313130;
+  } */
+
+  .svg-component svg {
+    margin-top: 0px;
+    height: 100%;
+    width: 100%; 
+  }
+
+    /* stroke: red;
+    fill: teal; */
+    /* height: 560px; */
+    /* width: 960px;  */
+    /* width: 326 / 560 */
+    /* width: 560 / 960 */
+
+  
+  /* For the Login Display */
+
+  .login-wrapper {
+    padding: 100px;
+  }
+  
+  .image--cover {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 20px;
+  
+    object-fit: cover;
+    object-position: center right;
+  }
+  
+  .image--cover--navbar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  
+    margin-right: 5px;
+  
+  }
+
+  .image--doctor--navbar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  
+    margin-right: 5px;
+    margin-bottom: -10px;
+    padding-bottom: -10px;
+  
+  }
