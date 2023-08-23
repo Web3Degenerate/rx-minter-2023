@@ -2,6 +2,8 @@
 
 ## App - Build dist folder with `npm run build --base=/client/`
 
+## App - Update Version with `npm thirdweb install`
+
 1. run `npx thirdweb@latest create --app`
 
 2. Install Dependencies

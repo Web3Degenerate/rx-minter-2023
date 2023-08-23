@@ -24,7 +24,7 @@ const PharmacyDashboard = () => {
 
     //  const { contract } = useContract("0xE0a73cAEb01ABdee510993F2d6a525b9948B49dF"); // 11.0 - Fixed spacing SVG issue. 
     // const { contract } = useContract("0xE0a73cAEb01ABdee510993F2d6a525b9948B49dF"); // 11.0 - Fixed spacing SVG issue.  
-    const { pharmacyContract } = useContract("0x684E9cA3BDf984769531Af2778957815EB096e01"); // 11.1 - Testing Pharmacy Update
+    // const { pharmacyContract } = useContract("0x684E9cA3BDf984769531Af2778957815EB096e01"); // 11.1 - Testing Pharmacy Update
     // const { contract } = useContract("0x135B8F385f8FaE5ab558d2D2A7A5d33a99184485"); // 11.7 (1 jake ottenger last used) - Fixed spacing SVG issue.  
     // const { contract } = useContract(solidityContractAddress); // 11.7 (1 jake ottenger last used) - Fixed spacing SVG issue.  
     const { contract } = useContract(solidityContractAddress);
@@ -33,7 +33,7 @@ const PharmacyDashboard = () => {
 
     // Your NFT collection contract address
     // const contractAddress = "0x135B8F385f8FaE5ab558d2D2A7A5d33a99184485";
-    const pharmacyContractAddress = "0x684E9cA3BDf984769531Af2778957815EB096e01";
+    // const pharmacyContractAddress = "0x684E9cA3BDf984769531Af2778957815EB096e01";
 
     //Get Current User's Addy: 
     const address = useAddress(); 
