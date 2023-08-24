@@ -44,6 +44,7 @@ const PatientDashboard = () => {
 
     
     const address = useAddress(); 
+    // const address = "0xEc556927470AEa02dCA8e59c682E7BD5f565D4aE"
     // const address = '0xfa1B88F6a4Efa3Fc139492DC1B9cc5A3d66fDDC9'
     // const address = "0xE3cEA19e68430563f71C591390358e54d1fa857a";
 
@@ -224,7 +225,8 @@ let displayPatientName
 let convertPatientName
 let grabPatientName
 
-  if(nfts){
+  // if(nfts){
+    if(nfts?.length > 0){
     nfts.map((nft) => (   
         grabPatientName = nft.metadata.name
     ))
@@ -234,6 +236,8 @@ let grabPatientName
       }else{
         displayPatientName = `(for ${grabPatientName})`
       }
+  }else{
+    displayPatientName = '';
   }
 
 
@@ -373,12 +377,12 @@ return (
                             // className="view-scripts-image"
                           > */}
 
-                              <p><b>Patient:</b> {nft.metadata.name.startsWith('0x') ? (
+                              <p><b>Patient:</b> {nft?.metadata.name.startsWith('0x') ? (
                                                       ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft.metadata.name))
                                                   ) : (
                                                       nft.metadata.name
                                                   ) } | 
-                                   <b> DOB:</b> {nft.metadata.attributes[1].value.startsWith('0x') ? (
+                                   <b> DOB:</b> {nft?.metadata.attributes[1].value.startsWith('0x') ? (
                                                       formatDateTwoDigitYear(ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft.metadata.attributes[1].value)))
                                                   ) : (
                                                       formatDateTwoDigitYear(nft.metadata.attributes[1].value)
@@ -482,9 +486,9 @@ return (
                       
                       <>
                         <div className="text-center">
-                          <h3 style={{color:`${sessionsColor}`}}>No NFT Scripts found for Address:</h3>
+                          <h3 style={{color:`${sessionsColor}`}}>There are no other NFT Scripts found for your Address:</h3>
                           <h5 style={{color:"white"}}>{address}</h5>
-                          <h5 style={{color:`${sessionsColor}`}}>Please contact your doctors office if you need further assistance.</h5>
+                          <h5 style={{color:`${sessionsColor}`}}>Please contact your pharmacy if you need further assistance.</h5>
                         </div>
                       </>
                   )}

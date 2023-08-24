@@ -500,8 +500,8 @@ const {name,wallet_address,email,dob,pt_physical_address,pt_phone,pid,pt_primary
         <div className="row">
             <div className="col">
               
-                    <b className="card-text "><b>Primary Insurance: </b><span className="input-style">{patient.pt_primary_insurance}</span></b>&nbsp;          
-                    &nbsp;<b className="card-text" ><b>Insurance ID#: </b><span className="input-style">{patient.pt_primary_id}</span></b>&nbsp;              
+                    <b className="card-text "><b>Primary Insurance: </b><span className="input-style">{patient.pt_primary_insurance ? patient.pt_primary_insurance : "N/A"}</span></b>&nbsp;          
+                    &nbsp;<b className="card-text" ><b>Insurance ID#: </b><span className="input-style">{patient.pt_primary_id ? patient.pt_primary_id : "N/A"}</span></b>&nbsp;              
         <hr></hr>
                 <b className="card-text "><b>Secondary Insurance: </b><span className="input-style">{patient.pt_secondary_insurance ? patient.pt_secondary_insurance : "N/A"}</span></b>&nbsp;          
                 &nbsp;<b className="card-text" ><b>Insurance ID#: </b><span className="input-style">{patient.pt_secondary_id ? patient.pt_secondary_id : "N/A"}</span></b>&nbsp; 

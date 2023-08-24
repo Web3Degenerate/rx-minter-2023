@@ -37,6 +37,7 @@ const PharmacyDashboard = () => {
 
     //Get Current User's Addy: 
     const address = useAddress(); 
+    // const address = "0xEc556927470AEa02dCA8e59c682E7BD5f565D4aE"
     //  const address = '0xE3cEA19e68430563f71C591390358e54d1fa857a'
 
     // const addyShortner = (address) => {
@@ -46,11 +47,21 @@ const PharmacyDashboard = () => {
     //     return tinyAddy;
     // }
 
-    const { data: nfts } = useOwnedNFTs(contract, address);
+    const { data: nfts, isLoading: isLoadingNFT } = useOwnedNFTs(contract, address);
     console.log("Pharmacy owned nfts:", nfts)
 
     //from: https://www.youtube.com/watch?v=xAqCEBFGdYk
     const [search, setSearch] = useState('');
+
+    // const [displayPharmacyNFTs,setDisplayPharmacyNFTs] = useState('block');
+    // const [displayNoPharmacyNFTs,setDisplayNoPharmacyNFTs] = useState('none');
+    // if(nfts?.length > 0){
+    //     setDisplayPharmacyNFTs('none')
+    //     setDisplayNoPharmacyNFTs('block')
+    // }else{
+    //     setDisplayPharmacyNFTs('block')
+    //     setDisplayNoPharmacyNFTs('none')
+    // }
 
 //**************************************** -- RETURN -- ************************************* */
 return (
@@ -125,13 +136,23 @@ return (
 {/* || nft.metadata.wallet_address.toLowerCase().includes(search) */}
 {/* <td>{nft.metadata.wallet_address.slice(0,5)}...{nft.metadata.wallet_address.slice(37)}</td> */}
             {/* {patient.filter((patient) => { */}
-            {nfts?.filter((nft) => {
+
+{isLoadingNFT ? (
+            <tr>
+            <td colSpan="7" className="text-center">
+                <h5 style={{color:"white"}}>Checking for NFT Prescriptions. Please wait...</h5>
+            </td>
+            </tr>
+    ) : (
+    nfts?.length > 0 ?
+            nfts?.filter((nft) => {
                return search.toLowerCase() === '' ? nft : nft.metadata.name.toLowerCase().includes(search) || nft.metadata.attributes[0].value.toLowerCase().includes(search)
             }
 
             ).map((nft, index) => (
+        <>
                     <tr key={`${index}`}>
-                        <td style={{display: "none"}}>{index+1}</td>
+                        <td style={{display:"none"}}>{index+1}</td>
 
                         <td>
                             {nft?.metadata.name.startsWith('0x') ? (
@@ -149,14 +170,19 @@ return (
 
                         <td>
                         {convertBigNumberToFourDigitYear(nft?.metadata.attributes[5].value)}
- 
-                        
                         </td>
 
                         <td><Link className="btn btn-primary" to={`/pharmacy-review-nft/${nft.metadata.id}`}>Manage Rx</Link></td>
                     
                     </tr>
-                ))}
+    </>
+    )) : (
+                        <tr>
+                              <td colSpan="7" className="text-center">
+                                  <h5 style={{color:"white"}}>There are no NFT Prescriptions For Your Review</h5>
+                              </td>
+                        </tr>
+        ) )}
             </tbody>
         </table>
     </>
