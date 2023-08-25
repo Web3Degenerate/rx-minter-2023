@@ -3,7 +3,7 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 
 import { Route, Routes } from 'react-router-dom'
 import { Navbar } from './components';
-import { PharmacyDashboard, PharmacyReview } from './pages';
+import { PharmacyDashboard, PharmacyReview, PharmacyHistory } from './pages';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -35,6 +35,8 @@ export default function Home() {
                               {/* <Route path="/edit-pharmacy/:id" element={ <EditPharmacy /> } /> */}
 
                               <Route path="/pharmacy-review-nft/:id" element={ <PharmacyReview /> } />
+
+                              <Route path="/pharmacy-transactions" element={<PharmacyHistory /> } />
 
               </Routes>
           </div>

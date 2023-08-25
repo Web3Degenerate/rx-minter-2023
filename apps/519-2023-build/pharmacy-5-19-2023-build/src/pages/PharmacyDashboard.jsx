@@ -63,6 +63,14 @@ const PharmacyDashboard = () => {
     //     setDisplayNoPharmacyNFTs('none')
     // }
 
+    const decodePatientName = (name) => {
+        if (name.startsWith('0x') ) {
+           return ethers.utils.toUtf8String(ethers.utils.RLP.decode(name))
+          }else{
+            return nft.metadata.name
+        }
+    }
+
 //**************************************** -- RETURN -- ************************************* */
 return (
 
@@ -98,7 +106,7 @@ return (
         <div className="row">
             <div className="col-md-12 text-center">
                 <div className="input-group mb-3">
-                    <input type="search" className="form-control" placeholder="Search For A Patient" aria-label="Recipient's username" aria-describedby="basic-addon2"
+                    <input type="search" className="form-control" placeholder="Search For A Patient or Medication Name..." aria-label="Recipient's username" aria-describedby="basic-addon2"
                     onChange={(e) => setSearch(e.target.value.toLowerCase())}></input>
                     {/* <div className="input-group-append">
                         <button className="btn btn-outline-secondary" type="button">Search</button>
@@ -146,7 +154,7 @@ return (
     ) : (
     nfts?.length > 0 ?
             nfts?.filter((nft) => {
-               return search.toLowerCase() === '' ? nft : nft.metadata.name.toLowerCase().includes(search) || nft.metadata.attributes[0].value.toLowerCase().includes(search)
+               return search.toLowerCase() === '' ? nft : decodePatientName(nft.metadata.name).toLowerCase().includes(search) || nft.metadata.attributes[0].value.toLowerCase().includes(search)
             }
 
             ).map((nft, index) => (
@@ -155,11 +163,7 @@ return (
                         <td style={{display:"none"}}>{index+1}</td>
 
                         <td>
-                            {nft?.metadata.name.startsWith('0x') ? (
-                                ethers.utils.toUtf8String(ethers.utils.RLP.decode(nft?.metadata.name))
-                            ) : ( 
-                                nft.metadata.name
-                            )}
+                            {decodePatientName(nft.metadata.name)}
                         </td>
  
                         <td>{nft.metadata.attributes[0].value}</td>

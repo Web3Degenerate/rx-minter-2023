@@ -25,16 +25,26 @@ const Navbar = () => {
 
       {address ? (
 
-          <Link className="navbar-brand" to="/">
-            <img src={logoPalau} width="30" height="30" className="d-inline-block align-top image--cover--navbar" alt=""></img>
-             &nbsp;Pharmacy Dashboard <small className="text-muted">({addyShortner(address)})</small>
-          </Link>
+      <ul className="nav navbar-nav">
+          <li className="nav-item" style={{margin:"5px"}}>
+            <Link className="navbar-brand btn btn-primary" to="/">
+              <img src={logoPalau} width="30" height="30" className="d-inline-block align-top image--cover--navbar" alt=""></img>
+              &nbsp;Pharmacy Dashboard 
+            </Link>
+          </li>
+          {/* <small className="text-muted">({addyShortner(address)})</small> */}
+
+          <li className="nav-item" style={{margin:"5px"}}>
+                  <Link className="navbar-brand btn btn-primary" to="/pharmacy-transactions">Pharmacy Transaction Log</Link>
+          </li>
+      </ul>
      
       ):(
         <Link className="navbar-brand" to="/">
           <img src={logoPalau} width="30" height="30" className="d-inline-block align-top image--cover--navbar" alt=""></img>
           Rx Minter Pharmacy Portal Login 
-        </Link>        
+        </Link>       
+
           
       )}
 
@@ -44,6 +54,10 @@ const Navbar = () => {
    {address ? ( 
         <ul className="nav navbar-nav">
 
+                {/* <li className="nav-item" style={{margin:"5px"}}>
+                  <Link className="navbar-brand btn btn-primary" to="/pharmacy-transactions">Transaction History</Link>
+                </li> */}
+
             <li className="nav-item" style={{margin:"5px"}}>
                 {/* <Link className="navbar-brand btn btn-success" to="/">Patient Portal</Link> */}
                 <ConnectWallet dropdownPosition={{
@@ -52,9 +66,6 @@ const Navbar = () => {
                                     }} />
             </li>
 
-              {/* <li className="nav-item" style={{margin:"5px"}}>
-                <Link className="navbar-brand btn btn-primary" to="/add-patient">Add Patient</Link>
-              </li> */}
 
             {/* <li className="nav-item">
               <Link className="navbar-brand btn btn-primary" to="/edit-patient/:id">Edit Patient</Link>
