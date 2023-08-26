@@ -50,7 +50,9 @@ const [testPatientData, setTestPatientData] = useState([]);
 
 useEffect(() => {
     async function fetchPatientNames() {
-      const patientNames = await Promise.all(fillEvents.map(eventz => loadPatient(eventz.data.patient_address)));
+      const filteredFillEvents = fillEvents.filter(eventz => eventz.data.pharmacy_name === address);
+    //   const patientNames = await Promise.all(fillEvents.map(eventz => loadPatient(eventz.data.patient_address)));
+      const patientNames = await Promise.all(filteredFillEvents.map(eventz => loadPatient(eventz.data.patient_address)));
       setPatientData(patientNames);
       setTestPatientData(patientNames);
     }
