@@ -13,7 +13,8 @@ import { useAddress, useContract, ConnectWallet, useOwnedNFTs, ThirdwebNftMedia,
   import axios from 'axios';
   import { ethers } from 'ethers';
 
-  import { addyShortner, convertBigNumberToTwoDigitYear, convertBigNumberToFourDigitYear, convertBigNumberToRawString, formatDateFourDigitYear, formatDateTwoDigitYear } from '../utils'
+  import { addyShortner, convertBigNumberToTwoDigitYear, convertBigNumberToFourDigitYear, 
+    convertBigNumberToRawString, formatDateFourDigitYear, formatDateTwoDigitYear, decodePatientName } from '../utils'
   import { solidityContractAddress } from '../constants'
 
   import { logoPalau } from '../assets'
@@ -53,23 +54,13 @@ const PharmacyDashboard = () => {
     //from: https://www.youtube.com/watch?v=xAqCEBFGdYk
     const [search, setSearch] = useState('');
 
-    // const [displayPharmacyNFTs,setDisplayPharmacyNFTs] = useState('block');
-    // const [displayNoPharmacyNFTs,setDisplayNoPharmacyNFTs] = useState('none');
-    // if(nfts?.length > 0){
-    //     setDisplayPharmacyNFTs('none')
-    //     setDisplayNoPharmacyNFTs('block')
-    // }else{
-    //     setDisplayPharmacyNFTs('block')
-    //     setDisplayNoPharmacyNFTs('none')
+    // const decodePatientName = (name) => {
+    //     if (name.startsWith('0x') ) {
+    //        return ethers.utils.toUtf8String(ethers.utils.RLP.decode(name))
+    //       }else{
+    //         return nft.metadata.name
+    //     }
     // }
-
-    const decodePatientName = (name) => {
-        if (name.startsWith('0x') ) {
-           return ethers.utils.toUtf8String(ethers.utils.RLP.decode(name))
-          }else{
-            return nft.metadata.name
-        }
-    }
 
 //**************************************** -- RETURN -- ************************************* */
 return (

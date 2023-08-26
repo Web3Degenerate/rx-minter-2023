@@ -1,4 +1,4 @@
-// import { ethers } from 'ethers';
+import { ethers } from 'ethers';
 // import { useAddress, useContract, ConnectWallet, useOwnedNFTs, ThirdwebNftMedia, 
 //     useTransferNFT, useMetadata, useNFT, useContractRead } from "@thirdweb-dev/react";
 // import { solidityContractAddress } from '../constants';
@@ -78,3 +78,10 @@ export const convertBigNumberToTwoDigitYear = (bigNumberDate) => {
 }
 
 
+export const decodePatientName = (name) => {
+    if (name.startsWith('0x') ) {
+       return ethers.utils.toUtf8String(ethers.utils.RLP.decode(name))
+      }else{
+        return nft.metadata.name
+    }
+}
