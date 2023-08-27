@@ -15,8 +15,8 @@ import "../styles/App.css";
 
 const PharmacyHistory = () => {
 
-    // const address = useAddress();
-    const address = "0xEc556927470AEa02dCA8e59c682E7BD5f565D4aE"
+    const address = useAddress();
+    // const address = "0xEc556927470AEa02dCA8e59c682E7BD5f565D4aE"
 
     const { contract } = useContract(solidityContractAddress);
 
@@ -93,8 +93,10 @@ useEffect(() => {
   return (
  <>   
  
-        <>
-                <h3>Pharmacy History</h3>
+        <>  
+          
+                <h3>Pharmacy History <small className="text-muted">({addyShortner(address)})</small></h3>
+                
              {/* <h5>Current Date in PST is {pstDate}</h5> */}
 
             <div className="row">
