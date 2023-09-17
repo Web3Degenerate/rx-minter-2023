@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.11.8",
-    "@thirdweb-dev/react": "^3",
-    "@thirdweb-dev/sdk": "^3",
+    "@thirdweb-dev/react": "^3.14.41",
+    "@thirdweb-dev/sdk": "^3.10.60",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "ethers": "^5.7.2",

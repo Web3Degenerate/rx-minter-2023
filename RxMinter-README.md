@@ -33,52 +33,45 @@
 **Source**: https://axellarsson.com/blog/expected-javascript-module-script-server-response-mimetype-text-html/
 **Docs**: https://vitejs.dev/guide/build.html#public-base-path
 
+---
 
+## Updating SDK issue
+
+### - On Fri 7/21/23, SF Jorge was unable to access his owned NFT on the patients.rxminter.com build but not doctors.rxminter.com
+
+- Per the ThirdWeb **Discord**
+
+`We've received reports from our community that Google Safe Browsing has flagged our IPFS gateway domains (thirdwebstorage.com) as potentially deceptive.`
+
+`We recommend that you update the SDK to the latest version (@thirdweb-dev/sdk@3.10.29, @thirdweb-dev/react@3.14.9) by running npx thirdweb install in your project.`
+
+Run **npx thirdweb install** in your project. (_Note from Devin on 7/10/23_)
+
+---
 
 ## GuestLogin Component
-- With Thirdweb's `ConnectWallet` and `useAddress` wrap all protected pages: 
+
+- With Thirdweb's `ConnectWallet` and `useAddress` wrap all protected pages:
 
 ```js
+import { ConnectWallet, useAddress } from "@thirdweb-dev/react"
+import { GuestLogin } from "../components"
 
-  import { ConnectWallet, useAddress } from "@thirdweb-dev/react";
-  import { GuestLogin } from '../components';
+const address = useAddress()
 
-    const address = useAddress(); 
-
-  return(
-    <>
-        {address ? (
-          <>
-
-            {/* Page JSX code */}
-                
-          </>
-        ) : (
-          <GuestLogin />
-        )}
-    </>
-  );
+return <>{address ? <>{/* Page JSX code */}</> : <GuestLogin />}</>
 ```
-
 
 ### Change Log (8/17/2023)
 
 1. Doctors Build - **CreateScripts.jsx**
 
-**Error** - Qty = 1. Days Supply = 15. 
+**Error** - Qty = 1. Days Supply = 15.
 
 `contract call failure Error: underflow [ See: https://links.ethers.org/v5-errors-NUMERIC_FAULT-underflow ] (fault="underflow", operation="BigNumber.from", value=0.06666666666666667, code=NUMERIC_FAULT, version=bignumber/5.7.0)`
 
-
-
-
-
-
-
-
-
-
 ---
+
 ---
 
 ## Solidity Contracts:

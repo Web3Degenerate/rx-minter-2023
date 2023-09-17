@@ -18,7 +18,11 @@ const container = document.getElementById("root");
 const root = createRoot(container);
 root.render(
   <React.StrictMode>
-    <ThirdwebProvider activeChain={activeChain}>
+    <ThirdwebProvider 
+      activeChain={activeChain}
+      clientId="aa6739281a291c543db15f926dba7268"
+      // clientId="9dbbe47652c582851bbeccd7d6857bf1"
+    >
       <Router>      
             <App />          
       </Router>

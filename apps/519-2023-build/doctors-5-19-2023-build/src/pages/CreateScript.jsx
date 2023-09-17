@@ -221,8 +221,8 @@ const handleSubmit = async (e) => { // useRef() example didn't have e param, but
 
 
 //*********************************************************************** START OF MERGE FN TEST ************************************************/
-if (confirm(`Next Fill Date will initially be set to ${formatDateTwoDigitYear(nextFillDate)} by adding a ${numberOfDays} Days Supply of ${medication_Ref} to the Date Prescribed: ${formatDateTwoDigitYear(date_prescribed_Ref)}. Do you wish to proceed?`) == true){  
-
+// if (confirm(`Next Fill Date will initially be set to ${formatDateTwoDigitYear(nextFillDate)} by adding a ${numberOfDays} Days Supply of ${medication_Ref} to the Date Prescribed: ${formatDateTwoDigitYear(date_prescribed_Ref)}. Do you wish to proceed?`) == true){  
+  if (confirm(`You will mint an NFT Script for ${name} on ${formatDateTwoDigitYear(date_prescribed_Ref)} for medication ${medication_Ref}. Do you wish to proceed?`) == true){ 
 
                         // ******************   datePrescribed inputDatePrescribed
 try {
